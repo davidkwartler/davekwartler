@@ -7,7 +7,7 @@ export default function About() {
   return (
     <main className="min-h-screen bg-neutral-900">
       <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-white mb-8">
+        <h1 className="text-4xl font-bold text-white mb-12 font-[family-name:var(--font-playfair)] tracking-wide">
           About Me
         </h1>
 

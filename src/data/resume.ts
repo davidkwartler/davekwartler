@@ -1,6 +1,7 @@
 export const resumeData = {
   name: "David Kwartler",
   title: "Senior Product Manager",
+  subtitle: "AI Authentication, Authorization, Trust & Privacy",
   location: "Austin, TX",
 
   summary: [

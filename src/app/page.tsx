@@ -17,13 +17,13 @@ export default function Home() {
               priority
             />
           </div>
-          <h1 className="text-5xl font-bold text-white sm:text-6xl">
+          <h1 className="text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide">
             {resumeData.name}
           </h1>
           <p className="mt-4 text-xl text-gray-300">
             {resumeData.title} in {resumeData.location}
           </p>
-          <div className="mt-10 flex justify-center gap-4">
+          <div className="mt-12 flex justify-center gap-4">
             <Link
               href="/work"
               className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
