@@ -36,6 +36,7 @@ export default function Home() {
               Tailwind CSS
             </a>
           </p>
+          <p className="mt-2">&copy; {new Date().getFullYear()}</p>
         </footer>
       </div>
     </main>
