@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "David Kwartler - Senior Product Manager",
   description: "Personal website of David Kwartler, a Senior Product Manager in Austin, TX focused on identity & access management solutions.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

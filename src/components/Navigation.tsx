@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/what-i-do", label: "My Work" },
+  { href: "/work", label: "My Work" },
   { href: "/about", label: "About Me" },
   { href: "/resume", label: "Resume" },
 ];
@@ -14,7 +15,7 @@ export function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-gray-900 border-b border-gray-700">
+    <nav className="bg-neutral-900 border-b border-gray-700">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link
@@ -23,7 +24,7 @@ export function Navigation() {
           >
             David Kwartler
           </Link>
-          <div className="flex space-x-8">
+          <div className="flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -37,6 +38,19 @@ export function Navigation() {
                 {link.label}
               </Link>
             ))}
+            <a
+              href="https://www.linkedin.com/in/dkwartler/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="opacity-100 hover:opacity-50 transition-opacity"
+            >
+              <Image
+                src="/linkedin-icon.png"
+                alt="LinkedIn"
+                width={20}
+                height={20}
+              />
+            </a>
           </div>
         </div>
       </div>

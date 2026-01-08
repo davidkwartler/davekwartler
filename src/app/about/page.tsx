@@ -5,31 +5,35 @@ export const metadata = {
 
 export default function About() {
   return (
-    <main className="min-h-screen bg-gray-900">
+    <main className="min-h-screen bg-neutral-900">
       <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold text-white mb-8">
           About Me
         </h1>
 
         <div className="prose prose-invert max-w-none space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Hey there! I'm David. I'm originally from Boston, MA 🍀, went to college in Washington, DC 🏛️, and now live in sunny Austin, TX 🤠. I work in tech as a product manager, but my time outside work revolves around cars, music, and being outdoors.
+          <p className="text-gray-300 leading-relaxed">
+            I'm David. I grew up in Boston, went to college in Washington, DC, and now live in Austin, a city that makes it easy to stay active, explore, and enjoy the outdoors year-round.
           </p>
 
-          <p className="text-lg text-gray-300 leading-relaxed">
-            I'm a performance car enthusiast and amateur racecar driver 🏎️, so odds are you'll catch me behind the wheel of my 2011 Chevrolet Corvette. I also love being outdoors, whether it's biking 🚴‍♂️ around town or getting out on the water in a kayak 🛶.
+          <p className="text-gray-300 leading-relaxed">
+            Outside of work, I'm drawn to pursuits that reward focus and momentum. I'm a performance car enthusiast and amateur race car driver, currently spending time behind the wheel of a Porsche Cayman. I stay active with long bike rides around the Town Lake trail.
           </p>
 
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Music 🎶 is a huge part of my life. I went to over 75 shows in 2024, and I'm really into electronic dance music 🪩. I've been learning to DJ, and I also collect vinyl so my record shelf is always growing 💿.
+          <p className="text-gray-300 leading-relaxed">
+            Music has always been a constant in my life. I'm especially into EDM and hard rock, and last year I made it to around 80 live shows across several festivals. More recently, that interest has expanded into learning to DJ and building a growing vinyl collection at home.
           </p>
 
-          <p className="text-lg text-gray-300 leading-relaxed">
-            I've been vegan 🌱 since 2016, love to cook, make espresso ☕, and explore new hard-to-find bourbons 🥃. My cat Rey keeps life interesting, she's great and definitely runs the household 🐈‍⬛🏠.
+          <p className="text-gray-300 leading-relaxed">
+            I love to travel and have spent much of the last few years visiting cities across the U.S. and Canada, often planning trips around food, art museums, and good music.
           </p>
 
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Other than that, I'm probably watching Austin FC ⚽ or the Atlanta Falcons 🏈, still hoping for that winning season 🏆.
+          <p className="text-gray-300 leading-relaxed">
+            I've been vegan for a decade and enjoy cooking, making espresso, and the occasional hunt for a good bottle of bourbon. At home, my cat Rey keeps me grounded. She's my best friend and very much in charge.
+          </p>
+
+          <p className="text-gray-300 leading-relaxed">
+            When things slow down, I'm probably watching Austin FC or the Atlanta Falcons and holding onto hope for a winning season.
           </p>
         </div>
 
