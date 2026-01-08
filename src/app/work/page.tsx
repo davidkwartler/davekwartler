@@ -106,7 +106,7 @@ export default function WhatIDo() {
                     {edu.degree}
                   </h3>
                   <p className="text-green-400">
-                    {edu.institution} | {edu.location} | {edu.graduationDate}
+                    {edu.institution} | {edu.location}
                   </p>
                   <p className="mt-2 text-gray-400 italic">
                     {edu.details}
