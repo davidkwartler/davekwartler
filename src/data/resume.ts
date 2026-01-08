@@ -41,7 +41,7 @@ I enjoy solving ambiguous technical problems at the intersection of identity, se
       startDate: "08/2024",
       endDate: "Present",
       description:
-        "Global tech company with AI-enabled marketplace serving travelers and partners",
+        "Global travel technology company operating an AI-enabled marketplace for travelers and partners",
       highlights: [
         "Defined and led a multi-team initiative spanning eight development squads to achieve identity platform multi-tenancy, ensuring user data isolation and unlocking $15M in potential value through personalized user experiences for Expedia's fast-growing demand partner marketplace.",
         "Achieved 1% conversion uplift by leading cross-functional alignment across loyalty, fraud, cybersecurity, and privacy teams to A/B test extended session length strategy, balancing user experience with account security.",
@@ -57,7 +57,7 @@ I enjoy solving ambiguous technical problems at the intersection of identity, se
       startDate: "06/2021",
       endDate: "08/2024",
       description:
-        "Top US automaker driving innovation in electric, autonomous, and connected vehicles",
+        "Leading US automaker advancing electric, autonomous, and connected vehicle technology",
       highlights: [
         "Increased loyalty program enrollments by 28%, delivering $16M in monthly customer lifetime value gains through A/B testing to optimize sign-up flow and drive retention.",
         "Launched revamped mobile app authentication experience informed by an employee pilot program of over 200 participants, resulting in a 19% increase in customer satisfaction and improved user experience.",
@@ -71,7 +71,7 @@ I enjoy solving ambiguous technical problems at the intersection of identity, se
       startDate: "06/2019",
       endDate: "06/2021",
       description:
-        "Tech consulting firm supporting large-scale technology modernization initiatives for a wide range of clients",
+        "Technology consulting firm delivering large-scale modernization initiatives for a wide range of clients",
       highlights: [
         "Accelerated environmental assessment project efficiency by 65% through revamped email notifications in Department of Homeland Security environmental planning application.",
         "Secured $2M DHS contract by leading UI design and product vision for a data visualization proof of concept, enabling real-time security officer post tracking to optimize resource allocation.",
