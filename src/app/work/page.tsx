@@ -68,7 +68,7 @@ export default function WhatIDo() {
             {resumeData.experience.map((job, index) => (
               <div
                 key={index}
-                className="bg-neutral-800/50 rounded-lg p-6 flex gap-4 border border-neutral-700"
+                className="bg-neutral-800/50 rounded-lg p-6 flex gap-4 border border-neutral-700 border-l-4 border-l-blue-500 shadow-[inset_4px_0_12px_-4px_rgba(59,130,246,0.3)]"
               >
                 {companyLogos[job.company] && (
                   <div className="flex-shrink-0">
@@ -104,7 +104,7 @@ export default function WhatIDo() {
             {resumeData.education.map((edu, index) => (
               <div
                 key={index}
-                className="bg-neutral-800/50 rounded-lg p-6 flex gap-4 border border-neutral-700"
+                className="bg-neutral-800/50 rounded-lg p-6 flex gap-4 border border-neutral-700 border-l-4 border-l-blue-500 shadow-[inset_4px_0_12px_-4px_rgba(59,130,246,0.3)]"
               >
                 {educationLogos[edu.institution] && (
                   <div className="flex-shrink-0">
