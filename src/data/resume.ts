@@ -1,87 +1,96 @@
 export const resumeData = {
-  name: "Your Name",
-  title: "Software Engineer",
-  email: "your.email@example.com",
-  location: "San Francisco, CA",
-  phone: "(555) 123-4567",
-  website: "https://yourwebsite.com",
-  linkedin: "https://linkedin.com/in/yourprofile",
-  github: "https://github.com/yourusername",
+  name: "David Kwartler",
+  title: "Senior Product Manager",
+  location: "Austin, TX",
 
-  summary:
-    "Passionate software engineer with 5+ years of experience building scalable web applications. Skilled in full-stack development with a focus on creating elegant, user-centric solutions.",
+  summary: [
+    "Accomplished product manager with over six years of experience leading cross-functional teams to build impactful software products that drive measurable outcomes at enterprise scale.",
+    "Identity and Access Management expert responsible for Expedia Group's robust in-house customer identity platform, powering secure traveler and partner experiences across our global two-sided marketplace.",
+    "Led IAM product at General Motors, delivering seamless authentication and profile experiences across web, mobile, and connected vehicle platforms for millions of customers.",
+    "Analytical problem-solver and clear communicator with a proven ability to blend technical expertise and strategic thinking to drive business impact in fast-paced, dynamic environments.",
+  ],
+
+  careerBackground: `I'm a Senior Product Manager focused on building secure, scalable authentication and authorization solutions, with a growing emphasis on AI integrations and emerging interaction models. Over my career, I've worked to make login more seamless, strengthen account protection measures, and deliver personalized identity and profile experiences that support hundreds of millions of global users and contribute to business growth.
+
+At Expedia Group, I help define how identity, authorization, and privacy work across our platform, including AI-powered experiences and our MCP-based product integrations. My work centers on designing clear consent and access models so that AI systems can act on behalf of users safely, transparently, and with well-defined trust boundaries.
+
+I enjoy solving ambiguous technical problems at the intersection of identity, security, and user experience, especially in rapidly evolving spaces like AI-enabled products. I'm always happy to connect with others working in tech.`,
+
+  skills: [
+    "Product Strategy",
+    "Continuous Discovery",
+    "User Research",
+    "A/B Testing",
+    "Data Analysis",
+    "Collaboration",
+    "Communication",
+    "Stakeholder Alignment & Influence",
+    "Leadership & Mentoring",
+    "API Design & Documentation",
+    "Identity & Access Management",
+    "UI/UX Design",
+    "Product Development Lifecycle",
+    "Acceptance Testing",
+  ],
 
   experience: [
     {
-      company: "Tech Company",
-      position: "Senior Software Engineer",
-      location: "San Francisco, CA",
-      startDate: "Jan 2022",
+      company: "Expedia Group",
+      position: "Senior Product Manager",
+      location: "Austin, TX",
+      startDate: "08/2024",
       endDate: "Present",
+      description:
+        "Global tech company with AI-enabled marketplace serving travelers and partners",
       highlights: [
-        "Led development of a customer-facing dashboard serving 100k+ users",
-        "Architected microservices infrastructure reducing deployment time by 60%",
-        "Mentored junior developers and conducted code reviews",
+        "Defined and led a multi-team initiative spanning eight development squads to achieve identity platform multi-tenancy, ensuring user data isolation and unlocking $15M in potential value through personalized user experiences for Expedia's fast-growing demand partner marketplace.",
+        "Achieved 1% conversion uplift by leading cross-functional alignment across loyalty, fraud, cybersecurity, and privacy teams to A/B test extended session length strategy, balancing user experience with account security.",
+        "Championed system rearchitecture to eliminate external vendor dependency for authentication, delivering $3M in annual EBITDA savings and improving control of our tech stack.",
+        "Launched social login and NAVER Pay integration in South Korea to streamline checkout and capture $4M in incremental value by improving conversion in a key international growth market.",
+        "Enabled digital tax form submission for Vrbo hosts by introducing identity federation with a third-party app through our OIDC API, simplifying compliance workflows for over 600,000 property owners.",
       ],
     },
     {
-      company: "Startup Inc",
-      position: "Software Engineer",
-      location: "New York, NY",
-      startDate: "Jun 2019",
-      endDate: "Dec 2021",
+      company: "General Motors",
+      position: "Senior Product Manager",
+      location: "Austin, TX",
+      startDate: "06/2021",
+      endDate: "08/2024",
+      description:
+        "Top US automaker driving innovation in electric, autonomous, and connected vehicles",
       highlights: [
-        "Built RESTful APIs handling 1M+ daily requests",
-        "Implemented CI/CD pipelines improving release frequency by 3x",
-        "Collaborated with product team to deliver features on tight deadlines",
+        "Increased loyalty program enrollments by 28%, delivering $16M in monthly customer lifetime value gains through A/B testing to optimize sign-up flow and drive retention.",
+        "Launched revamped mobile app authentication experience informed by an employee pilot program of over 200 participants, resulting in a 19% increase in customer satisfaction and improved user experience.",
+        "Improved multi-factor authentication success rate by 13% by leveraging product analytics to identify and prioritize enhancements, leading to increased app engagement and stronger account security.",
       ],
     },
     {
-      company: "Digital Agency",
-      position: "Junior Developer",
-      location: "Boston, MA",
-      startDate: "Aug 2017",
-      endDate: "May 2019",
+      company: "CVP",
+      position: "Product Owner",
+      location: "Washington, DC",
+      startDate: "06/2019",
+      endDate: "06/2021",
+      description:
+        "Tech consulting firm supporting large-scale technology modernization initiatives for a wide range of clients",
       highlights: [
-        "Developed responsive web applications for various clients",
-        "Maintained legacy codebases and implemented new features",
-        "Participated in agile development processes",
+        "Accelerated environmental assessment project efficiency by 65% through revamped email notifications in Department of Homeland Security environmental planning application.",
+        "Secured $2M DHS contract by leading UI design and product vision for a data visualization proof of concept, enabling real-time security officer post tracking to optimize resource allocation.",
       ],
     },
   ],
 
   education: [
     {
-      institution: "University of Technology",
-      degree: "Bachelor of Science in Computer Science",
-      location: "Boston, MA",
-      graduationDate: "May 2017",
-      gpa: "3.8/4.0",
-      highlights: ["Dean's List", "Computer Science Honor Society"],
+      institution: "The George Washington University",
+      degree: "Bachelor of Business Administration",
+      location: "Washington, DC",
+      graduationDate: "2015 – 2019",
+      details: "Major in Finance, Minor in Environmental Sustainability",
     },
   ],
 
-  skills: {
-    languages: ["TypeScript", "JavaScript", "Python", "Go", "SQL"],
-    frameworks: ["React", "Next.js", "Node.js", "Express", "Django"],
-    tools: ["Git", "Docker", "Kubernetes", "AWS", "PostgreSQL", "MongoDB"],
-    other: ["System Design", "Agile/Scrum", "Technical Writing"],
-  },
-
-  projects: [
-    {
-      name: "Open Source Project",
-      description:
-        "A CLI tool for automating development workflows with 500+ GitHub stars",
-      technologies: ["Go", "Docker"],
-      link: "https://github.com/yourusername/project",
-    },
-    {
-      name: "Personal Blog",
-      description:
-        "A JAMstack blog built with Next.js and MDX, featuring syntax highlighting and dark mode",
-      technologies: ["Next.js", "MDX", "Tailwind CSS"],
-      link: "https://yourblog.com",
-    },
+  certifications: [
+    "SAFe Product Owner / Product Manager",
+    "Professional Scrum Master I",
   ],
 };
