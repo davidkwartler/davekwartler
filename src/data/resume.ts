@@ -74,8 +74,8 @@ I enjoy solving ambiguous technical problems at the intersection of identity, se
       description:
         "Technology consulting firm delivering large-scale modernization initiatives for a wide range of clients",
       highlights: [
-        "Accelerated environmental assessment project efficiency by 65% through revamped email notifications in Department of Homeland Security environmental planning application.",
-        "Secured $2M DHS contract by leading UI design and product vision for a data visualization proof of concept, enabling real-time security officer post tracking to optimize resource allocation.",
+        "Accelerated environmental assessment project efficiency by 65% through revamped email notifications in large-scale regulatory planning platform.",
+        "Secured $2M contract by leading UI design and product vision for a data visualization proof of concept, enabling real-time security officer post tracking to optimize resource allocation.",
       ],
     },
   ],
