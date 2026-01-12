@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export const metadata = {
   title: "About Me - David Kwartler",
   description: "Learn more about David Kwartler",
@@ -37,33 +39,103 @@ export default function About() {
           </p>
         </div>
 
-        <div className="mt-16 space-y-12">
-          <figure className="space-y-3">
-            <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center">
-              <span className="text-gray-400 text-sm">[Photo: Racing at New England Dragway]</span>
-            </div>
-            <figcaption className="text-sm text-gray-400 italic text-center">
-              Racing my dad's 2009 Chevrolet Corvette at New England Dragway. Best 1/4 mile time: 9.98 seconds at 136 miles per hour.
-            </figcaption>
-          </figure>
+        <div className="mt-16 space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
+              <Image
+                src="/bike-austin.png"
+                alt="Biking in Austin"
+                width={600}
+                height={400}
+                className="w-full h-auto rounded-lg"
+              />
+              <figcaption className="text-sm text-gray-400 italic text-center">
+                Biking the Town Lake Trail in Austin
+              </figcaption>
+            </figure>
 
-          <figure className="space-y-3">
-            <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center">
-              <span className="text-gray-400 text-sm">[Photo: Swedish House Mafia concert]</span>
-            </div>
-            <figcaption className="text-sm text-gray-400 italic text-center">
-              Enjoying a Swedish House Mafia concert at Lucca Summer Festival in Lucca, Italy.
-            </figcaption>
-          </figure>
+            <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
+              <Image
+                src="/corvette.jpg"
+                alt="Corvette"
+                width={600}
+                height={400}
+                className="w-full h-auto rounded-lg"
+              />
+              <figcaption className="text-sm text-gray-400 italic text-center">
+                Corvette racing at New England Dragway
+              </figcaption>
+            </figure>
+          </div>
 
-          <figure className="space-y-3">
-            <div className="aspect-video bg-gray-800 rounded-lg flex items-center justify-center">
-              <span className="text-gray-400 text-sm">[Photo: Austin FC playoff game]</span>
-            </div>
-            <figcaption className="text-sm text-gray-400 italic text-center">
-              Attending an Austin FC playoff game with my friends. Verde Listos!
-            </figcaption>
-          </figure>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
+              <Image
+                src="/david-chicago.JPG"
+                alt="David in Chicago"
+                width={400}
+                height={600}
+                className="w-full h-auto rounded-lg"
+              />
+              <figcaption className="text-sm text-gray-400 italic text-center">
+                Visiting the Bean in Chicago
+              </figcaption>
+            </figure>
+
+            <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
+              <Image
+                src="/david-seattle.JPG"
+                alt="David at the Seattle Space Needle"
+                width={400}
+                height={600}
+                className="w-full h-auto rounded-lg"
+              />
+              <figcaption className="text-sm text-gray-400 italic text-center">
+                View from the Space Needle in Seattle
+              </figcaption>
+            </figure>
+
+            <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
+              <Image
+                src="/david-nyc.JPG"
+                alt="David in New York City"
+                width={400}
+                height={600}
+                className="w-full h-auto rounded-lg"
+              />
+              <figcaption className="text-sm text-gray-400 italic text-center">
+                Manhattan skyline views in New York City
+              </figcaption>
+            </figure>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
+              <Image
+                src="/david-falcons.JPG"
+                alt="David at a Falcons game"
+                width={600}
+                height={400}
+                className="w-full h-auto rounded-lg"
+              />
+              <figcaption className="text-sm text-gray-400 italic text-center">
+                Atlanta Falcons game in Massachusetts
+              </figcaption>
+            </figure>
+
+            <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
+              <Image
+                src="/identiverse.jpg"
+                alt="David at Identiverse"
+                width={600}
+                height={400}
+                className="w-full h-auto rounded-lg"
+              />
+              <figcaption className="text-sm text-gray-400 italic text-center">
+                Identiverse with my team in Las Vegas
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </main>
