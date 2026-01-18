@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { resumeData } from "@/data/resume";
+import Footer from "@/components/Footer";
 
 const companyLogos: Record<string, string> = {
   "Expedia Group": "/expedia-logo.jpg",
@@ -29,8 +30,8 @@ export const metadata = {
 
 export default function WhatIDo() {
   return (
-    <main className="min-h-screen bg-neutral-900">
-      <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-neutral-900 flex flex-col">
+      <div className="flex-grow max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold text-white mb-12 font-[family-name:var(--font-playfair)] tracking-wide">
           My Work
         </h1>
@@ -139,6 +140,7 @@ export default function WhatIDo() {
           </div>
         </section>
       </div>
+      <Footer />
     </main>
   );
 }

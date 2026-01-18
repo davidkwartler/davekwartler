@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "About Me - David Kwartler",
@@ -7,8 +8,8 @@ export const metadata = {
 
 export default function About() {
   return (
-    <main className="min-h-screen bg-neutral-900">
-      <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-neutral-900 flex flex-col">
+      <div className="flex-grow max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold text-white mb-12 font-[family-name:var(--font-playfair)] tracking-wide">
           About Me
         </h1>
@@ -138,6 +139,7 @@ export default function About() {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

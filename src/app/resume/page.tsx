@@ -1,4 +1,5 @@
 import { resumeData } from "@/data/resume";
+import Footer from "@/components/Footer";
 
 const companyUrls: Record<string, string> = {
   "Expedia Group": "https://www.expediagroup.com",
@@ -13,8 +14,8 @@ export const metadata = {
 
 export default function Resume() {
   return (
-    <main className="min-h-screen bg-neutral-900">
-      <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-neutral-900 flex flex-col">
+      <div className="flex-grow max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white font-[family-name:var(--font-playfair)] tracking-wide">
             {resumeData.name}
@@ -129,6 +130,7 @@ export default function Resume() {
           </ul>
         </section>
       </div>
+      <Footer />
     </main>
   );
 }
