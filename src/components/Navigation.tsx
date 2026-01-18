@@ -7,8 +7,8 @@ import { useState } from "react";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/work", label: "My Work" },
   { href: "/about", label: "About Me" },
+  { href: "/work", label: "My Work" },
   { href: "/resume", label: "Resume" },
 ];
 
@@ -43,10 +43,10 @@ export function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${
+                className={`text-sm transition-colors ${
                   pathname === link.href
-                    ? "text-blue-400"
-                    : "text-gray-300 hover:text-white"
+                    ? "text-blue-400 font-bold"
+                    : "text-gray-300 hover:text-white font-medium"
                 }`}
               >
                 {link.label}
@@ -94,10 +94,10 @@ export function Navigation() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`text-sm font-medium transition-colors py-2 ${
+                  className={`text-sm transition-colors py-2 ${
                     pathname === link.href
-                      ? "text-blue-400"
-                      : "text-gray-300 hover:text-white"
+                      ? "text-blue-400 font-bold"
+                      : "text-gray-300 hover:text-white font-medium"
                   }`}
                 >
                   {link.label}

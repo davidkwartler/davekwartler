@@ -6,6 +6,12 @@ export default function Footer() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-1">
           <div className="flex gap-6 text-sm">
+            <Link
+              href="/resume"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              Resume
+            </Link>
             <a
               href="https://www.linkedin.com/in/dkwartler"
               target="_blank"
@@ -14,12 +20,6 @@ export default function Footer() {
             >
               LinkedIn
             </a>
-            <Link
-              href="/resume"
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              Resume
-            </Link>
             <a
               href="mailto:david@davidkwartler.com"
               className="text-gray-400 hover:text-white transition-colors"
