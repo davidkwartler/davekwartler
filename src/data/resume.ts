@@ -11,11 +11,13 @@ export const resumeData = {
     "Analytical problem-solver and clear communicator with a proven ability to blend technical expertise and strategic thinking to drive business impact in fast-paced, dynamic environments.",
   ],
 
-  careerBackground: `I'm a Senior Product Manager focused on building secure, scalable authentication and authorization solutions, with a growing emphasis on AI integrations and emerging interaction models. Over my career, I've worked to make login more seamless, strengthen account protection measures, and deliver personalized identity and profile experiences that support hundreds of millions of global users and contribute to business growth.
+  careerBackground: `I'm a Senior Product Manager focused on building secure, scalable authentication and authorization solutions. My work sits at the intersection of enterprise partnerships and AI, where I work to design the frameworks that allow our platform to safely partner and scale with the next frontier of interaction models.
 
-At Expedia Group, I help define how identity, authorization, and privacy work across our platform, including AI-powered experiences and our MCP-based product integrations. My work centers on designing clear consent and access models so that AI systems can act on behalf of users safely, transparently, and with well-defined trust boundaries.
+Over my career, I've worked to make login seamless, strengthen account protection, and deliver personalized identity and profile experiences for hundreds of millions of global users.
 
-I enjoy solving ambiguous technical problems at the intersection of identity, security, and user experience, especially in rapidly evolving spaces like AI-enabled products. I'm always happy to connect with others working in tech.`,
+At Expedia Group, I help define how identity, authorization, and privacy work across our travel ecosystem, with a focus on AI-powered experiences and our MCP-based product integrations. My work centers on designing clear consent and access models that enable AI systems to act on behalf of users safely and transparently.
+
+I enjoy solving the ambiguous challenges found in rapidly evolving spaces like AI authorization; operating at the intersection of identity, security, and user experience to build trust frameworks that serve as durable growth engines for our business.`,
 
   skills: [
     "Product Strategy",
