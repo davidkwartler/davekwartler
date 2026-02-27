@@ -5,10 +5,10 @@ export const resumeData = {
   location: "Austin, TX",
 
   summary: [
-    "Accomplished product manager with over six years of experience leading cross-functional teams to build impactful software products that drive measurable outcomes at enterprise scale.",
-    "Identity and Access Management expert responsible for Expedia Group's robust in-house customer identity platform, powering secure traveler and partner experiences across our global two-sided marketplace.",
-    "Led IAM product at General Motors, delivering seamless authentication and profile experiences across web, mobile, and connected vehicle platforms for millions of customers.",
-    "Analytical problem-solver and clear communicator with a proven ability to blend technical expertise and strategic thinking to drive business impact in fast-paced, dynamic environments.",
+    "Accomplished AI product manager with seven years of experience building enterprise-scale software products that bridge the gap between trust, security, and user experience.",
+    "Lead identity connectivity and AI authorization at Expedia, powering enterprise partnerships and MCP-based product integrations through a secure trust layer.",
+    "IAM expert who led GM's identity solution, delivering seamless authentication across web, mobile, and connected vehicle platforms for millions of users.",
+    "Strategic product leader focused on blending technical expertise and analytical problem-solving to transform complex authorization frameworks into durable growth engines.",
   ],
 
   careerBackground: `I'm a Senior Product Manager focused on building secure, scalable authentication and authorization solutions. My work sits at the intersection of enterprise partnerships and AI, where I work to design the frameworks that allow our platform to safely partner and scale with the next frontier of interaction models.
@@ -20,19 +20,24 @@ At Expedia Group, I help define how identity, authorization, and privacy work ac
 I enjoy solving the ambiguous challenges found in rapidly evolving spaces like AI authorization; operating at the intersection of identity, security, and user experience to build trust frameworks that serve as durable growth engines for our business.`,
 
   skills: [
+    "AI Agent Authorization",
+    "Model Context Protocol (MCP)",
+    "LLM Data Privacy & Governance",
+    "Identity & Access Management",
+    "OAuth 2.0",
+    "Federated Identity & OIDC",
+    "API Design & Documentation",
     "Product Strategy",
-    "Continuous Discovery",
-    "User Research",
-    "A/B Testing",
-    "Data Analysis",
-    "Collaboration",
-    "Communication",
     "Stakeholder Alignment & Influence",
     "Leadership & Mentoring",
-    "API Design & Documentation",
-    "Identity & Access Management",
-    "UI/UX Design",
+    "Collaboration",
+    "Communication",
     "Product Development Lifecycle",
+    "Continuous Discovery",
+    "A/B Testing",
+    "User Research",
+    "Data Analysis",
+    "UI/UX Design",
     "Acceptance Testing",
   ],
 
@@ -46,7 +51,9 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       description:
         "Global travel technology company operating an AI-enabled marketplace for travelers and partners",
       highlights: [
-        "Defined and led a multi-team initiative spanning eight development squads to achieve identity platform multi-tenancy, ensuring user data isolation and unlocking $15M in potential value through personalized user experiences for Expedia's fast-growing demand partner marketplace.",
+        "Led authorization strategy for the Expedia app in ChatGPT as one of OpenAI's launch partners, building the identity layer of our MCP server for personalized search, connected shopping, and secure agentic checkout.",
+        "Architected a centralized OAuth 2.0 consent system to power $300M+ in enterprise partnerships, enabling secure scope-based identity connectivity, data exchange and account linking with 10+ global partners.",
+        "Pioneered initiative to achieve identity platform multi-tenancy, ensuring user data isolation and unlocking $15M in value via personalized experiences and loyalty integrations for Expedia's fast-growing B2B marketplace.",
         "Achieved 1% conversion uplift by leading cross-functional alignment across loyalty, fraud, cybersecurity, and privacy teams to A/B test extended session length strategy, balancing user experience with account security.",
         "Championed system rearchitecture to eliminate external vendor dependency for authentication, delivering $3M in annual EBITDA savings and improving control of our tech stack.",
         "Launched social login and NAVER Pay integration in South Korea to streamline checkout and capture $4M in incremental value by improving conversion in a key international growth market.",
