@@ -96,15 +96,8 @@ export default function WhatIDo() {
                     )} · {job.location} · {job.startDate} – {job.endDate}
                   </p>
                   <p className="mt-3 text-gray-300">
-                    {job.description}
+                    {job.workSummary || job.description}
                   </p>
-                  {job.highlights && job.highlights.length > 0 && (
-                    <ul className="mt-3 space-y-2 text-sm text-gray-400 list-disc list-inside">
-                      {job.highlights.map((highlight, i) => (
-                        <li key={i}>{highlight}</li>
-                      ))}
-                    </ul>
-                  )}
                 </div>
               </div>
             ))}

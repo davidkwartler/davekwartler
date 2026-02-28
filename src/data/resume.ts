@@ -50,6 +50,8 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       endDate: "Present",
       description:
         "Global travel technology company operating an AI-enabled marketplace for travelers and partners",
+      workSummary:
+        "I build secure, scalable authentication and authorization capabilities for Expedia Group's customer identity platform. My work focuses on defining consent, access, and privacy for AI-powered experiences and MCP-based integrations, ensuring systems can act on behalf of users safely and transparently across Expedia's ecosystem.",
       highlights: [
         "Led authorization strategy for the Expedia app in ChatGPT as one of OpenAI's launch partners, building the identity layer of our MCP server for personalized search, connected shopping, and secure agentic checkout.",
         "Architected a centralized OAuth 2.0 consent system to power $300M+ in enterprise partnerships, enabling secure scope-based identity connectivity, data exchange and account linking with 10+ global partners.",
@@ -68,6 +70,8 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       endDate: "08/2024",
       description:
         "Leading US automaker advancing electric, autonomous, and connected vehicle technology",
+      workSummary:
+        "Led full-stack product development for customer identity and access management, focused on improving developer experience, strengthening account security, and reducing authentication friction across GM's digital ecosystem. Owned authentication and profile capabilities spanning mobile apps, web experiences, and connected vehicle platforms.",
       highlights: [
         "Increased loyalty program enrollments by 28%, delivering $16M in monthly customer lifetime value gains through A/B testing to optimize sign-up flow and drive retention.",
         "Launched revamped mobile app authentication experience informed by an employee pilot program of over 200 participants, resulting in a 19% increase in customer satisfaction and improved user experience.",
@@ -82,6 +86,8 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       endDate: "06/2021",
       description:
         "Technology consulting firm delivering large-scale modernization initiatives for a wide range of clients",
+      workSummary:
+        "Worked on 10+ total technology consulting engagements, including two long-running projects, across roles spanning product management, business analysis, quality assurance, and agile delivery, supporting large-scale technology modernization initiatives for a wide range of clients.",
       highlights: [
         "Accelerated environmental assessment project efficiency by 65% through revamped email notifications in large-scale regulatory planning platform.",
         "Secured $2M contract by leading UI design and product vision for a data visualization proof of concept, enabling real-time security officer post tracking to optimize resource allocation.",
