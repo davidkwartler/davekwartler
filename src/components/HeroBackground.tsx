@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 /**
  * HeroBackground - Stripe-inspired animated gradient background
@@ -11,9 +11,18 @@ import { motion } from "motion/react";
  * - Subtle skew for depth and perspective
  * - Static noise overlay for texture
  * - Respects prefers-reduced-motion
- * - High performance
  */
 export default function HeroBackground() {
+  const prefersReducedMotion = useReducedMotion();
+
+  const blobAnimate = (x: string[], y: string[], scale: number[]) =>
+    prefersReducedMotion ? undefined : { x, y, scale };
+
+  const blobTransition = (duration: number) =>
+    prefersReducedMotion
+      ? undefined
+      : { duration, ease: "easeInOut" as const, repeat: Infinity, repeatType: "loop" as const };
+
   return (
     <div className="absolute inset-0 overflow-hidden -z-10">
       {/* Base dark layer */}
@@ -35,17 +44,8 @@ export default function HeroBackground() {
             background: "radial-gradient(ellipse at center, rgba(139, 92, 246, 0.3) 0%, transparent 70%)",
             filter: "blur(60px)",
           }}
-          animate={{
-            x: ["0%", "5%", "-3%", "0%"],
-            y: ["0%", "10%", "5%", "0%"],
-            scale: [1, 1.05, 0.95, 1],
-          }}
-          transition={{
-            duration: 25,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
+          animate={blobAnimate(["0%", "5%", "-3%", "0%"], ["0%", "10%", "5%", "0%"], [1, 1.05, 0.95, 1])}
+          transition={blobTransition(25)}
         />
 
         {/* Cyan/teal blob - right side */}
@@ -59,17 +59,8 @@ export default function HeroBackground() {
             background: "radial-gradient(ellipse at center, rgba(34, 211, 238, 0.2) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
-          animate={{
-            x: ["0%", "-8%", "5%", "0%"],
-            y: ["0%", "5%", "-5%", "0%"],
-            scale: [1, 1.1, 0.9, 1],
-          }}
-          transition={{
-            duration: 30,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
+          animate={blobAnimate(["0%", "-8%", "5%", "0%"], ["0%", "5%", "-5%", "0%"], [1, 1.1, 0.9, 1])}
+          transition={blobTransition(30)}
         />
 
         {/* Deep blue blob - center */}
@@ -83,17 +74,8 @@ export default function HeroBackground() {
             background: "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.25) 0%, transparent 70%)",
             filter: "blur(70px)",
           }}
-          animate={{
-            x: ["0%", "10%", "-5%", "0%"],
-            y: ["0%", "-5%", "10%", "0%"],
-            scale: [1, 0.95, 1.05, 1],
-          }}
-          transition={{
-            duration: 35,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
+          animate={blobAnimate(["0%", "10%", "-5%", "0%"], ["0%", "-5%", "10%", "0%"], [1, 0.95, 1.05, 1])}
+          transition={blobTransition(35)}
         />
 
         {/* Pink/magenta accent - bottom */}
@@ -107,17 +89,8 @@ export default function HeroBackground() {
             background: "radial-gradient(ellipse at center, rgba(236, 72, 153, 0.15) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
-          animate={{
-            x: ["0%", "-5%", "8%", "0%"],
-            y: ["0%", "-8%", "-3%", "0%"],
-            scale: [1, 1.1, 0.95, 1],
-          }}
-          transition={{
-            duration: 28,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
+          animate={blobAnimate(["0%", "-5%", "8%", "0%"], ["0%", "-8%", "-3%", "0%"], [1, 1.1, 0.95, 1])}
+          transition={blobTransition(28)}
         />
 
         {/* Indigo overlay - creates depth */}
@@ -131,17 +104,8 @@ export default function HeroBackground() {
             background: "radial-gradient(ellipse at center, rgba(99, 102, 241, 0.2) 0%, transparent 60%)",
             filter: "blur(60px)",
           }}
-          animate={{
-            x: ["0%", "5%", "-8%", "0%"],
-            y: ["0%", "5%", "-5%", "0%"],
-            scale: [1, 0.9, 1.05, 1],
-          }}
-          transition={{
-            duration: 32,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
+          animate={blobAnimate(["0%", "5%", "-8%", "0%"], ["0%", "5%", "-5%", "0%"], [1, 0.9, 1.05, 1])}
+          transition={blobTransition(32)}
         />
       </div>
 
