@@ -52,7 +52,7 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       workSummary:
         "I own the authorization layer for Expedia's agentic traveler experience across Gen AI partnerships. My work focuses on building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces — safely and transparently.",
       highlights: [
-        "Lead authorization strategy for Expedia's MCP integrations across ChatGPT, Claude, Meta AI, Alexa+, and Gemini, building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces.",
+        "Lead authorization strategy for Expedia's MCP integrations across ChatGPT, Claude, and Alexa+, building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces.",
         "Architected centralized OAuth 2.0 consent system powering $400M+ in enterprise partnerships across AI, loyalty programs, and social platforms, enabling secure scope-based identity connectivity and data exchange with 20+ global partners.",
         "Championed AI building within Expedia by shipping 50+ production code changes for account linking, from building UI designs in Figma Make to pushing frontend, API, and OIDC changes via Claude Code and Codex.",
         "Pioneered identity platform multi-tenancy, ensuring user data isolation and unlocking $15M in value via personalization and loyalty integrations for Expedia's B2B marketplace.",
@@ -86,7 +86,7 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       description:
         "Technology consulting firm delivering large-scale modernization initiatives for a wide range of clients",
       workSummary:
-        "Worked across 10+ technology consulting engagements spanning product management, business analysis, quality assurance, and agile delivery, supporting large-scale modernization initiatives for government and enterprise clients.",
+        "Worked on 10+ technology consulting engagements, including two long-running projects, across roles spanning product management, business analysis, quality assurance, and agile delivery, supporting large-scale modernization initiatives for a wide range of clients.",
       highlights: [
         "Accelerated project efficiency by 65% by redesigning workflows and notification systems in an environmental planning application.",
         "Secured $2M client contract by leading product and UI design for a real-time data visualization proof of concept.",
@@ -100,7 +100,7 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       degree: "Bachelor of Business Administration",
       location: "Washington, DC",
       graduationDate: "2015 – 2019",
-      details: "Major in Finance",
+      details: "Major in Finance, Minor in Environmental Sustainability",
     },
   ],
 
