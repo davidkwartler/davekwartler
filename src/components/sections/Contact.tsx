@@ -49,6 +49,22 @@ export default function Contact() {
               Email me
             </a>
           </div>
+          <a
+            href="#top"
+            className="mt-16 inline-flex flex-col items-center gap-1 text-sm text-gray-500 transition-colors hover:text-white"
+          >
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+            </svg>
+            Back to top
+          </a>
         </Reveal>
       </div>
     </section>
