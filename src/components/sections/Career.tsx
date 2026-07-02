@@ -42,7 +42,7 @@ const entries: Entry[] = [
   {
     id: "gw",
     logo: "/gw-logo.png",
-    node: "GW",
+    node: "GW School of Business",
     years: "2015–19",
     title: edu.degree,
     org: edu.institution,
@@ -67,7 +67,7 @@ const entries: Entry[] = [
   {
     id: "gm",
     logo: "/gm-logo.jpeg",
-    node: "GM",
+    node: "General Motors",
     years: "2021–24",
     title: gm.position,
     org: gm.company,
@@ -145,7 +145,7 @@ export default function Career() {
                       />
                     </span>
                     <span
-                      className={`text-sm font-medium transition-colors ${
+                      className={`max-w-[5.5rem] text-center text-xs leading-tight font-medium transition-colors sm:max-w-[9rem] sm:text-sm ${
                         isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
                       }`}
                     >

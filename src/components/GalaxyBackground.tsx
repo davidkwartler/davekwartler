@@ -27,6 +27,7 @@ type Band = {
   px: number; // seconds per horizontal cycle
   py: number;
   phase: number;
+  rot: number; // ellipse rotation in radians
   r: number; // fraction of max(viewport)
   scaleX: number;
   scaleY: number;
@@ -34,27 +35,42 @@ type Band = {
   tint: [number, number, number];
 };
 
+// A diagonal galactic plane with a bright core, plus two faint wisps.
+// Deliberately dark: the glow should read as light in space, not a
+// colored backdrop.
 const BANDS: Band[] = [
-  { cx: 0.22, cy: 0.28, ax: 0.14, ay: 0.10, px: 26, py: 21, phase: 0.0, r: 0.5, scaleX: 1.7, scaleY: 0.75, alpha: 0.32, tint: [139, 92, 246] },
-  { cx: 0.78, cy: 0.24, ax: 0.12, ay: 0.12, px: 31, py: 24, phase: 2.1, r: 0.44, scaleX: 1.4, scaleY: 0.8, alpha: 0.18, tint: [217, 70, 239] },
-  { cx: 0.5, cy: 0.64, ax: 0.16, ay: 0.09, px: 22, py: 28, phase: 4.2, r: 0.42, scaleX: 1.9, scaleY: 0.65, alpha: 0.26, tint: [99, 102, 241] },
-  { cx: 0.85, cy: 0.75, ax: 0.10, ay: 0.11, px: 35, py: 19, phase: 5.6, r: 0.36, scaleX: 1.2, scaleY: 0.9, alpha: 0.16, tint: [59, 130, 246] },
+  { cx: 0.5, cy: 0.44, ax: 0.05, ay: 0.04, px: 40, py: 33, phase: 0.0, rot: -0.32, r: 0.5, scaleX: 2.6, scaleY: 0.5, alpha: 0.2, tint: [139, 92, 246] },
+  { cx: 0.56, cy: 0.4, ax: 0.04, ay: 0.03, px: 34, py: 27, phase: 1.3, rot: -0.32, r: 0.16, scaleX: 1.3, scaleY: 0.75, alpha: 0.3, tint: [196, 181, 253] },
+  { cx: 0.82, cy: 0.18, ax: 0.07, ay: 0.06, px: 29, py: 24, phase: 2.6, rot: 0.4, r: 0.3, scaleX: 1.6, scaleY: 0.6, alpha: 0.12, tint: [217, 70, 239] },
+  { cx: 0.16, cy: 0.72, ax: 0.07, ay: 0.06, px: 37, py: 25, phase: 4.4, rot: -0.5, r: 0.34, scaleX: 1.7, scaleY: 0.65, alpha: 0.12, tint: [99, 102, 241] },
 ];
 
-type Star = { x: number; y: number; r: number; phase: number; speed: number; violet: boolean };
+type Star = {
+  x: number;
+  y: number;
+  r: number;
+  phase: number;
+  speed: number;
+  violet: boolean;
+  bright: boolean;
+};
 
 const TAU = Math.PI * 2;
 const GRID = 28; // px between binary glyphs
 
 function makeStars(count: number): Star[] {
-  return Array.from({ length: count }, () => ({
-    x: Math.random(),
-    y: Math.random(),
-    r: 0.4 + Math.random() * 1.1,
-    phase: Math.random() * TAU,
-    speed: 0.3 + Math.random() * 1.2,
-    violet: Math.random() < 0.25,
-  }));
+  return Array.from({ length: count }, () => {
+    const bright = Math.random() < 0.16;
+    return {
+      x: Math.random(),
+      y: Math.random(),
+      r: bright ? 1.1 + Math.random() * 0.9 : 0.3 + Math.random() * 0.8,
+      phase: Math.random() * TAU,
+      speed: 0.3 + Math.random() * 1.2,
+      violet: Math.random() < 0.25,
+      bright,
+    };
+  });
 }
 
 function drawFrame(
@@ -66,7 +82,7 @@ function drawFrame(
   dim: number
 ) {
   ctx.globalCompositeOperation = "source-over";
-  ctx.fillStyle = "#08070d";
+  ctx.fillStyle = "#050409";
   ctx.fillRect(0, 0, w, h);
 
   // Nebula
@@ -78,27 +94,52 @@ function drawFrame(
     const r = b.r * base;
     ctx.save();
     ctx.translate(x, y);
+    ctx.rotate(b.rot);
     ctx.scale(b.scaleX, b.scaleY);
     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
     const [cr, cg, cb] = b.tint;
     const a = b.alpha * dim;
     grad.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${a})`);
-    grad.addColorStop(0.55, `rgba(${cr}, ${cg}, ${cb}, ${a * 0.45})`);
+    grad.addColorStop(0.4, `rgba(${cr}, ${cg}, ${cb}, ${a * 0.35})`);
     grad.addColorStop(1, `rgba(${cr}, ${cg}, ${cb}, 0)`);
     ctx.fillStyle = grad;
     ctx.fillRect(-r, -r, r * 2, r * 2);
     ctx.restore();
   }
 
-  // Stars
+  // Stars: soft glow + core; the bright ones get a 4-point sparkle
   for (const s of stars) {
-    const tw = (0.35 + 0.55 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase))) * dim;
-    ctx.fillStyle = s.violet
-      ? `rgba(196, 181, 253, ${tw})`
-      : `rgba(255, 255, 255, ${tw * 0.9})`;
+    const x = s.x * w;
+    const y = s.y * h;
+    const tw = (0.3 + 0.6 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase))) * dim;
+    const [cr, cg, cb] = s.violet ? [196, 181, 253] : [255, 255, 255];
+
+    if (s.bright) {
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, s.r * 4);
+      glow.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${tw * 0.35})`);
+      glow.addColorStop(1, `rgba(${cr}, ${cg}, ${cb}, 0)`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(x, y, s.r * 4, 0, TAU);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${tw})`;
     ctx.beginPath();
-    ctx.arc(s.x * w, s.y * h, s.r, 0, TAU);
+    ctx.arc(x, y, s.r, 0, TAU);
     ctx.fill();
+
+    if (s.bright) {
+      ctx.strokeStyle = `rgba(${cr}, ${cg}, ${cb}, ${tw * 0.5})`;
+      ctx.lineWidth = 0.6;
+      const len = s.r * 3.5;
+      ctx.beginPath();
+      ctx.moveTo(x - len, y);
+      ctx.lineTo(x + len, y);
+      ctx.moveTo(x, y - len);
+      ctx.lineTo(x, y + len);
+      ctx.stroke();
+    }
   }
 
   // Binary field: brightness follows traveling waves, glyphs flip slowly
@@ -132,7 +173,7 @@ function drawFrame(
 export default function GalaxyBackground({
   timeScale = 1,
   dim = 1,
-  starCount = 140,
+  starCount = 160,
 }: {
   timeScale?: number;
   dim?: number;
@@ -198,7 +239,7 @@ export default function GalaxyBackground({
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 0%, transparent 55%, rgba(0, 0, 0, 0.4) 100%)",
+            "radial-gradient(ellipse at center, transparent 0%, transparent 45%, rgba(0, 0, 0, 0.5) 100%)",
         }}
       />
     </div>

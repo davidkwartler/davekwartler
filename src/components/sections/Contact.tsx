@@ -12,7 +12,7 @@ export default function Contact() {
     >
       {/* Smaller, slower galaxy with soft edges into the monochrome page */}
       <div className="absolute inset-0 -z-10">
-        <GalaxyBackground timeScale={0.45} dim={0.65} starCount={70} />
+        <GalaxyBackground timeScale={0.45} dim={0.85} starCount={80} />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-neutral-950 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-950 to-transparent" />
       </div>
