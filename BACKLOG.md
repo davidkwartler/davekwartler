@@ -22,6 +22,27 @@ The About page currently has 7 photos in a grid. Quality over quantity.
 - Pairs well with the single-page redesign, where photos become section accents
   rather than a gallery
 
+## David Kwartler AI ("chat with David")
+
+A chatbot on the site that lets visitors chat with an AI David — Claude API with a
+basic system prompt plus context about him (resume, about, site voice). Heavy rate
+limits.
+
+- Architecture: the site is a static export, so the API key can't live in the
+  frontend. Needs a small serverless function (Vercel Edge Function alongside the
+  static site, or a separate tiny worker) that holds the key, injects the system
+  prompt, and enforces limits.
+- Rate limiting: aggressive — per-IP token bucket + small daily global cap so a
+  viral moment can't run up the bill. Hard cap on response length and turns per
+  session.
+- System prompt: persona from site content only; deflect anything private,
+  no partner namedrops (same content rules as the site), redirect
+  serious inquiries to email/LinkedIn.
+- Prompt-injection hygiene: treat all user input as untrusted; no tools, no
+  browsing, nothing to exfiltrate. It only talks.
+- On-brand touch: the chat could open with a consent-screen joke ("David AI
+  requests access to: this conversation").
+
 ## Earlier brainstorm (not yet committed)
 
 - **OAuth consent screen easter egg**: first-visit parody consent dialog
