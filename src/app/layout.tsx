@@ -36,12 +36,21 @@ export const metadata: Metadata = {
     siteName: "David Kwartler",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "David Kwartler — Senior Product Manager",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "David Kwartler",
     description:
       "Identity nerd, agentic-travel PM, occasional race car driver.",
+    images: ["/og.png"],
   },
 };
 
