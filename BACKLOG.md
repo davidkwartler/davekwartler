@@ -25,6 +25,24 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **Public-surface scan**: check whether an "opinions are my own, not my
   employer's" disclaimer is needed, and audit all copy for anything
   Expedia-confidential
+- **Pause galaxy when offscreen (perf)**: both canvases run rAF loops even
+  when invisible (hero after fade-out, contact while elsewhere). Add an
+  IntersectionObserver to stop/resume the loop; shares machinery with the
+  pause-animation accessibility button
+- **Link preview image (og.png) refresh**: replace with a screenshot of the
+  galaxy background so LinkedIn/iMessage previews match the new site. Favicon
+  needs the same refresh
+- **Resume PDF download link**: David will provide his PDF resume; add a
+  "Download resume (PDF)" link in the career section
+- **Custom 404 page**: dark page with the binary field; identity-nerd joke
+  copy ("401: you don't have permission to be here... kidding, it's a 404")
+- **Binary-field easter eggs**: very infrequently, the 0/1 wave resolves into
+  readable strings — "DK", "MCP", "OIDC". Unannounced, blink-and-miss-it
+- **Vercel Analytics**: David thinks it's already enabled — verify, and wire
+  up/review post-redesign
+- **Google Search Console revisit**: already set up (David did the
+  verification). Post-redesign: submit the sitemap, confirm old /work and
+  /about URLs re-index to the single page
 
 ## David Kwartler AI ("chat with David")
 
