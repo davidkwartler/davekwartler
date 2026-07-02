@@ -6,7 +6,9 @@ import {
   useMotionValue,
   useMotionTemplate,
   useReducedMotion,
+  useScroll,
   useSpring,
+  useTransform,
 } from "motion/react";
 import HeroBackground from "@/components/HeroBackground";
 import { resumeData } from "@/data/resume";
@@ -21,7 +23,14 @@ export default function Hero() {
   const my = useMotionValue(-1000);
   const sx = useSpring(mx, { stiffness: 120, damping: 25 });
   const sy = useSpring(my, { stiffness: 120, damping: 25 });
-  const glow = useMotionTemplate`radial-gradient(520px circle at ${sx}px ${sy}px, rgba(255, 255, 255, 0.07), transparent 70%)`;
+  const glow = useMotionTemplate`radial-gradient(520px circle at ${sx}px ${sy}px, rgba(167, 139, 250, 0.09), transparent 70%)`;
+
+  // Galaxy fades away as the hero scrolls out
+  const { scrollY } = useScroll();
+  const bgOpacity = useTransform(scrollY, (v) => {
+    if (typeof window === "undefined") return 1;
+    return Math.max(0, 1 - v / (window.innerHeight * 0.75));
+  });
 
   const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -44,7 +53,12 @@ export default function Hero() {
       onMouseMove={onMouseMove}
       className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
     >
-      <HeroBackground />
+      <motion.div
+        className="absolute inset-0 -z-10"
+        style={{ opacity: prefersReducedMotion ? 1 : bgOpacity }}
+      >
+        <HeroBackground />
+      </motion.div>
 
       {/* Cursor spotlight */}
       {!prefersReducedMotion && (
@@ -80,7 +94,7 @@ export default function Hero() {
                 x: "-50%",
                 y: "-50%",
                 background:
-                  "radial-gradient(circle, rgba(255,255,255,0.10), transparent 65%)",
+                  "radial-gradient(circle, rgba(196,181,253,0.14), transparent 65%)",
               }}
               animate={{ scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
