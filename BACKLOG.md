@@ -69,6 +69,11 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   landing the heading closer to the nav (smaller scroll-margin or negative
   offset so padding is absorbed), verify scrollspy still highlights the right
   tab after the change
+- **Differentiate the contact galaxy from the hero**: same composition twice
+  reads as copy-paste. Flip it — mirror the galactic plane (opposite diagonal,
+  core on the other side), maybe shift the wisp tints. Implementation: add a
+  variant/flip prop to GalaxyBackground that mirrors band positions/rotations
+  (cx→1-cx, rot→-rot) instead of hardcoding a second BANDS array
 
 ## Travel map easter egg (elaborated 2026-07-02)
 
