@@ -43,6 +43,9 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **Google Search Console revisit**: already set up (David did the
   verification). Post-redesign: submit the sitemap, confirm old /work and
   /about URLs re-index to the single page
+- **Headshot grey outline (tentative — David not sold)**: try the grey ring
+  from the OG image around the hero headshot; preview against the galaxy
+  before committing, easy to drop if it fights the breathing halo
 
 ## David Kwartler AI ("chat with David")
 
