@@ -46,6 +46,12 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **Headshot grey outline (tentative — David not sold)**: try the grey ring
   from the OG image around the hero headshot; preview against the galaxy
   before committing, easy to drop if it fights the breathing halo
+- **Kill the Skills section**: collapse the flat skills-chip wall into the
+  four timeline entries instead — each job's detail panel shows the skills
+  used there ("spread the love"). Needs a skills-per-job mapping (draft one,
+  David reviews); pairs with the earlier idea of dropping the four generic
+  soft skills. Decide where certifications land afterward (probably GW/
+  education entry or a one-liner)
 
 ## Travel map easter egg (elaborated 2026-07-02)
 
