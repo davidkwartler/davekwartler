@@ -5,19 +5,19 @@ export const resumeData = {
   location: "Austin, TX",
 
   summary: [
-    "Accomplished AI builder PM and CIAM expert with seven years of experience delivering identity and authorization products at two Fortune 500 companies.",
-    "Own the authorization layer for Expedia's agentic traveler experience across Gen AI partnerships, building secure software products that bridge the gap between trust, privacy, and user experience.",
+    "CIAM expert and hands-on builder with seven years of experience delivering identity and authorization products at two Fortune 500 companies.",
+    "Build the OAuth and OIDC systems that let travelers securely connect their Expedia accounts with partners: a growth engine driving member acquisition, retention, conversion, and return on ad spend across enterprise partnerships.",
+    "Design the consent and access models that enable AI systems to act on behalf of travelers safely and transparently through MCP-based integrations.",
     "Previously led GM's customer identity platform across web, mobile, and connected vehicles, serving millions of users and introducing new 0-to-1 authentication experiences.",
-    "Strategic product leader focused on blending technical expertise and analytical problem-solving to transform complex authorization frameworks into durable growth engines.",
   ],
 
-  careerBackground: `I'm a Senior Product Manager focused on building secure, scalable authentication and authorization solutions. My work sits at the intersection of enterprise partnerships and AI, where I design the frameworks that allow our platform to safely partner and scale with the next frontier of interaction models.
+  careerBackground: `I'm a Senior Product Manager focused on secure, scalable authentication and authorization solutions: identity connectivity, consent, and privacy.
 
-Over my career, I've worked to make login seamless, strengthen account protection, and deliver personalized identity and profile experiences for hundreds of millions of global users.
+At Expedia Group, I build the OAuth and OIDC systems that let travelers securely connect their accounts with our partners across loyalty programs, social platforms, and AI experiences. Account linking done well is a growth engine: it drives member acquisition, retention, conversion, and return on ad spend across enterprise partnerships. My team also designs the consent and access models that enable AI systems to act on behalf of travelers safely and transparently through our MCP-based integrations.
 
-At Expedia Group, I own the authorization layer for our agentic traveler experience across Gen AI partnerships — including ChatGPT, Claude, Meta AI, Alexa+, and Gemini. My work centers on designing clear consent and access models that enable AI systems to act on behalf of users safely and transparently.
+Over my career, I've made login seamless, strengthened account protection, and delivered personalized identity and profile experiences for hundreds of millions of global users.
 
-I enjoy solving the ambiguous challenges found in rapidly evolving spaces like AI authorization; operating at the intersection of identity, security, and user experience to build trust frameworks that serve as durable growth engines for our business.`,
+I'm a builder. I prototype with AI and ship production changes myself because it's the fastest way to test an idea. I enjoy the ambiguous challenges of rapidly evolving spaces like AI authorization, working at the intersection of identity, security, and user experience.`,
 
   skills: [
     "Identity & Access Management",
@@ -50,11 +50,11 @@ I enjoy solving the ambiguous challenges found in rapidly evolving spaces like A
       description:
         "Global travel technology company operating an AI-enabled marketplace for travelers and partners",
       workSummary:
-        "I own the authorization layer for Expedia's agentic traveler experience across Gen AI partnerships. My work focuses on building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces — safely and transparently.",
+        "I lead identity connectivity for Expedia's enterprise partnerships: the account linking, consent, and authorization systems that power loyalty, social, and Gen AI integrations. My work enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces, safely and transparently.",
       highlights: [
-        "Lead authorization strategy for Expedia's MCP integrations across ChatGPT, Claude, and Alexa+, building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces.",
+        "Lead authorization strategy for Expedia's MCP-based Gen AI integrations, building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first agentic surfaces.",
         "Architected centralized OAuth 2.0 consent system powering $400M+ in enterprise partnerships across AI, loyalty programs, and social platforms, enabling secure scope-based identity connectivity and data exchange with 20+ global partners.",
-        "Championed AI building within Expedia by shipping 50+ production code changes for account linking, from building UI designs in Figma Make to pushing frontend, API, and OIDC changes via Claude Code and Codex.",
+        "Championed AI building within Expedia by shipping 50+ production code changes for account linking, from designing UI in Figma to pushing frontend, API, and OIDC changes with AI coding tools.",
         "Pioneered identity platform multi-tenancy, ensuring user data isolation and unlocking $15M in value via personalization and loyalty integrations for Expedia's B2B marketplace.",
         "Achieved 1% booking conversion uplift by aligning loyalty, fraud, privacy, and cybersecurity teams to A/B test an extended session length strategy.",
         "Eliminated external vendor dependency for authentication through system rearchitecture, delivering $3M in annual EBITDA savings.",

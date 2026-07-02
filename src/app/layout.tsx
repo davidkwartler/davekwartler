@@ -20,7 +20,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "David Kwartler",
-  description: "Personal website of David Kwartler, a Senior Product Manager in Austin, TX focused on identity & access management solutions.",
+  description: "Personal website of David Kwartler, a Senior Product Manager in Austin, TX working on identity connectivity, consent, and AI agent authorization.",
   icons: {
     icon: "/favicon.svg",
   },

@@ -26,7 +26,11 @@ export default function Home() {
               {resumeData.name}
             </h1>
             <p className="mt-4 text-xl text-gray-300">
-              {resumeData.title} in {resumeData.location}
+              Identity nerd, agentic-travel PM, occasional race car driver
+            </p>
+            <p className="mt-3 text-lg text-gray-400 max-w-xl mx-auto">
+              I design how AI agents get permission to act for you. Also:
+              Porsche, vinyl, and a cat named Rey.
             </p>
             <div className="mt-12 flex justify-center gap-4">
               <Link
