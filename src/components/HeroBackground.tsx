@@ -3,11 +3,10 @@
 import { motion, useReducedMotion } from "motion/react";
 
 /**
- * HeroBackground - Stripe-inspired animated gradient background
+ * HeroBackground - monochrome aurora
  *
  * Features:
- * - Aurora-like mesh gradient with purple, cyan, and blue accents
- * - Slow-moving radial gradients that blend seamlessly
+ * - Slow-moving radial gradients in grays/whites with a faint cool tint
  * - Subtle skew for depth and perspective
  * - Static noise overlay for texture
  * - Respects prefers-reduced-motion
@@ -26,14 +25,14 @@ export default function HeroBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden -z-10">
       {/* Base dark layer */}
-      <div className="absolute inset-0 bg-[#0a0a0f]" />
+      <div className="absolute inset-0 bg-[#0a0a0b]" />
 
       {/* Skewed gradient container for depth */}
       <div
         className="absolute inset-0"
         style={{ transform: "skewY(-6deg) scaleY(1.2)", transformOrigin: "top left" }}
       >
-        {/* Primary purple blob - top left */}
+        {/* Bright silver blob - top left */}
         <motion.div
           className="absolute"
           style={{
@@ -41,14 +40,14 @@ export default function HeroBackground() {
             left: "-10%",
             width: "70%",
             height: "70%",
-            background: "radial-gradient(ellipse at center, rgba(139, 92, 246, 0.3) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(226, 232, 240, 0.14) 0%, transparent 70%)",
             filter: "blur(60px)",
           }}
           animate={blobAnimate(["0%", "5%", "-3%", "0%"], ["0%", "10%", "5%", "0%"], [1, 1.05, 0.95, 1])}
           transition={blobTransition(25)}
         />
 
-        {/* Cyan/teal blob - right side */}
+        {/* Cool slate blob - right side */}
         <motion.div
           className="absolute"
           style={{
@@ -56,14 +55,14 @@ export default function HeroBackground() {
             right: "-20%",
             width: "60%",
             height: "60%",
-            background: "radial-gradient(ellipse at center, rgba(34, 211, 238, 0.2) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.12) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
           animate={blobAnimate(["0%", "-8%", "5%", "0%"], ["0%", "5%", "-5%", "0%"], [1, 1.1, 0.9, 1])}
           transition={blobTransition(30)}
         />
 
-        {/* Deep blue blob - center */}
+        {/* Soft white blob - center */}
         <motion.div
           className="absolute"
           style={{
@@ -71,14 +70,14 @@ export default function HeroBackground() {
             left: "20%",
             width: "50%",
             height: "50%",
-            background: "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.25) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(255, 255, 255, 0.09) 0%, transparent 70%)",
             filter: "blur(70px)",
           }}
           animate={blobAnimate(["0%", "10%", "-5%", "0%"], ["0%", "-5%", "10%", "0%"], [1, 0.95, 1.05, 1])}
           transition={blobTransition(35)}
         />
 
-        {/* Pink/magenta accent - bottom */}
+        {/* Dim slate accent - bottom */}
         <motion.div
           className="absolute"
           style={{
@@ -86,14 +85,14 @@ export default function HeroBackground() {
             left: "30%",
             width: "50%",
             height: "40%",
-            background: "radial-gradient(ellipse at center, rgba(236, 72, 153, 0.15) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(100, 116, 139, 0.10) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
           animate={blobAnimate(["0%", "-5%", "8%", "0%"], ["0%", "-8%", "-3%", "0%"], [1, 1.1, 0.95, 1])}
           transition={blobTransition(28)}
         />
 
-        {/* Indigo overlay - creates depth */}
+        {/* Pale overlay - creates depth */}
         <motion.div
           className="absolute"
           style={{
@@ -101,7 +100,7 @@ export default function HeroBackground() {
             right: "10%",
             width: "40%",
             height: "40%",
-            background: "radial-gradient(ellipse at center, rgba(99, 102, 241, 0.2) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at center, rgba(203, 213, 225, 0.08) 0%, transparent 60%)",
             filter: "blur(60px)",
           }}
           animate={blobAnimate(["0%", "5%", "-8%", "0%"], ["0%", "5%", "-5%", "0%"], [1, 0.9, 1.05, 1])}
@@ -114,9 +113,9 @@ export default function HeroBackground() {
         className="absolute inset-0 opacity-60"
         style={{
           background: `
-            radial-gradient(ellipse 80% 50% at 50% 0%, rgba(139, 92, 246, 0.15), transparent),
-            radial-gradient(ellipse 60% 40% at 100% 50%, rgba(34, 211, 238, 0.1), transparent),
-            radial-gradient(ellipse 50% 50% at 0% 100%, rgba(59, 130, 246, 0.1), transparent)
+            radial-gradient(ellipse 80% 50% at 50% 0%, rgba(226, 232, 240, 0.07), transparent),
+            radial-gradient(ellipse 60% 40% at 100% 50%, rgba(148, 163, 184, 0.05), transparent),
+            radial-gradient(ellipse 50% 50% at 0% 100%, rgba(255, 255, 255, 0.04), transparent)
           `,
         }}
       />
@@ -135,7 +134,7 @@ export default function HeroBackground() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(0, 0, 0, 0.3) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(0, 0, 0, 0.35) 100%)",
         }}
       />
     </div>

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #1a1a1a;
+  --background: #0a0a0a;
   --foreground: #ededed;
 }
 
@@ -12,10 +12,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 

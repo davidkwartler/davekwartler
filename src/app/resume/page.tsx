@@ -7,16 +7,19 @@ export const metadata = {
 
 export default function Resume() {
   return (
-    <main className="min-h-screen bg-neutral-900 flex items-center justify-center">
+    <main className="min-h-screen bg-neutral-950 flex items-center justify-center">
       <script
         dangerouslySetInnerHTML={{
-          __html: 'window.location.replace("/work");',
+          __html: 'window.location.replace("/#career");',
         }}
       />
       <p className="text-gray-400">
         The resume has moved.{" "}
-        <Link href="/work" className="text-white underline underline-offset-4">
-          Continue to Work
+        <Link
+          href="/#career"
+          className="text-white underline underline-offset-4"
+        >
+          Continue to Career
         </Link>
       </p>
     </main>
