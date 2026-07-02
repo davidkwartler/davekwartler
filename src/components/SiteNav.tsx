@@ -17,6 +17,21 @@ export function SiteNav() {
   const prefersReducedMotion = useReducedMotion();
   const [active, setActive] = useState("top");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showAvatar, setShowAvatar] = useState(false);
+
+  // Show the nav avatar once the hero headshot has scrolled out of view
+  useEffect(() => {
+    const img = document.getElementById("hero-headshot-img");
+    if (!img) {
+      setShowAvatar(true);
+      return;
+    }
+    const io = new IntersectionObserver(([entry]) =>
+      setShowAvatar(!entry.isIntersecting)
+    );
+    io.observe(img);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -53,19 +68,29 @@ export function SiteNav() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a href="#top" className="flex items-center gap-3 font-semibold text-white">
-          {/* Landing pad for the scrubbed hero headshot */}
-          <span id="nav-avatar-slot" className="h-9 w-9 shrink-0 rounded-full">
-            {prefersReducedMotion && (
-              <Image
-                src="/dk-headshot.jpg"
-                alt=""
-                width={36}
-                height={36}
-                className="rounded-full"
-              />
-            )}
-          </span>
+        <a href="#top" className="flex items-center font-semibold text-white">
+          <motion.span
+            className="h-9 shrink-0 overflow-hidden rounded-full"
+            initial={false}
+            animate={{
+              width: showAvatar ? 36 : 0,
+              marginRight: showAvatar ? 12 : 0,
+              opacity: showAvatar ? 1 : 0,
+            }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { type: "spring", stiffness: 320, damping: 30 }
+            }
+          >
+            <Image
+              src="/dk-headshot.jpg"
+              alt=""
+              width={36}
+              height={36}
+              className="h-9 w-9 max-w-none rounded-full"
+            />
+          </motion.span>
           David Kwartler
         </a>
 

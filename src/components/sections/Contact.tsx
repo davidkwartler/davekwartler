@@ -25,7 +25,7 @@ export default function Contact() {
               href="mailto:david@davidkwartler.com"
               className="inline-block rounded-full bg-white/90 px-8 py-4 text-lg font-medium text-neutral-900 hover:bg-white transition-colors"
             >
-              david@davidkwartler.com
+              Email me
             </MagneticLink>
             <div className="flex items-center gap-6">
               <a
