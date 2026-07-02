@@ -132,18 +132,47 @@ function spawnMeteor(now: number): Meteor {
   };
 }
 
-function spawnEgg(now: number, w: number, h: number, word?: string): Egg | null {
+// Brightness field for the binary glyphs; also used to place easter eggs
+// inside a patch that's currently glowing.
+function waveAt(x: number, y: number, t: number) {
+  return (
+    Math.sin(x * 0.006 + t * 0.55) * Math.sin(y * 0.009 - t * 0.4) * 0.5 +
+    0.5 * Math.sin((x + y) * 0.004 + t * 0.3)
+  );
+}
+
+function spawnEgg(
+  now: number,
+  tWave: number,
+  w: number,
+  h: number,
+  word?: string
+): Egg | null {
   const text = word ?? EGG_WORDS[Math.floor(Math.random() * EGG_WORDS.length)];
   const cols = Math.floor(w / GRID);
   const rows = Math.floor(h / GRID);
   if (cols < text.length + 4 || rows < 5) return null;
-  return {
-    word: text,
-    i: 2 + Math.floor(Math.random() * (cols - text.length - 3)),
-    j: 2 + Math.floor(Math.random() * (rows - 4)),
-    start: now,
-    dur: 5,
-  };
+  // Score each candidate run of cells by its dimmest glyph, so the whole
+  // word lands embedded in a bright region of the floating pattern rather
+  // than popping up in dark space.
+  const candidates: { i: number; j: number; score: number }[] = [];
+  for (let j = 1; j < rows - 1; j++) {
+    for (let i = 1; i < cols - text.length; i++) {
+      let score = Infinity;
+      for (let k = 0; k < text.length; k++) {
+        score = Math.min(
+          score,
+          waveAt((i + k) * GRID + GRID / 2, j * GRID + GRID / 2, tWave)
+        );
+      }
+      candidates.push({ i, j, score });
+    }
+  }
+  candidates.sort((a, b) => b.score - a.score);
+  const pick =
+    candidates[Math.floor(Math.random() * Math.min(8, candidates.length))];
+  if (!pick) return null;
+  return { word: text, i: pick.i, j: pick.j, start: now, dur: 5 };
 }
 
 function drawMeteor(
@@ -277,18 +306,16 @@ function drawFrame(
     for (let j = 0; j <= rows; j++) {
       const x = i * GRID + GRID / 2;
       const y = j * GRID + GRID / 2;
-      const wave =
-        Math.sin(x * 0.006 + t * 0.55) *
-          Math.sin(y * 0.009 - t * 0.4) *
-          0.5 +
-        0.5 * Math.sin((x + y) * 0.004 + t * 0.3);
+      const wave = waveAt(x, y, t);
       const fieldAlpha = Math.pow(Math.max(0, wave), 3) * 0.3 * dim;
 
       let char: string;
       let alpha: number;
       if (egg && eggEnv > 0 && j === egg.j && i >= egg.i && i < egg.i + egg.word.length) {
+        // Barely brighter than the field's own peak so the word sits inside
+        // the pattern instead of floating on top of it
         char = egg.word[i - egg.i];
-        alpha = Math.max(fieldAlpha, eggEnv * 0.5 * dim);
+        alpha = Math.max(fieldAlpha, eggEnv * 0.38 * dim);
       } else {
         if (fieldAlpha < 0.02) continue;
         const seed = i * 7919 + j * 104729;
@@ -343,7 +370,8 @@ export default function GalaxyBackground({
     let userPaused = isGalaxyPaused();
     let meteor: Meteor | null = null;
     let egg: Egg | null = null;
-    let nextMeteorAt = 60 + Math.random() * 60;
+    // One welcome meteor shortly after load, then the sparse schedule
+    let nextMeteorAt = 3;
     let nextEggAt = 45 + Math.random() * 75;
 
     const draw = () =>
@@ -376,7 +404,7 @@ export default function GalaxyBackground({
         }
       }
       if (easterEggs) {
-        if (!egg && tReal >= nextEggAt) egg = spawnEgg(tReal, w, h);
+        if (!egg && tReal >= nextEggAt) egg = spawnEgg(tReal, tAnim, w, h);
         if (egg && tReal > egg.start + egg.dur) {
           egg = null;
           nextEggAt = tReal + 120 + Math.random() * 180;
@@ -421,7 +449,7 @@ export default function GalaxyBackground({
           draw();
         },
         egg: (word?: string) => {
-          egg = spawnEgg(tReal - 2.5, w, h, word);
+          egg = spawnEgg(tReal - 2.5, tAnim, w, h, word);
           draw();
         },
       };
