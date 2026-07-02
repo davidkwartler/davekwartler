@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { resumeData } from "@/data/resume";
 import Footer from "@/components/Footer";
@@ -9,135 +8,185 @@ const companyLogos: Record<string, string> = {
   "CVP": "/cvp-logo.png",
 };
 
-const educationLogos: Record<string, string> = {
-  "The George Washington University": "/gw-logo.png",
-};
-
 const companyUrls: Record<string, string> = {
   "Expedia Group": "https://www.expediagroup.com",
   "General Motors": "https://www.gm.com",
   "CVP": "https://www.cvpcorp.com",
 };
 
-const educationUrls: Record<string, string> = {
-  "The George Washington University": "https://www.gwu.edu",
-};
-
 export const metadata = {
-  title: "My Work - David Kwartler",
-  description: "Career background of David Kwartler, Senior Product Manager",
+  title: "Work - David Kwartler",
+  description:
+    "Career of David Kwartler: identity connectivity, consent, and AI agent authorization at Expedia Group and General Motors.",
 };
 
-export default function WhatIDo() {
+function TimelineEntry({
+  logo,
+  logoAlt,
+  isLast,
+  children,
+}: {
+  logo?: string;
+  logoAlt: string;
+  isLast?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex gap-5">
+      <div className="flex flex-col items-center">
+        {logo ? (
+          <Image
+            src={logo}
+            alt={logoAlt}
+            width={44}
+            height={44}
+            className="rounded-full ring-1 ring-white/10 bg-white/5"
+          />
+        ) : (
+          <div className="w-11 h-11 rounded-full ring-1 ring-white/10 bg-white/5" />
+        )}
+        {!isLast && <div className="w-px flex-1 bg-white/10 mt-3" />}
+      </div>
+      <div className={`flex-1 min-w-0 ${isLast ? "" : "pb-12"}`}>{children}</div>
+    </li>
+  );
+}
+
+export default function Work() {
   return (
     <main className="min-h-screen bg-neutral-900 flex flex-col">
-      <div className="flex-grow max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-white mb-12 font-[family-name:var(--font-playfair)] tracking-wide">
-          My Work
+      <div className="flex-grow max-w-3xl mx-auto w-full px-4 py-14 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold text-white font-[family-name:var(--font-playfair)] tracking-wide">
+          Work
         </h1>
 
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            Career Background
-          </h2>
-          <div className="prose prose-invert max-w-none">
-            {resumeData.careerBackground.split("\n\n").map((paragraph, index) => (
-              <p
-                key={index}
-                className="text-gray-300 leading-relaxed mb-4"
-              >
-                {paragraph}
-              </p>
-            ))}
-          </div>
-          <p className="mt-6 text-gray-300">
-            Curious to learn more?{" "}
-            <Link
-              href="/resume"
-              className="text-blue-400 hover:underline font-medium"
-            >
-              Check out my full resume.
-            </Link>
-          </p>
-        </section>
+        <div className="mt-8 space-y-5">
+          {resumeData.careerBackground.split("\n\n").map((paragraph, index) => (
+            <p key={index} className="text-gray-300 leading-relaxed">
+              {paragraph}
+            </p>
+          ))}
+        </div>
 
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-8">
+        <section className="mt-16">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-8">
             Experience
           </h2>
-          <div className="space-y-6">
+          <ol>
             {resumeData.experience.map((job, index) => (
-              <div
+              <TimelineEntry
                 key={index}
-                className="bg-neutral-800/50 rounded-lg p-6 flex gap-4 border border-neutral-700 border-l-4 border-l-blue-500 shadow-[inset_4px_0_12px_-4px_rgba(59,130,246,0.3)]"
+                logo={companyLogos[job.company]}
+                logoAlt={`${job.company} logo`}
               >
-                {companyLogos[job.company] && (
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={companyLogos[job.company]}
-                      alt={`${job.company} logo`}
-                      width={48}
-                      height={48}
-                      className="rounded"
-                    />
-                  </div>
-                )}
-                <div>
-                  <h3 className="text-xl font-semibold text-white">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                  <h3 className="text-lg font-semibold text-white">
                     {job.position}
                   </h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {companyUrls[job.company] ? (
-                      <a href={companyUrls[job.company]} target="_blank" rel="noopener noreferrer" className="text-blue-400 font-semibold hover:underline">
-                        {job.company}
-                      </a>
-                    ) : (
-                      <span className="text-blue-400 font-semibold">{job.company}</span>
-                    )} · {job.location} · {job.startDate} – {job.endDate}
-                  </p>
-                  <p className="mt-3 text-gray-300">
-                    {job.workSummary || job.description}
-                  </p>
+                  <span className="text-sm text-gray-500 tabular-nums">
+                    {job.startDate} – {job.endDate}
+                  </span>
                 </div>
-              </div>
+                <p className="mt-0.5 text-sm text-gray-400">
+                  {companyUrls[job.company] ? (
+                    <a
+                      href={companyUrls[job.company]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-300 underline-offset-4 hover:underline"
+                    >
+                      {job.company}
+                    </a>
+                  ) : (
+                    job.company
+                  )}{" "}
+                  · {job.location}
+                </p>
+                <p className="mt-3 text-gray-300 leading-relaxed">
+                  {job.workSummary || job.description}
+                </p>
+                {job.highlights && job.highlights.length > 0 && (
+                  <details className="mt-3 group">
+                    <summary className="cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
+                      <svg
+                        className="w-3.5 h-3.5 transition-transform group-open:rotate-90"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                      Highlights
+                    </summary>
+                    <ul className="mt-4 space-y-3 border-l border-white/10 pl-5">
+                      {job.highlights.map((highlight, i) => (
+                        <li
+                          key={i}
+                          className="text-sm text-gray-400 leading-relaxed"
+                        >
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+              </TimelineEntry>
             ))}
 
             {resumeData.education.map((edu, index) => (
-              <div
-                key={index}
-                className="bg-neutral-800/50 rounded-lg p-6 flex gap-4 border border-neutral-700 border-l-4 border-l-blue-500 shadow-[inset_4px_0_12px_-4px_rgba(59,130,246,0.3)]"
+              <TimelineEntry
+                key={`edu-${index}`}
+                logo="/gw-logo.png"
+                logoAlt={`${edu.institution} logo`}
+                isLast={index === resumeData.education.length - 1}
               >
-                {educationLogos[edu.institution] && (
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={educationLogos[edu.institution]}
-                      alt={`${edu.institution} logo`}
-                      width={48}
-                      height={48}
-                      className="rounded"
-                    />
-                  </div>
-                )}
-                <div>
-                  <h3 className="text-xl font-semibold text-white">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                  <h3 className="text-lg font-semibold text-white">
                     {edu.degree}
                   </h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {educationUrls[edu.institution] ? (
-                      <a href={educationUrls[edu.institution]} target="_blank" rel="noopener noreferrer" className="text-blue-400 font-semibold hover:underline">
-                        {edu.institution}
-                      </a>
-                    ) : (
-                      <span className="text-blue-400">{edu.institution}</span>
-                    )} · {edu.location}
-                  </p>
-                  <p className="mt-3 text-gray-300">
-                    {edu.details}
-                  </p>
+                  <span className="text-sm text-gray-500 tabular-nums">
+                    {edu.graduationDate}
+                  </span>
                 </div>
-              </div>
+                <p className="mt-0.5 text-sm text-gray-400">
+                  {edu.institution} · {edu.location}
+                </p>
+                <p className="mt-3 text-sm text-gray-400 leading-relaxed">
+                  {edu.details}
+                </p>
+              </TimelineEntry>
+            ))}
+          </ol>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-6">
+            Skills
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {resumeData.skills.map((skill) => (
+              <span
+                key={skill}
+                className="px-3 py-1 rounded-full border border-white/10 text-sm text-gray-400"
+              >
+                {skill}
+              </span>
             ))}
           </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-4">
+            Certifications
+          </h2>
+          <p className="text-gray-400 text-sm">
+            {resumeData.certifications.join(" · ")}
+          </p>
         </section>
       </div>
       <Footer />

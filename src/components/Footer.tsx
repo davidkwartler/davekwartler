@@ -7,10 +7,10 @@ export default function Footer() {
         <div className="flex flex-col items-center gap-1">
           <div className="flex gap-6 text-sm">
             <Link
-              href="/resume"
+              href="/work"
               className="text-gray-400 hover:text-white transition-colors"
             >
-              Resume
+              Work
             </Link>
             <a
               href="https://www.linkedin.com/in/dkwartler"

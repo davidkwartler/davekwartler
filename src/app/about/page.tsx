@@ -44,7 +44,7 @@ export default function About() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <figure className="space-y-2 mx-auto sm:mx-0 w-3/4 sm:w-full">
               <Image
-                src="/bike-austin.png"
+                src="/bike-austin.jpg"
                 alt="Biking in Austin"
                 width={600}
                 height={400}

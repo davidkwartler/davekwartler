@@ -35,15 +35,15 @@ export default function Home() {
             <div className="mt-12 flex justify-center gap-4">
               <Link
                 href="/work"
-                className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-6 py-3 bg-white/90 text-neutral-900 font-medium rounded-lg hover:bg-white transition-colors"
               >
-                My Work
+                Work
               </Link>
               <Link
                 href="/about"
-                className="px-6 py-3 border border-gray-600 text-gray-300 font-medium rounded-lg hover:bg-gray-800 transition-colors"
+                className="px-6 py-3 border border-white/20 text-gray-200 font-medium rounded-lg hover:bg-white/10 transition-colors"
               >
-                About Me
+                About
               </Link>
             </div>
           </div>
