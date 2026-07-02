@@ -74,6 +74,11 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   core on the other side), maybe shift the wisp tints. Implementation: add a
   variant/flip prop to GalaxyBackground that mirrors band positions/rotations
   (cx→1-cx, rot→-rot) instead of hardcoding a second BANDS array
+- **Shooting star easter egg**: very infrequent meteor streak across the hero
+  galaxy — roughly every 3 minutes, randomized so it never feels scheduled.
+  Fast (~1s), thin bright streak with a fading tail, random diagonal path in
+  the upper half of the canvas. Respects prefers-reduced-motion and the
+  future pause button; hero only (contact galaxy stays calm)
 
 ## Travel map easter egg (elaborated 2026-07-02)
 
