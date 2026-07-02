@@ -2,22 +2,29 @@
 
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
+import { isGalaxyPaused, subscribeGalaxyPause } from "@/lib/galaxy-pause";
 
 /**
  * GalaxyBackground - purple galaxy canvas.
  *
- * Three layers drawn per frame:
+ * Layers drawn per frame:
  *  1. Nebula: violet/magenta/indigo light bands drifting on sine paths,
- *     blended additively.
- *  2. Stars: fixed positions, twinkling alpha.
- *  3. Binary field: a grid of 0s and 1s whose brightness follows slow
- *     traveling waves; glyphs flip over time.
+ *     blended additively, plus two low-alpha accent wisps when `accents`
+ *     is set.
+ *  2. Stars: fixed positions, twinkling alpha; a few pick up accent tints.
+ *  3. Shooting star: rare meteor streak (hero only, `shootingStars`).
+ *  4. Binary field: a grid of 0s and 1s whose brightness follows slow
+ *     traveling waves; glyphs flip over time. With `easterEggs`, the field
+ *     very occasionally resolves a short string (DK / MCP / OIDC).
  *
  * Props tune the instance: timeScale slows all motion, dim scales all
- * light intensity, starCount sets star density. Draws a single static
- * frame under prefers-reduced-motion; the rAF loop pauses automatically
- * in hidden tabs.
+ * light intensity, starCount sets star density, flip mirrors the nebula
+ * composition. Draws a single static frame under prefers-reduced-motion.
+ * The rAF loop stops while the canvas is offscreen (IntersectionObserver)
+ * or while the user has paused motion via PauseMotionButton.
  */
+
+export type RGB = [number, number, number];
 
 type Band = {
   cx: number;
@@ -32,7 +39,7 @@ type Band = {
   scaleX: number;
   scaleY: number;
   alpha: number;
-  tint: [number, number, number];
+  tint: RGB;
 };
 
 // A diagonal galactic plane with a bright core, plus two faint wisps.
@@ -45,32 +52,144 @@ const BANDS: Band[] = [
   { cx: 0.16, cy: 0.72, ax: 0.07, ay: 0.06, px: 37, py: 25, phase: 4.4, rot: -0.5, r: 0.34, scaleX: 1.7, scaleY: 0.65, alpha: 0.12, tint: [99, 102, 241] },
 ];
 
+// Two extra wisps carrying the instance's accent tints. Alphas sit well
+// below the main bands so the colors read as hints, not a palette change.
+function accentBands([a1, a2]: [RGB, RGB]): Band[] {
+  return [
+    { cx: 0.28, cy: 0.62, ax: 0.06, ay: 0.05, px: 31, py: 26, phase: 3.1, rot: -0.42, r: 0.24, scaleX: 1.5, scaleY: 0.5, alpha: 0.055, tint: a1 },
+    { cx: 0.72, cy: 0.28, ax: 0.05, ay: 0.05, px: 36, py: 29, phase: 5.2, rot: 0.34, r: 0.2, scaleX: 1.4, scaleY: 0.55, alpha: 0.06, tint: a2 },
+  ];
+}
+
 type Star = {
   x: number;
   y: number;
   r: number;
   phase: number;
   speed: number;
-  violet: boolean;
+  tint: RGB;
   bright: boolean;
 };
 
+type Meteor = {
+  x0: number;
+  y0: number;
+  dx: number;
+  dy: number;
+  start: number;
+  dur: number;
+};
+
+type Egg = {
+  word: string;
+  i: number;
+  j: number;
+  start: number;
+  dur: number;
+};
+
+type GalaxyDebug = { meteor: () => void; egg: (word?: string) => void };
+
+declare global {
+  interface Window {
+    __galaxy?: GalaxyDebug[];
+  }
+}
+
 const TAU = Math.PI * 2;
 const GRID = 28; // px between binary glyphs
+const VIOLET: RGB = [196, 181, 253];
+const WHITE: RGB = [255, 255, 255];
+const EGG_WORDS = ["DK", "MCP", "OIDC"];
 
-function makeStars(count: number): Star[] {
+function makeStars(count: number, accents?: [RGB, RGB]): Star[] {
   return Array.from({ length: count }, () => {
     const bright = Math.random() < 0.16;
+    const roll = Math.random();
+    const tint =
+      roll < 0.25
+        ? VIOLET
+        : accents && roll < 0.33
+          ? accents[0]
+          : accents && roll < 0.41
+            ? accents[1]
+            : WHITE;
     return {
       x: Math.random(),
       y: Math.random(),
       r: bright ? 1.1 + Math.random() * 0.9 : 0.3 + Math.random() * 0.8,
       phase: Math.random() * TAU,
       speed: 0.3 + Math.random() * 1.2,
-      violet: Math.random() < 0.25,
+      tint,
       bright,
     };
   });
+}
+
+function spawnMeteor(now: number): Meteor {
+  const ltr = Math.random() < 0.5;
+  const dist = 0.28 + Math.random() * 0.14; // fraction of viewport width
+  return {
+    x0: ltr ? 0.05 + Math.random() * 0.35 : 0.6 + Math.random() * 0.35,
+    y0: 0.06 + Math.random() * 0.28,
+    dx: ltr ? dist : -dist,
+    dy: 0.1 + Math.random() * 0.12,
+    start: now,
+    dur: 0.9 + Math.random() * 0.4,
+  };
+}
+
+function spawnEgg(now: number, w: number, h: number, word?: string): Egg | null {
+  const text = word ?? EGG_WORDS[Math.floor(Math.random() * EGG_WORDS.length)];
+  const cols = Math.floor(w / GRID);
+  const rows = Math.floor(h / GRID);
+  if (cols < text.length + 4 || rows < 5) return null;
+  return {
+    word: text,
+    i: 2 + Math.floor(Math.random() * (cols - text.length - 3)),
+    j: 2 + Math.floor(Math.random() * (rows - 4)),
+    start: now,
+    dur: 5,
+  };
+}
+
+function drawMeteor(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  tReal: number,
+  m: Meteor,
+  dim: number
+) {
+  const p = (tReal - m.start) / m.dur;
+  if (p < 0 || p > 1) return;
+  const hx = (m.x0 + m.dx * p) * w;
+  const hy = (m.y0 + m.dy * p) * h;
+  const ang = Math.atan2(m.dy * h, m.dx * w);
+  const tail = 90;
+  const tx = hx - Math.cos(ang) * tail;
+  const ty = hy - Math.sin(ang) * tail;
+  const fade = Math.sin(p * Math.PI) * dim;
+
+  ctx.globalCompositeOperation = "lighter";
+  const grad = ctx.createLinearGradient(tx, ty, hx, hy);
+  grad.addColorStop(0, "rgba(255, 244, 235, 0)");
+  grad.addColorStop(1, `rgba(255, 244, 235, ${0.85 * fade})`);
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 1.4;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(tx, ty);
+  ctx.lineTo(hx, hy);
+  ctx.stroke();
+
+  const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 6);
+  glow.addColorStop(0, `rgba(255, 255, 255, ${0.9 * fade})`);
+  glow.addColorStop(1, "rgba(255, 255, 255, 0)");
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(hx, hy, 6, 0, TAU);
+  ctx.fill();
 }
 
 function drawFrame(
@@ -78,8 +197,13 @@ function drawFrame(
   w: number,
   h: number,
   t: number,
+  tReal: number,
   stars: Star[],
-  dim: number
+  dim: number,
+  bands: Band[],
+  flip: boolean,
+  meteor: Meteor | null,
+  egg: Egg | null
 ) {
   ctx.globalCompositeOperation = "source-over";
   ctx.fillStyle = "#050409";
@@ -88,13 +212,15 @@ function drawFrame(
   // Nebula
   ctx.globalCompositeOperation = "lighter";
   const base = Math.max(w, h);
-  for (const b of BANDS) {
-    const x = (b.cx + b.ax * Math.sin((t / b.px) * TAU + b.phase)) * w;
+  for (const b of bands) {
+    const cx = flip ? 1 - b.cx : b.cx;
+    const rot = flip ? -b.rot : b.rot;
+    const x = (cx + b.ax * Math.sin((t / b.px) * TAU + b.phase)) * w;
     const y = (b.cy + b.ay * Math.sin((t / b.py) * TAU + b.phase * 1.7)) * h;
     const r = b.r * base;
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(b.rot);
+    ctx.rotate(rot);
     ctx.scale(b.scaleX, b.scaleY);
     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
     const [cr, cg, cb] = b.tint;
@@ -112,7 +238,7 @@ function drawFrame(
     const x = s.x * w;
     const y = s.y * h;
     const tw = (0.3 + 0.6 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase))) * dim;
-    const [cr, cg, cb] = s.violet ? [196, 181, 253] : [255, 255, 255];
+    const [cr, cg, cb] = s.tint;
 
     if (s.bright) {
       const glow = ctx.createRadialGradient(x, y, 0, x, y, s.r * 4);
@@ -142,6 +268,8 @@ function drawFrame(
     }
   }
 
+  if (meteor) drawMeteor(ctx, w, h, tReal, meteor, dim);
+
   // Binary field: brightness follows traveling waves, glyphs flip slowly
   ctx.globalCompositeOperation = "source-over";
   ctx.font = "11px ui-monospace, SFMono-Regular, Menlo, monospace";
@@ -149,6 +277,9 @@ function drawFrame(
   ctx.textBaseline = "middle";
   const cols = Math.ceil(w / GRID);
   const rows = Math.ceil(h / GRID);
+  const eggEnv = egg
+    ? Math.sin(Math.min(Math.max((tReal - egg.start) / egg.dur, 0), 1) * Math.PI)
+    : 0;
   for (let i = 0; i <= cols; i++) {
     for (let j = 0; j <= rows; j++) {
       const x = i * GRID + GRID / 2;
@@ -158,12 +289,20 @@ function drawFrame(
           Math.sin(y * 0.009 - t * 0.4) *
           0.5 +
         0.5 * Math.sin((x + y) * 0.004 + t * 0.3);
-      const brightness = Math.max(0, wave);
-      const alpha = Math.pow(brightness, 3) * 0.3 * dim;
-      if (alpha < 0.02) continue;
-      const seed = i * 7919 + j * 104729;
-      const flip = Math.floor(t / (2.5 + (seed % 5) * 0.7));
-      const char = (seed + flip) % 2 === 0 ? "0" : "1";
+      const fieldAlpha = Math.pow(Math.max(0, wave), 3) * 0.3 * dim;
+
+      let char: string;
+      let alpha: number;
+      if (egg && eggEnv > 0 && j === egg.j && i >= egg.i && i < egg.i + egg.word.length) {
+        char = egg.word[i - egg.i];
+        alpha = Math.max(fieldAlpha, eggEnv * 0.5 * dim);
+      } else {
+        if (fieldAlpha < 0.02) continue;
+        const seed = i * 7919 + j * 104729;
+        const flipTick = Math.floor(t / (2.5 + (seed % 5) * 0.7));
+        char = (seed + flipTick) % 2 === 0 ? "0" : "1";
+        alpha = fieldAlpha;
+      }
       ctx.fillStyle = `rgba(196, 181, 253, ${alpha})`;
       ctx.fillText(char, x, y);
     }
@@ -174,13 +313,22 @@ export default function GalaxyBackground({
   timeScale = 1,
   dim = 1,
   starCount = 160,
+  flip = false,
+  accents,
+  shootingStars = false,
+  easterEggs = false,
 }: {
   timeScale?: number;
   dim?: number;
   starCount?: number;
+  flip?: boolean;
+  accents?: [RGB, RGB];
+  shootingStars?: boolean;
+  easterEggs?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const accentsKey = accents ? accents.join(",") : "";
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -188,10 +336,25 @@ export default function GalaxyBackground({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const stars = makeStars(starCount);
+    const bands = accents ? [...BANDS, ...accentBands(accents)] : BANDS;
+    const stars = makeStars(starCount, accents);
+
     let w = 0;
     let h = 0;
     let raf = 0;
+    let tAnim = 0;
+    let tReal = 0;
+    let last = 0;
+    let running = false;
+    let visible = false; // IntersectionObserver fires immediately with the real state
+    let userPaused = isGalaxyPaused();
+    let meteor: Meteor | null = null;
+    let egg: Egg | null = null;
+    let nextMeteorAt = 60 + Math.random() * 60;
+    let nextEggAt = 45 + Math.random() * 75;
+
+    const draw = () =>
+      drawFrame(ctx, w, h, tAnim, tReal, stars, dim, bands, flip, meteor, egg);
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -200,25 +363,90 @@ export default function GalaxyBackground({
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (prefersReducedMotion) drawFrame(ctx, w, h, 0, stars, dim);
+      draw();
     };
     resize();
     window.addEventListener("resize", resize);
 
-    if (!prefersReducedMotion) {
-      const start = performance.now();
-      const loop = (now: number) => {
-        drawFrame(ctx, w, h, ((now - start) / 1000) * timeScale, stars, dim);
-        raf = requestAnimationFrame(loop);
+    const frame = (now: number) => {
+      // Clamp dt so a background-tab gap doesn't teleport the animation
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      tAnim += dt * timeScale;
+      tReal += dt;
+
+      if (shootingStars) {
+        if (!meteor && tReal >= nextMeteorAt) meteor = spawnMeteor(tReal);
+        if (meteor && tReal > meteor.start + meteor.dur) {
+          meteor = null;
+          nextMeteorAt = tReal + 150 + Math.random() * 120;
+        }
+      }
+      if (easterEggs) {
+        if (!egg && tReal >= nextEggAt) egg = spawnEgg(tReal, w, h);
+        if (egg && tReal > egg.start + egg.dur) {
+          egg = null;
+          nextEggAt = tReal + 120 + Math.random() * 180;
+        }
+      }
+
+      draw();
+      raf = requestAnimationFrame(frame);
+    };
+
+    // The loop runs only while the canvas is onscreen, the user hasn't
+    // paused motion, and reduced motion isn't requested. Time accumulates
+    // only while running, so meteor/egg schedules pause with the canvas.
+    const sync = () => {
+      const shouldRun = !prefersReducedMotion && visible && !userPaused;
+      if (shouldRun && !running) {
+        running = true;
+        last = performance.now();
+        raf = requestAnimationFrame(frame);
+      } else if (!shouldRun && running) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    };
+
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    io.observe(canvas);
+
+    const unsubscribe = subscribeGalaxyPause(() => {
+      userPaused = isGalaxyPaused();
+      sync();
+    });
+
+    let debugApi: GalaxyDebug | undefined;
+    if (process.env.NODE_ENV === "development") {
+      debugApi = {
+        meteor: () => {
+          meteor = spawnMeteor(tReal - 0.5);
+          draw();
+        },
+        egg: (word?: string) => {
+          egg = spawnEgg(tReal - 2.5, w, h, word);
+          draw();
+        },
       };
-      raf = requestAnimationFrame(loop);
+      (window.__galaxy ||= []).push(debugApi);
     }
 
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
+      unsubscribe();
       window.removeEventListener("resize", resize);
+      if (debugApi && window.__galaxy) {
+        window.__galaxy = window.__galaxy.filter((api) => api !== debugApi);
+      }
     };
-  }, [prefersReducedMotion, timeScale, dim, starCount]);
+    // accentsKey stands in for the accents tuple (kept stable by parents)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefersReducedMotion, timeScale, dim, starCount, flip, shootingStars, easterEggs, accentsKey]);
 
   return (
     <div className="absolute inset-0 overflow-hidden -z-10">

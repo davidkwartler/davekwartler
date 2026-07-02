@@ -1,4 +1,5 @@
 import Footer from "@/components/Footer";
+import PauseMotionButton from "@/components/PauseMotionButton";
 import { SiteNav } from "@/components/SiteNav";
 import Hero from "@/components/sections/Hero";
 import WhatIDo from "@/components/sections/WhatIDo";
@@ -18,6 +19,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <PauseMotionButton />
     </>
   );
 }

@@ -1,8 +1,14 @@
 "use client";
 
 import { Reveal } from "@/components/Reveal";
-import GalaxyBackground from "@/components/GalaxyBackground";
+import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+
+// Subtle cool hints for the contact galaxy: blue and green
+const CONTACT_ACCENTS: [RGB, RGB] = [
+  [96, 165, 250],
+  [52, 211, 153],
+];
 
 export default function Contact() {
   return (
@@ -12,7 +18,14 @@ export default function Contact() {
     >
       {/* Smaller, slower galaxy with soft edges into the monochrome page */}
       <div className="absolute inset-0 -z-10">
-        <GalaxyBackground timeScale={0.45} dim={0.85} starCount={80} />
+        <GalaxyBackground
+          timeScale={0.45}
+          dim={0.85}
+          starCount={80}
+          flip
+          accents={CONTACT_ACCENTS}
+          easterEggs
+        />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-neutral-950 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-950 to-transparent" />
       </div>

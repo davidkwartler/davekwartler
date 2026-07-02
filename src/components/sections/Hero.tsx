@@ -7,10 +7,16 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
-import GalaxyBackground from "@/components/GalaxyBackground";
+import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
 import { resumeData } from "@/data/resume";
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
+
+// Subtle warm hints for the hero galaxy: orange and pink
+const HERO_ACCENTS: [RGB, RGB] = [
+  [251, 146, 60],
+  [244, 114, 182],
+];
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
@@ -40,7 +46,7 @@ export default function Hero() {
         className="absolute inset-0 -z-10"
         style={{ opacity: prefersReducedMotion ? 1 : bgOpacity }}
       >
-        <GalaxyBackground />
+        <GalaxyBackground accents={HERO_ACCENTS} shootingStars easterEggs />
       </motion.div>
 
       <div className="text-center">

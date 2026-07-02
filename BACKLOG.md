@@ -9,6 +9,11 @@ iteration-heavy), XL (its own project).
 Shipped 2026-07-02: single-page scroll redesign (galaxy hero, horizontal career
 timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
+Built 2026-07-03 (galaxy batch): subtle accent colors (hero orange/pink,
+contact blue/green), flipped contact galaxy, pause-motion button, offscreen
+rAF pause, shooting star (~3 min, hero only), binary easter eggs (DK/MCP/OIDC,
+both galaxies). Dev-only console hook: `__galaxy[0].meteor()` / `.egg("DK")`.
+
 ## Do now
 
 - **(S) Vercel Analytics**: David thinks it's already enabled — verify, and
@@ -22,12 +27,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **(S) Public-surface scan**: check whether an "opinions are my own, not my
   employer's" disclaimer is needed, and audit all copy for anything
   Expedia-confidential
-- **(M) Differentiate the contact galaxy from the hero**: same composition
-  twice reads as copy-paste. Flip it — mirror the galactic plane (opposite
-  diagonal, core on the other side), maybe shift the wisp tints.
-  Implementation: add a variant/flip prop to GalaxyBackground that mirrors
-  band positions/rotations (cx→1-cx, rot→-rot) instead of hardcoding a second
-  BANDS array
 - **(M) Kill the Skills section**: collapse the flat skills-chip wall into the
   four timeline entries — each job's detail panel shows the skills used there.
   Mapping from David (2026-07-02), covers all 18 skills:
@@ -49,20 +48,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   the last section (contact). Coordinate placement with the pause-animation
   button so the bottom corners don't get crowded; keep it subtle (gray,
   hover-white, same style as the hero cue)
-- **(M) Pause galaxy when offscreen (perf)**: both canvases run rAF loops even
-  when invisible (hero after fade-out, contact while elsewhere). Add an
-  IntersectionObserver to stop/resume the loop; shares machinery with the
-  pause-animation accessibility button
-- **(M) Accessibility pause button**: small pause-animation button in the
-  bottom corner(s) to stop the galaxy/motion
-- **(M) Shooting star easter egg**: very infrequent meteor streak across the
-  hero galaxy — roughly every 3 minutes, randomized so it never feels
-  scheduled. Fast (~1s), thin bright streak with a fading tail, random
-  diagonal path in the upper half of the canvas. Respects
-  prefers-reduced-motion and the pause button; hero only. Meteor clock should
-  only tick while the hero is visible (pairs with pause-offscreen)
-- **(L) Binary-field easter eggs**: very infrequently, the 0/1 wave resolves
-  into readable strings — "DK", "MCP", "OIDC". Unannounced, blink-and-miss-it
 - **(L) Custom 404 page**: dark page with the binary field; identity-nerd
   joke copy ("401: you don't have permission to be here... kidding, it's a
   404")
@@ -89,8 +74,9 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **(M) Copy pass — add detail everywhere** — do together with David.
   Direction by example: "long bike rides on the Town Lake trail", "I travel
   for vegan food, modern art museums, and good electronic music"
-- **(L) Hero animation experiments**: add more colors and glows to the galaxy
-  (taste iteration with David in preview)
+- **(L) Hero animation experiments**: first pass done 2026-07-03 (subtle
+  orange/pink accents); keep for further glow/color iteration with David in
+  preview if he wants more
 - **(L) Font brainstorm**: everything other than the hero name (Playfair) is
   boring; explore alternatives (iteration-heavy)
 
