@@ -26,7 +26,11 @@ export const metadata: Metadata = {
   title: "David Kwartler",
   description: siteDescription,
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: "/apple-icon.png",
   },
   openGraph: {
     title: "David Kwartler",
