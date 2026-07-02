@@ -42,7 +42,7 @@ export default function Hero() {
     <section
       id="top"
       onMouseMove={onMouseMove}
-      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+      className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
     >
       <HeroBackground />
 
@@ -70,7 +70,22 @@ export default function Hero() {
       )}
 
       <div className="text-center">
-        <div className="mx-auto mb-8 h-44 w-44">
+        <div className="relative mx-auto mb-8 h-44 w-44">
+          {/* Soft breathing halo behind the headshot */}
+          {!prefersReducedMotion && (
+            <motion.div
+              aria-hidden
+              className="absolute left-1/2 top-1/2 -z-10 h-[340px] w-[340px] rounded-full"
+              style={{
+                x: "-50%",
+                y: "-50%",
+                background:
+                  "radial-gradient(circle, rgba(255,255,255,0.10), transparent 65%)",
+              }}
+              animate={{ scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
           <Image
             id="hero-headshot-img"
             src="/dk-headshot.jpg"

@@ -1,7 +1,6 @@
 "use client";
 
 import { Reveal } from "@/components/Reveal";
-import { MagneticLink } from "@/components/MagneticLink";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 
 export default function Contact() {
@@ -21,12 +20,12 @@ export default function Contact() {
         </Reveal>
         <Reveal delay={0.1}>
           <div className="mt-10 flex flex-col items-center gap-6">
-            <MagneticLink
+            <a
               href="mailto:david@davidkwartler.com"
-              className="inline-block rounded-full bg-white/90 px-8 py-4 text-lg font-medium text-neutral-900 hover:bg-white transition-colors"
+              className="inline-block rounded-full bg-white/90 px-8 py-4 text-lg font-medium text-neutral-900 transition-all duration-300 hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] active:scale-[0.98]"
             >
               Email me
-            </MagneticLink>
+            </a>
             <div className="flex items-center gap-6">
               <a
                 href="https://www.linkedin.com/in/dkwartler/"
