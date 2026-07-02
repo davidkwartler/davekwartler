@@ -63,6 +63,12 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
     in the brainstorm) — consider cutting Collaboration/Communication and
     letting GWU carry Product Strategy alone, or moving Product Strategy to
     Expedia
+- **Tighten anchor-nav landing position**: clicking a nav tab (e.g. "What I
+  do") leaves too much dead space above the section. The gap is scroll-mt-20
+  stacking on top of each section's own py-28/py-36 padding — likely fix is
+  landing the heading closer to the nav (smaller scroll-margin or negative
+  offset so padding is absorbed), verify scrollspy still highlights the right
+  tab after the change
 
 ## Travel map easter egg (elaborated 2026-07-02)
 
