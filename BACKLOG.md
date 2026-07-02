@@ -2,25 +2,29 @@
 
 Ideas parked for future sessions. Roughly ordered by interest, not commitment.
 
-## UX overhaul: single-page scroll design
+Shipped 2026-07-02: single-page scroll redesign (galaxy hero, horizontal career
+timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
-Convert the site from multi-page (Home / About / Work) to a single page where
-scrolling moves through all content: hero → career timeline → about → photos → contact.
+## Next up (from David, 2026-07-02)
 
-- Keep the aurora hero as the opening viewport
-- The career timeline ports well as a scroll section
-- Sticky anchor nav that highlights the current section replaces page links
-- Preserve /work and /about as anchors or redirects so existing links don't break
-- Motion is already a dependency; tasteful scroll-triggered reveals are possible
-
-## Photo curation: fewer, better images (3-4 max)
-
-The About page currently has 7 photos in a grid. Quality over quantity.
-
-- Candidates to keep: one racing shot, one travel shot, one Austin (bike or Identiverse) shot
-- Larger, more intentional placement instead of uniform grids
-- Pairs well with the single-page redesign, where photos become section accents
-  rather than a gallery
+- **Hero animation experiments**: add more colors and glows to the galaxy
+- **Header tabs**: rename after a brainstorm (current: Home / What I do /
+  Career / About / Say hi)
+- **New images**: swap the three Human-section photos for Ricoh GR IV shots —
+  Porsche, art museum, Austin skyline (compress like the others, max 1600px;
+  captions Motorsports / Travel / Fitness may need revisiting to match)
+- **Copy pass — add detail everywhere** (do together with David). Direction by
+  example: "long bike rides on the Town Lake trail", "I travel for vegan food,
+  modern art museums, and good electronic music"
+- **Footer links**: rethink — LinkedIn/GitHub in the footer sit two inches
+  below the same links in the contact section
+- **Font brainstorm**: everything other than the hero name (Playfair) is
+  boring; explore alternatives
+- **Accessibility**: small pause-animation button in the bottom corner(s) to
+  stop the galaxy/motion
+- **Public-surface scan**: check whether an "opinions are my own, not my
+  employer's" disclaimer is needed, and audit all copy for anything
+  Expedia-confidential
 
 ## David Kwartler AI ("chat with David")
 
