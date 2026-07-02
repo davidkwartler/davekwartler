@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       <SiteNav />
-      <main className="relative bg-neutral-950">
+      <main className="bg-neutral-950">
         <Hero />
         <WhatIDo />
         <Career />

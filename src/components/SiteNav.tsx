@@ -88,6 +88,7 @@ export function SiteNav() {
               alt=""
               width={36}
               height={36}
+              loading="eager"
               className="h-9 w-9 max-w-none rounded-full"
             />
           </motion.span>
