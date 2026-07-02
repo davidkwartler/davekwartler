@@ -9,21 +9,29 @@ iteration-heavy), XL (its own project).
 Shipped 2026-07-02: single-page scroll redesign (galaxy hero, horizontal career
 timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
-Built 2026-07-03 (galaxy batch): subtle accent colors (hero orange/pink,
-contact blue/green), flipped contact galaxy, pause-motion button, offscreen
-rAF pause, shooting star (~3 min, hero only), binary easter eggs (DK/MCP/OIDC,
-both galaxies). Dev-only console hook: `__galaxy[0].meteor()` / `.egg("DK")`.
+## Shipped 2026-07-03
+
+- ✅ Galaxy accent colors — hero orange/pink, contact blue/green, blended
+  into the galactic plane as one smooth gradient
+- ✅ Flipped contact galaxy (mirror of the hero, not a copy)
+- ✅ Pause-motion button (bottom right, persists via localStorage)
+- ✅ Pause galaxy when offscreen (IntersectionObserver stops the rAF loop)
+- ✅ Shooting star — welcome meteor ~3s after load, then every ~2.5-4.5 min,
+  hero only
+- ✅ Binary easter eggs — DK / MCP / OIDC, embedded in bright patches of the
+  0/1 wave. Dev hook: `__galaxy[0].meteor()` / `.egg("DK")`
+- ✅ Tighter anchor-nav landings (~40px under the nav)
+- ✅ Footer rework — socials (icon + wordmark) moved to footer; back-to-top
+  with up chevron at the bottom of the contact section
+- ✅ Skip-to-next-section arrow (persistent, bounces on hero only)
+- ✅ og.png refresh — galaxy render with grey-ring headshot
+- ✅ Favicon refresh — white DK on dark grey (nebula version rejected)
+- ✅ Dev-warning fixes (LCP eager nav avatar, Motion scroll-offset warning)
 
 ## Do now
 
 - **(S) Vercel Analytics**: David thinks it's already enabled — verify, and
   wire up/review post-redesign
-- **(S) Tighten anchor-nav landing position**: clicking a nav tab (e.g. "What
-  I do") leaves too much dead space above the section. The gap is scroll-mt-20
-  stacking on top of each section's own py-28/py-36 padding — land the heading
-  closer to the nav, then verify the scrollspy still highlights the right tab
-- **(S) Footer links**: rethink — LinkedIn/GitHub in the footer sit two inches
-  below the same links in the contact section
 - **(S) Public-surface scan**: check whether an "opinions are my own, not my
   employer's" disclaimer is needed, and audit all copy for anything
   Expedia-confidential
@@ -42,18 +50,9 @@ both galaxies). Dev-only console hook: `__galaxy[0].meteor()` / `.egg("DK")`.
   - Open question: GWU's chips are the three softest — consider cutting
     Collaboration/Communication and letting GWU carry Product Strategy alone,
     or moving Product Strategy to Expedia
-- **(M) "Skip to next section" arrow**: persistent little down arrow that fast
-  scrolls to the next section from anywhere. Generalize the hero's bouncing
-  scroll cue: target derives from the scrollspy's current section; hide it on
-  the last section (contact). Coordinate placement with the pause-animation
-  button so the bottom corners don't get crowded; keep it subtle (gray,
-  hover-white, same style as the hero cue)
 - **(L) Custom 404 page**: dark page with the binary field; identity-nerd
   joke copy ("401: you don't have permission to be here... kidding, it's a
   404")
-- **(L) Link preview image (og.png) refresh**: replace with a screenshot of
-  the galaxy background so LinkedIn/iMessage previews match the new site.
-  Favicon needs the same refresh
 
 ## Do later
 
