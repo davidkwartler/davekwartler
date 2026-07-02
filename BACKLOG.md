@@ -48,10 +48,21 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   before committing, easy to drop if it fights the breathing halo
 - **Kill the Skills section**: collapse the flat skills-chip wall into the
   four timeline entries instead — each job's detail panel shows the skills
-  used there ("spread the love"). Needs a skills-per-job mapping (draft one,
-  David reviews); pairs with the earlier idea of dropping the four generic
-  soft skills. Decide where certifications land afterward (probably GW/
-  education entry or a one-liner)
+  used there ("spread the love"). Mapping from David (2026-07-02), covers all
+  18 skills:
+  - Expedia: AI Agent Authorization, Model Context Protocol (MCP), LLM Data
+    Privacy & Governance, OAuth 2.0, AI-Assisted Development, Leadership &
+    Mentoring
+  - GM: Identity & Access Management, OIDC Identity Federation, API Design &
+    Documentation, A/B Testing, Stakeholder Alignment & Influence
+  - CVP: UI/UX Design, User Research, Data Analysis, Continuous Discovery
+  - GWU: Product Strategy, Collaboration, Communication
+  - Certifications: Professional Scrum Master I → CVP; SAFe Product Owner /
+    Product Manager → GM
+  - Open question: GWU's chips are the three softest (see "skills list trim"
+    in the brainstorm) — consider cutting Collaboration/Communication and
+    letting GWU carry Product Strategy alone, or moving Product Strategy to
+    Expedia
 
 ## Travel map easter egg (elaborated 2026-07-02)
 
