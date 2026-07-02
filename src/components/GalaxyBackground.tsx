@@ -52,13 +52,14 @@ const BANDS: Band[] = [
   { cx: 0.16, cy: 0.72, ax: 0.07, ay: 0.06, px: 37, py: 25, phase: 4.4, rot: -0.5, r: 0.34, scaleX: 1.7, scaleY: 0.65, alpha: 0.12, tint: [99, 102, 241] },
 ];
 
-// Two extra wisps carrying the instance's accent tints, at the same
-// intensity as the main outer wisps so the colors read as part of the
-// galaxy gradient.
+// Two accent glows sitting on the ends of the galactic plane, sharing its
+// rotation and drift so the band's color temperature shifts smoothly from
+// one tint through violet to the other instead of reading as separate
+// shapes.
 function accentBands([a1, a2]: [RGB, RGB]): Band[] {
   return [
-    { cx: 0.24, cy: 0.66, ax: 0.06, ay: 0.05, px: 31, py: 26, phase: 3.1, rot: -0.42, r: 0.32, scaleX: 1.7, scaleY: 0.55, alpha: 0.2, tint: a1 },
-    { cx: 0.76, cy: 0.24, ax: 0.05, ay: 0.05, px: 36, py: 29, phase: 5.2, rot: 0.34, r: 0.28, scaleX: 1.5, scaleY: 0.6, alpha: 0.19, tint: a2 },
+    { cx: 0.24, cy: 0.53, ax: 0.05, ay: 0.04, px: 40, py: 33, phase: 0.0, rot: -0.32, r: 0.34, scaleX: 2.0, scaleY: 0.45, alpha: 0.16, tint: a1 },
+    { cx: 0.76, cy: 0.35, ax: 0.05, ay: 0.04, px: 40, py: 33, phase: 0.0, rot: -0.32, r: 0.3, scaleX: 1.9, scaleY: 0.5, alpha: 0.16, tint: a2 },
   ];
 }
 
