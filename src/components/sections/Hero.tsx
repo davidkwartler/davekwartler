@@ -95,39 +95,6 @@ export default function Hero() {
         </motion.p>
       </div>
 
-      {/* Scroll cue */}
-      <motion.a
-        href="#what-i-do"
-        aria-label="Scroll to content"
-        className="absolute bottom-8 text-gray-500 hover:text-white transition-colors"
-        {...(prefersReducedMotion
-          ? {}
-          : {
-              initial: { opacity: 0 },
-              animate: { opacity: 1 },
-              transition: { delay: 1, duration: 0.6 },
-            })}
-      >
-        <motion.svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-          viewBox="0 0 24 24"
-          {...(prefersReducedMotion
-            ? {}
-            : {
-                animate: { y: [0, 6, 0] },
-                transition: {
-                  duration: 1.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
-              })}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </motion.svg>
-      </motion.a>
     </section>
   );
 }

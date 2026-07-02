@@ -98,7 +98,7 @@ export default function Career() {
   const active = entries.find((e) => e.id === activeId)!;
 
   return (
-    <section id="career" className="scroll-mt-20 px-4 py-28 sm:px-6 lg:px-8">
+    <section id="career" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">

@@ -14,7 +14,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative isolate scroll-mt-20 overflow-hidden px-4 py-36 sm:px-6 lg:px-8"
+      className="relative isolate -scroll-mt-10 overflow-hidden px-4 py-36 sm:px-6 lg:px-8"
     >
       {/* Smaller, slower galaxy with soft edges into the monochrome page */}
       <div className="absolute inset-0 -z-10">

@@ -74,7 +74,7 @@ export default function Human() {
     <section
       id="about"
       ref={ref}
-      className="relative scroll-mt-20 px-4 py-28 sm:px-6 lg:px-8"
+      className="relative -scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8"
     >
       <div className="mx-auto max-w-5xl">
         <Reveal>
