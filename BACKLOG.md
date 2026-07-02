@@ -79,6 +79,12 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   Fast (~1s), thin bright streak with a fading tail, random diagonal path in
   the upper half of the canvas. Respects prefers-reduced-motion and the
   future pause button; hero only (contact galaxy stays calm)
+- **"Skip to next section" arrow**: persistent little down arrow that fast
+  scrolls to the next section from anywhere. Generalize the hero's bouncing
+  scroll cue: target derives from the scrollspy's current section; hide it on
+  the last section (contact). Placement needs coordinating with the planned
+  pause-animation button so the bottom corners don't get crowded; keep it
+  subtle (gray, hover-white, same style as the hero cue)
 
 ## Travel map easter egg (elaborated 2026-07-02)
 
