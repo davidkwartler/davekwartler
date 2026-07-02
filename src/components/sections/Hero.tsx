@@ -3,14 +3,11 @@
 import Image from "next/image";
 import {
   motion,
-  useMotionValue,
-  useMotionTemplate,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
 } from "motion/react";
-import HeroBackground from "@/components/HeroBackground";
+import GalaxyBackground from "@/components/GalaxyBackground";
 import { resumeData } from "@/data/resume";
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
@@ -18,25 +15,12 @@ const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
 
-  // Cursor-following glow: raw values track the mouse, springs trail it
-  const mx = useMotionValue(-1000);
-  const my = useMotionValue(-1000);
-  const sx = useSpring(mx, { stiffness: 120, damping: 25 });
-  const sy = useSpring(my, { stiffness: 120, damping: 25 });
-  const glow = useMotionTemplate`radial-gradient(520px circle at ${sx}px ${sy}px, rgba(167, 139, 250, 0.09), transparent 70%)`;
-
   // Galaxy fades away as the hero scrolls out
   const { scrollY } = useScroll();
   const bgOpacity = useTransform(scrollY, (v) => {
     if (typeof window === "undefined") return 1;
     return Math.max(0, 1 - v / (window.innerHeight * 0.75));
   });
-
-  const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mx.set(e.clientX - rect.left);
-    my.set(e.clientY - rect.top);
-  };
 
   const fadeIn = (delay: number) =>
     prefersReducedMotion
@@ -50,38 +34,14 @@ export default function Hero() {
   return (
     <section
       id="top"
-      onMouseMove={onMouseMove}
       className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
     >
       <motion.div
         className="absolute inset-0 -z-10"
         style={{ opacity: prefersReducedMotion ? 1 : bgOpacity }}
       >
-        <HeroBackground />
+        <GalaxyBackground />
       </motion.div>
-
-      {/* Cursor spotlight */}
-      {!prefersReducedMotion && (
-        <motion.div
-          className="pointer-events-none absolute inset-0"
-          style={{ background: glow }}
-        />
-      )}
-
-      {/* One-time light sweep on load */}
-      {!prefersReducedMotion && (
-        <motion.div
-          className="pointer-events-none absolute inset-y-0 left-0 w-[35%]"
-          style={{
-            skewX: -12,
-            background:
-              "linear-gradient(100deg, transparent, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 60%, transparent)",
-          }}
-          initial={{ x: "-130%", opacity: 0 }}
-          animate={{ x: "430%", opacity: [0, 1, 1, 0] }}
-          transition={{ delay: 0.45, duration: 1.6, ease: "easeInOut" }}
-        />
-      )}
 
       <div className="text-center">
         <div className="relative mx-auto mb-8 h-44 w-44">

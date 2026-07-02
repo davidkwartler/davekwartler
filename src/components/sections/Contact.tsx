@@ -1,11 +1,21 @@
 "use client";
 
 import { Reveal } from "@/components/Reveal";
+import GalaxyBackground from "@/components/GalaxyBackground";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 
 export default function Contact() {
   return (
-    <section id="contact" className="scroll-mt-20 px-4 py-36 sm:px-6 lg:px-8">
+    <section
+      id="contact"
+      className="relative isolate scroll-mt-20 overflow-hidden px-4 py-36 sm:px-6 lg:px-8"
+    >
+      {/* Smaller, slower galaxy with soft edges into the monochrome page */}
+      <div className="absolute inset-0 -z-10">
+        <GalaxyBackground timeScale={0.45} dim={0.65} starCount={70} />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-neutral-950 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-950 to-transparent" />
+      </div>
       <div className="mx-auto max-w-3xl text-center">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">

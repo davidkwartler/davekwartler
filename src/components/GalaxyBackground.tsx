@@ -4,18 +4,19 @@ import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
 
 /**
- * HeroBackground - purple galaxy canvas.
+ * GalaxyBackground - purple galaxy canvas.
  *
  * Three layers drawn per frame:
  *  1. Nebula: violet/magenta/indigo light bands drifting on sine paths,
  *     blended additively.
  *  2. Stars: fixed positions, twinkling alpha.
  *  3. Binary field: a grid of 0s and 1s whose brightness follows slow
- *     traveling waves (link.com/agents-style); glyphs flip over time.
+ *     traveling waves; glyphs flip over time.
  *
- * Draws a single static frame under prefers-reduced-motion; the rAF
- * loop pauses automatically in hidden tabs. The parent fades this
- * whole layer out as the user scrolls past the hero.
+ * Props tune the instance: timeScale slows all motion, dim scales all
+ * light intensity, starCount sets star density. Draws a single static
+ * frame under prefers-reduced-motion; the rAF loop pauses automatically
+ * in hidden tabs.
  */
 
 type Band = {
@@ -61,7 +62,8 @@ function drawFrame(
   w: number,
   h: number,
   t: number,
-  stars: Star[]
+  stars: Star[],
+  dim: number
 ) {
   ctx.globalCompositeOperation = "source-over";
   ctx.fillStyle = "#08070d";
@@ -79,8 +81,9 @@ function drawFrame(
     ctx.scale(b.scaleX, b.scaleY);
     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
     const [cr, cg, cb] = b.tint;
-    grad.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${b.alpha})`);
-    grad.addColorStop(0.55, `rgba(${cr}, ${cg}, ${cb}, ${b.alpha * 0.45})`);
+    const a = b.alpha * dim;
+    grad.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${a})`);
+    grad.addColorStop(0.55, `rgba(${cr}, ${cg}, ${cb}, ${a * 0.45})`);
     grad.addColorStop(1, `rgba(${cr}, ${cg}, ${cb}, 0)`);
     ctx.fillStyle = grad;
     ctx.fillRect(-r, -r, r * 2, r * 2);
@@ -89,7 +92,7 @@ function drawFrame(
 
   // Stars
   for (const s of stars) {
-    const tw = 0.35 + 0.55 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+    const tw = (0.35 + 0.55 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase))) * dim;
     ctx.fillStyle = s.violet
       ? `rgba(196, 181, 253, ${tw})`
       : `rgba(255, 255, 255, ${tw * 0.9})`;
@@ -115,7 +118,7 @@ function drawFrame(
           0.5 +
         0.5 * Math.sin((x + y) * 0.004 + t * 0.3);
       const brightness = Math.max(0, wave);
-      const alpha = Math.pow(brightness, 3) * 0.3;
+      const alpha = Math.pow(brightness, 3) * 0.3 * dim;
       if (alpha < 0.02) continue;
       const seed = i * 7919 + j * 104729;
       const flip = Math.floor(t / (2.5 + (seed % 5) * 0.7));
@@ -126,7 +129,15 @@ function drawFrame(
   }
 }
 
-export default function HeroBackground() {
+export default function GalaxyBackground({
+  timeScale = 1,
+  dim = 1,
+  starCount = 140,
+}: {
+  timeScale?: number;
+  dim?: number;
+  starCount?: number;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
@@ -136,7 +147,7 @@ export default function HeroBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const stars = makeStars(140);
+    const stars = makeStars(starCount);
     let w = 0;
     let h = 0;
     let raf = 0;
@@ -148,7 +159,7 @@ export default function HeroBackground() {
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (prefersReducedMotion) drawFrame(ctx, w, h, 0, stars);
+      if (prefersReducedMotion) drawFrame(ctx, w, h, 0, stars, dim);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -156,7 +167,7 @@ export default function HeroBackground() {
     if (!prefersReducedMotion) {
       const start = performance.now();
       const loop = (now: number) => {
-        drawFrame(ctx, w, h, (now - start) / 1000, stars);
+        drawFrame(ctx, w, h, ((now - start) / 1000) * timeScale, stars, dim);
         raf = requestAnimationFrame(loop);
       };
       raf = requestAnimationFrame(loop);
@@ -166,7 +177,7 @@ export default function HeroBackground() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, timeScale, dim, starCount]);
 
   return (
     <div className="absolute inset-0 overflow-hidden -z-10">
