@@ -47,6 +47,37 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   from the OG image around the hero headshot; preview against the galaxy
   before committing, easy to drop if it fights the breathing halo
 
+## Travel map easter egg (elaborated 2026-07-02)
+
+Hidden page: clicking the "Travel" photo caption in the Human section opens a
+standalone interactive world map.
+
+- **Design**: black background; continents drawn entirely from the glowing 0/1
+  binary glyphs (same visual family as the galaxy field). Destination cities
+  glow brighter than the landmass; mousing over one highlights it and reveals
+  a small card with food / art / music notes.
+- **Route**: /travel — noindex, excluded from sitemap and nav. It's an easter
+  egg, and keeping it off the SEO surface fits the personal/professional
+  boundary.
+- **Implementation sketch**: canvas like GalaxyBackground; sample an
+  equirectangular land-mask image against the glyph grid to decide which
+  cells are "land", so it stays static-export friendly. Tap targets need to
+  work on mobile too (tap = hover).
+
+City cards so far (David's notes):
+
+| City | Food | Art | Music |
+|---|---|---|---|
+| Washington DC | HipCityVeg | Hirshhorn (best art museum) | Porter Robinson at Glow fest |
+| London | Mallow | Tate Modern | Hamilton |
+| Paris | Breathe, or Le Potager de Charlotte | Le Défilé Renault carwalk | Daft Punk on vinyl |
+| Brussels | Vegan chocolate anywhere | Magritte Museum | — |
+| Amsterdam | — | Moco Museum | — |
+
+Pins mapped but awaiting details from David: New York, Los Angeles, Chicago,
+Boston, Quebec, Ottawa, Nova Scotia, New Hampshire, Las Vegas, Seattle,
+Nashville, Italy, and Texas (Austin, Dallas, San Antonio).
+
 ## David Kwartler AI ("chat with David")
 
 A chatbot on the site that lets visitors chat with an AI David — Claude API with a
@@ -77,7 +108,6 @@ limits.
 - **Writing section (MDX)**: short essays on agentic authorization
 - **Concert log**: timeline or map of ~80 shows/year
 - **Track day telemetry**: lap-time or dyno visualizations from HP Tuners logs
-- **Travel map**: cities visited with food/music/museum highlights
 - **/now page**: currently building, reading, listening to
 - **Now playing (Spotify)** in the footer
 - **Rey easter egg**: konami code shows the cat
