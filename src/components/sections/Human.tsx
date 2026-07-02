@@ -15,19 +15,19 @@ const photos = [
   {
     src: "/corvette.jpg",
     alt: "Corvette racing at New England Dragway",
-    caption: "New England Dragway",
+    caption: "Motorsports",
     drift: 28,
   },
   {
     src: "/david-nyc.JPG",
     alt: "David in New York City",
-    caption: "Manhattan",
+    caption: "Travel",
     drift: -36,
   },
   {
     src: "/bike-austin.jpg",
     alt: "Biking the Town Lake Trail in Austin",
-    caption: "Town Lake Trail, Austin",
+    caption: "Fitness",
     drift: 22,
   },
 ];
