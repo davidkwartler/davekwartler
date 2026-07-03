@@ -19,27 +19,6 @@ Over my career, I've made login seamless, strengthened account protection, and d
 
 I'm a builder. I prototype with AI and ship production changes myself because it's the fastest way to test an idea. I enjoy the ambiguous challenges of rapidly evolving spaces like AI authorization, working at the intersection of identity, security, and user experience.`,
 
-  skills: [
-    "Identity & Access Management",
-    "AI Agent Authorization",
-    "Model Context Protocol (MCP)",
-    "LLM Data Privacy & Governance",
-    "OAuth 2.0",
-    "OIDC Identity Federation",
-    "AI-Assisted Development",
-    "API Design & Documentation",
-    "Product Strategy",
-    "A/B Testing",
-    "UI/UX Design",
-    "User Research",
-    "Data Analysis",
-    "Stakeholder Alignment & Influence",
-    "Leadership & Mentoring",
-    "Collaboration",
-    "Communication",
-    "Continuous Discovery",
-  ],
-
   experience: [
     {
       company: "Expedia Group",
@@ -60,6 +39,14 @@ I'm a builder. I prototype with AI and ship production changes myself because it
         "Eliminated external vendor dependency for authentication through system rearchitecture, delivering $3M in annual EBITDA savings.",
         "Launched social login and NAVER Pay integration in South Korea, capturing $4M in incremental value by improving conversion in a key growth market.",
       ],
+      skills: [
+        "AI Agent Authorization",
+        "Model Context Protocol (MCP)",
+        "LLM Data Privacy & Governance",
+        "OAuth 2.0",
+        "AI-Assisted Development",
+        "Leadership & Mentoring",
+      ],
     },
     {
       company: "General Motors",
@@ -76,6 +63,14 @@ I'm a builder. I prototype with AI and ship production changes myself because it
         "Launched revamped mobile authentication informed by a 200-user pilot, driving a 19% lift in customer satisfaction.",
         "Improved MFA success rate by 13% by using product analytics to identify and prioritize UX enhancements.",
       ],
+      skills: [
+        "Identity & Access Management",
+        "OIDC Identity Federation",
+        "API Design & Documentation",
+        "A/B Testing",
+        "Stakeholder Alignment & Influence",
+      ],
+      certification: "SAFe Product Owner / Product Manager",
     },
     {
       company: "CVP",
@@ -91,6 +86,13 @@ I'm a builder. I prototype with AI and ship production changes myself because it
         "Accelerated project efficiency by 65% by redesigning workflows and notification systems in an environmental planning application.",
         "Secured $2M client contract by leading product and UI design for a real-time data visualization proof of concept.",
       ],
+      skills: [
+        "UI/UX Design",
+        "User Research",
+        "Data Analysis",
+        "Continuous Discovery",
+      ],
+      certification: "Professional Scrum Master I",
     },
   ],
 
@@ -101,11 +103,7 @@ I'm a builder. I prototype with AI and ship production changes myself because it
       location: "Washington, DC",
       graduationDate: "2015 – 2019",
       details: "Major in Finance, Minor in Environmental Sustainability",
+      skills: ["Product Strategy"],
     },
-  ],
-
-  certifications: [
-    "SAFe Product Owner / Product Manager",
-    "Professional Scrum Master I",
   ],
 };

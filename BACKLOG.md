@@ -30,30 +30,25 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Vercel Analytics — verified it was never actually enabled (no package, no
   script on the live site); wired `@vercel/analytics` into the root layout,
   David enabled it in the dashboard
+- ✅ Public-surface scan — no disclaimer needed yet (no editorial content;
+  revisit when the Writing section ships). Findings: internal dollar figures
+  in the Expedia bullets ($400M portfolio, $3M EBITDA, $15M/$4M value attrib,
+  1% conversion) plus a NAVER Pay namedrop; toning down folded into the
+  copy pass under Do later
+- ✅ Skills section killed — chips folded into the four timeline detail
+  panels per David's mapping; certifications moved into GM (SAFe PO/PM) and
+  CVP (PSM I) panels; standalone Skills + Certifications blocks removed.
+  GWU carries Product Strategy alone; Collaboration/Communication cut
+  (Claude's call, easy to revisit)
+- ✅ Custom 404 — binary galaxy field, "401: you don't have permission to be
+  here... kidding" copy, OAuth-flavored error label, "Request a valid scope"
+  home button
+- ✅ Sitemap question resolved — fragment URLs (/#career) aren't allowed by
+  the sitemap protocol (Google strips them); section-level discovery already
+  works via in-page anchors and nav links. Sitemap stays root-only
 
 ## Do now
 
-- **(S) Public-surface scan**: check whether an "opinions are my own, not my
-  employer's" disclaimer is needed, and audit all copy for anything
-  Expedia-confidential
-- **(M) Kill the Skills section**: collapse the flat skills-chip wall into the
-  four timeline entries — each job's detail panel shows the skills used there.
-  Mapping from David (2026-07-02), covers all 18 skills:
-  - Expedia: AI Agent Authorization, Model Context Protocol (MCP), LLM Data
-    Privacy & Governance, OAuth 2.0, AI-Assisted Development, Leadership &
-    Mentoring
-  - GM: Identity & Access Management, OIDC Identity Federation, API Design &
-    Documentation, A/B Testing, Stakeholder Alignment & Influence
-  - CVP: UI/UX Design, User Research, Data Analysis, Continuous Discovery
-  - GWU: Product Strategy, Collaboration, Communication
-  - Certifications: Professional Scrum Master I → CVP; SAFe Product Owner /
-    Product Manager → GM
-  - Open question: GWU's chips are the three softest — consider cutting
-    Collaboration/Communication and letting GWU carry Product Strategy alone,
-    or moving Product Strategy to Expedia
-- **(L) Custom 404 page**: dark page with the binary field; identity-nerd
-  joke copy ("401: you don't have permission to be here... kidding, it's a
-  404")
 
 ## Do later
 
@@ -71,9 +66,14 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   /about URLs re-index to the single page
 - **(M) Header tabs rename** — brainstorm together (current: Home / What I
   do / Career / About / Say hi)
-- **(M) Copy pass — add detail everywhere** — do together with David.
-  Direction by example: "long bike rides on the Town Lake trail", "I travel
-  for vegan food, modern art museums, and good electronic music"
+- **(M) Copy pass — add detail everywhere, tone down Expedia-sensitive
+  language** — do together with David. Detail direction by example: "long
+  bike rides on the Town Lake trail", "I travel for vegan food, modern art
+  museums, and good electronic music". Tone-down targets from the 2026-07-02
+  public-surface scan: absolute internal dollar figures in the Expedia
+  bullets ($400M, $3M EBITDA, $15M, $4M), the 1% conversion uplift, and the
+  NAVER Pay namedrop (relative phrasing keeps the punch: "nine-figure
+  partnership portfolio", "multi-million-dollar annual savings")
 - **(L) Hero animation experiments**: first pass done 2026-07-03 (subtle
   orange/pink accents); keep for further glow/color iteration with David in
   preview if he wants more

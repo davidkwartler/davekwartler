@@ -26,6 +26,8 @@ type Entry = {
   dates: string;
   summary: string;
   bullets: string[];
+  skills: string[];
+  certification?: string;
 };
 
 function job(company: string) {
@@ -50,6 +52,7 @@ const entries: Entry[] = [
     dates: edu.graduationDate,
     summary: edu.details,
     bullets: [],
+    skills: edu.skills,
   },
   {
     id: "cvp",
@@ -63,6 +66,8 @@ const entries: Entry[] = [
     dates: `${cvp.startDate} – ${cvp.endDate}`,
     summary: cvp.workSummary,
     bullets: cvp.highlights,
+    skills: cvp.skills,
+    certification: cvp.certification,
   },
   {
     id: "gm",
@@ -76,6 +81,8 @@ const entries: Entry[] = [
     dates: `${gm.startDate} – ${gm.endDate}`,
     summary: gm.workSummary,
     bullets: gm.highlights,
+    skills: gm.skills,
+    certification: gm.certification,
   },
   {
     id: "expedia",
@@ -89,6 +96,8 @@ const entries: Entry[] = [
     dates: `${expedia.startDate} – ${expedia.endDate}`,
     summary: expedia.workSummary,
     bullets: expedia.highlights,
+    skills: expedia.skills,
+    certification: expedia.certification,
   },
 ];
 
@@ -209,34 +218,28 @@ export default function Career() {
                   ))}
                 </ul>
               )}
+              {active.skills.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {active.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1 rounded-full border border-white/10 text-sm text-gray-400 transition-colors hover:border-white/25 hover:text-gray-200"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {active.certification && (
+                <p className="mt-4 text-sm text-gray-500">
+                  Certification earned:{" "}
+                  <span className="text-gray-400">{active.certification}</span>
+                </p>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <Reveal className="mt-16">
-          <h3 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-6">
-            Skills
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {resumeData.skills.map((skill) => (
-              <span
-                key={skill}
-                className="px-3 py-1 rounded-full border border-white/10 text-sm text-gray-400 transition-colors hover:border-white/25 hover:text-gray-200"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal className="mt-16">
-          <h3 className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-4">
-            Certifications
-          </h3>
-          <p className="text-gray-400 text-sm">
-            {resumeData.certifications.join(" · ")}
-          </p>
-        </Reveal>
       </div>
     </section>
   );
