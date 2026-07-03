@@ -27,11 +27,12 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ og.png refresh — galaxy render with grey-ring headshot
 - ✅ Favicon refresh — white DK on dark grey (nebula version rejected)
 - ✅ Dev-warning fixes (LCP eager nav avatar, Motion scroll-offset warning)
+- ✅ Vercel Analytics — verified it was never actually enabled (no package, no
+  script on the live site); wired `@vercel/analytics` into the root layout,
+  David enabled it in the dashboard
 
 ## Do now
 
-- **(S) Vercel Analytics**: David thinks it's already enabled — verify, and
-  wire up/review post-redesign
 - **(S) Public-surface scan**: check whether an "opinions are my own, not my
   employer's" disclaimer is needed, and audit all copy for anything
   Expedia-confidential
