@@ -47,6 +47,8 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
   → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
+- ✅ Austin skyline brightness — 15% CSS lift (brightness-[1.15]) on that
+  img only; drop the imgClass in Human.tsx to revert
 - ✅ New Human-section photos — Ricoh shots landed: Porsche (DAVID plate),
   Musée d'Orsay hall, Austin skyline from Lady Bird Lake. Third caption
   changed Fitness → Wellness. Captions are now bold label + description
@@ -90,10 +92,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
 ## Backlog
 
-- **(S) Brighten the Austin skyline photo**: David finds it a tad dark but is
-  keeping it for now. Options: subtle CSS brightness filter on that img only
-  (reversible, no re-export), a re-export with exposure lifted, or a reshoot
-  in brighter light
 - **(S) Rey easter egg**: konami code shows the cat
 - **(M) OAuth consent screen easter egg**: first-visit parody consent dialog
   ("davidkwartler.com would like to access: your scroll position, your good

@@ -11,7 +11,16 @@ import {
 } from "motion/react";
 import { Reveal } from "@/components/Reveal";
 
-const photos = [
+type Photo = {
+  src: string;
+  alt: string;
+  label: string;
+  caption: string;
+  drift: number;
+  imgClass?: string;
+};
+
+const photos: Photo[] = [
   {
     src: "/porsche.jpg",
     alt: "White Porsche 718 Cayman GTS with a Texas plate reading DAVID",
@@ -32,6 +41,8 @@ const photos = [
     label: "Wellness",
     caption: "Austin skyline from the Town Lake bike trail",
     drift: 22,
+    // Dusk shot runs dark next to the other two; lift it in CSS
+    imgClass: "brightness-[1.15]",
   },
 ];
 
@@ -57,7 +68,7 @@ function ParallaxPhoto({
         alt={photo.alt}
         width={600}
         height={450}
-        className="aspect-[4/5] w-full rounded-xl object-cover ring-1 ring-white/10"
+        className={`aspect-[4/5] w-full rounded-xl object-cover ring-1 ring-white/10 ${photo.imgClass ?? ""}`}
       />
       <figcaption className="text-center text-sm text-gray-500">
         <span className="block font-semibold text-gray-300">
