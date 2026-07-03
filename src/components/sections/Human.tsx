@@ -14,20 +14,23 @@ import { Reveal } from "@/components/Reveal";
 const photos = [
   {
     src: "/porsche.jpg",
-    alt: "White Porsche Cayman GTS with a Texas plate reading DAVID",
-    caption: "Motorsports",
+    alt: "White Porsche 718 Cayman GTS with a Texas plate reading DAVID",
+    label: "Motorsports",
+    caption: "My Porsche 718 Cayman GTS",
     drift: 28,
   },
   {
     src: "/paris-orsay.jpg",
     alt: "The main hall of the Musée d'Orsay in Paris",
-    caption: "Travel",
+    label: "Travel",
+    caption: "Visiting the Musée d'Orsay in Paris",
     drift: -36,
   },
   {
     src: "/austin-skyline.jpg",
-    alt: "Downtown Austin skyline at dusk from Lady Bird Lake",
-    caption: "Austin",
+    alt: "Downtown Austin skyline at dusk from the Town Lake bike trail",
+    label: "Wellness",
+    caption: "Austin skyline from the Town Lake bike trail",
     drift: 22,
   },
 ];
@@ -57,6 +60,9 @@ function ParallaxPhoto({
         className="aspect-[4/5] w-full rounded-xl object-cover ring-1 ring-white/10"
       />
       <figcaption className="text-center text-sm text-gray-500">
+        <span className="block font-semibold text-gray-300">
+          {photo.label}
+        </span>
         {photo.caption}
       </figcaption>
     </motion.figure>

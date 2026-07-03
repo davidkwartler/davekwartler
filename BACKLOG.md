@@ -49,7 +49,10 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
 - ✅ New Human-section photos — Ricoh shots landed: Porsche (DAVID plate),
   Musée d'Orsay hall, Austin skyline from Lady Bird Lake. Third caption
-  changed Fitness → Austin to match the shot. Compressed to 1600px max
+  changed Fitness → Wellness. Captions are now bold label + description
+  ("Travel / Visiting the Musée d'Orsay in Paris"). Note: David first said
+  l'Orangerie, but the photo's exhibition banner (M'O, "Le travail") is
+  Orsay's, so Orsay it is. Compressed to 1600px max
   (EXIF orientation preserved; do NOT pixel-rotate these, browsers handle it)
 - ✅ Image cleanup — killed unused david-chicago/falcons/seattle JPGs and
   identiverse.jpg, plus the three replaced photos (corvette, david-nyc,
