@@ -37,7 +37,8 @@ export default function Contact() {
             Get in touch.
           </h2>
           <p className="mt-5 text-lg text-gray-400">
-            Work, AI agents, or the Porsche. All fair game.
+            Identity, authorization, AI agents, or anything tech. All fair
+            game.
           </p>
         </Reveal>
         <Reveal delay={0.1}>

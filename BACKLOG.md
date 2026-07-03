@@ -49,7 +49,9 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
 - ✅ Contact copy rework — "Say hi." → "Get in touch."; "Email is the
   fastest way to reach me. I read everything." → "Work, AI agents, or the
-  Porsche. All fair game." (David called the old copy cringe)
+  Porsche. All fair game.", then revised work-only per David: "Identity,
+  authorization, AI agents, or anything tech. All fair game." (no Porsche
+  in the contact section)
 - ✅ Header tabs renamed — Home / Work / Career / About / Contact (David's
   call: boring but straightforward)
 - ✅ Photo order rebalanced — Travel / Wellness / Motorsports, bright-dark-
