@@ -43,6 +43,9 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Custom 404 — binary galaxy field, "401: you don't have permission to be
   here... kidding" copy, OAuth-flavored error label, "Request a valid scope"
   home button
+- ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
+  → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
+  percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
 - ✅ Sitemap question resolved — fragment URLs (/#career) aren't allowed by
   the sitemap protocol (Google strips them); section-level discovery already
   works via in-page anchors and nav links. Sitemap stays root-only
@@ -66,14 +69,12 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   /about URLs re-index to the single page
 - **(M) Header tabs rename** — brainstorm together (current: Home / What I
   do / Career / About / Say hi)
-- **(M) Copy pass — add detail everywhere, tone down Expedia-sensitive
-  language** — do together with David. Detail direction by example: "long
-  bike rides on the Town Lake trail", "I travel for vegan food, modern art
-  museums, and good electronic music". Tone-down targets from the 2026-07-02
-  public-surface scan: absolute internal dollar figures in the Expedia
-  bullets ($400M, $3M EBITDA, $15M, $4M), the 1% conversion uplift, and the
-  NAVER Pay namedrop (relative phrasing keeps the punch: "nine-figure
-  partnership portfolio", "multi-million-dollar annual savings")
+- **(M) Copy pass — add detail everywhere** — do together with David.
+  Direction by example: "long bike rides on the Town Lake trail", "I travel
+  for vegan food, modern art museums, and good electronic music". (The
+  Expedia tone-down half shipped 2026-07-03; partner namedrops NAVER Pay and
+  ChatGPT approved by David. GM's "$16M in monthly CLV" left as-is — lower
+  heat, past employer — worth a look during this pass)
 - **(L) Hero animation experiments**: first pass done 2026-07-03 (subtle
   orange/pink accents); keep for further glow/color iteration with David in
   preview if he wants more

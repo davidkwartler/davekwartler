@@ -32,12 +32,12 @@ I'm a builder. I prototype with AI and ship production changes myself because it
         "I lead identity connectivity for Expedia's enterprise partnerships: the account linking, consent, and authorization systems that power loyalty, social, and Gen AI integrations. My work enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces, safely and transparently.",
       highlights: [
         "Lead authorization strategy for Expedia's MCP-based Gen AI integrations like ChatGPT and Claude, building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first agentic surfaces.",
-        "Architected centralized OAuth 2.0 consent system powering $400M+ in enterprise partnerships across AI, loyalty programs, and social platforms, enabling secure scope-based identity connectivity and data exchange with 20+ global partners.",
+        "Architected centralized OAuth 2.0 consent system powering a nine-figure enterprise partnership portfolio across AI, loyalty programs, and social platforms, enabling secure scope-based identity connectivity and data exchange with 20+ global partners.",
         "Championed AI building within Expedia by shipping 50+ production code changes for account linking, from building UI designs in Figma Make to pushing frontend, API, and OIDC changes via Claude Code and Codex.",
-        "Pioneered identity platform multi-tenancy, ensuring user data isolation and unlocking $15M in value via personalization and loyalty integrations for Expedia's B2B marketplace.",
+        "Pioneered identity platform multi-tenancy, ensuring user data isolation and unlocking multi-million-dollar value via personalization and loyalty integrations for Expedia's B2B marketplace.",
         "Achieved 1% booking conversion uplift by aligning loyalty, fraud, privacy, and cybersecurity teams to A/B test an extended session length strategy.",
-        "Eliminated external vendor dependency for authentication through system rearchitecture, delivering $3M in annual EBITDA savings.",
-        "Launched social login and NAVER Pay integration in South Korea, capturing $4M in incremental value by improving conversion in a key growth market.",
+        "Eliminated external vendor dependency for authentication through system rearchitecture, delivering multi-million-dollar annual savings.",
+        "Launched social login and NAVER Pay integration in South Korea, capturing millions in incremental value by improving conversion in a key growth market.",
       ],
       skills: [
         "AI Agent Authorization",
