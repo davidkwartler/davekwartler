@@ -90,6 +90,10 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
 ## Backlog
 
+- **(S) Brighten the Austin skyline photo**: David finds it a tad dark but is
+  keeping it for now. Options: subtle CSS brightness filter on that img only
+  (reversible, no re-export), a re-export with exposure lifted, or a reshoot
+  in brighter light
 - **(S) Rey easter egg**: konami code shows the cat
 - **(M) OAuth consent screen easter egg**: first-visit parody consent dialog
   ("davidkwartler.com would like to access: your scroll position, your good
