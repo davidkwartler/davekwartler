@@ -38,11 +38,12 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Skills section killed — chips folded into the four timeline detail
   panels per David's mapping; certifications moved into GM (SAFe PO/PM) and
   CVP (PSM I) panels; standalone Skills + Certifications blocks removed.
-  GWU carries Product Strategy alone; Collaboration/Communication cut
-  (Claude's call, easy to revisit)
+  GWU carries Product Strategy, Collaboration, Communication (David kept
+  the soft skills after Claude trial-cut them)
 - ✅ Custom 404 — binary galaxy field, "401: you don't have permission to be
   here... kidding" copy, OAuth-flavored error label, "Request a valid scope"
-  home button
+  home button. Has the site header and footer; nav anchors switched from
+  #section to /#section so they work from any path
 - ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
   → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay

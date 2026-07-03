@@ -103,7 +103,7 @@ I'm a builder. I prototype with AI and ship production changes myself because it
       location: "Washington, DC",
       graduationDate: "2015 – 2019",
       details: "Major in Finance, Minor in Environmental Sustainability",
-      skills: ["Product Strategy"],
+      skills: ["Product Strategy", "Collaboration", "Communication"],
     },
   ],
 };
