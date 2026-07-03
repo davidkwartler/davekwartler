@@ -47,6 +47,9 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
   → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
+- ✅ Contact copy rework — "Say hi." → "Get in touch."; "Email is the
+  fastest way to reach me. I read everything." → "Work, AI agents, or the
+  Porsche. All fair game." (David called the old copy cringe)
 - ✅ Header tabs renamed — Home / Work / Career / About / Contact (David's
   call: boring but straightforward)
 - ✅ Photo order rebalanced — Travel / Wellness / Motorsports, bright-dark-

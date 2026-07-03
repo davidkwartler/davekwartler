@@ -34,10 +34,10 @@ export default function Contact() {
             Contact
           </p>
           <h2 className="mt-3 text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide">
-            Say hi.
+            Get in touch.
           </h2>
           <p className="mt-5 text-lg text-gray-400">
-            Email is the fastest way to reach me. I read everything.
+            Work, AI agents, or the Porsche. All fair game.
           </p>
         </Reveal>
         <Reveal delay={0.1}>
