@@ -22,27 +22,27 @@ type Photo = {
 
 const photos: Photo[] = [
   {
-    src: "/porsche.jpg",
-    alt: "White Porsche 718 Cayman GTS with a Texas plate reading DAVID",
-    label: "Motorsports",
-    caption: "My Porsche 718 Cayman GTS",
-    drift: 28,
-  },
-  {
     src: "/paris-orsay.jpg",
     alt: "The main hall of the Musée d'Orsay in Paris",
     label: "Travel",
     caption: "Visiting the Musée d'Orsay in Paris",
-    drift: -36,
+    drift: 28,
   },
   {
     src: "/austin-skyline.jpg",
     alt: "Downtown Austin skyline at dusk from the Town Lake bike trail",
     label: "Wellness",
     caption: "Austin skyline from the Town Lake bike trail",
-    drift: 22,
+    drift: -36,
     // Dusk shot runs dark next to the other two; lift it in CSS
     imgClass: "brightness-[1.15]",
+  },
+  {
+    src: "/porsche.jpg",
+    alt: "White Porsche 718 Cayman GTS with a Texas plate reading DAVID",
+    label: "Motorsports",
+    caption: "My Porsche 718 Cayman GTS",
+    drift: 22,
   },
 ];
 

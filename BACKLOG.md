@@ -47,6 +47,9 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
   → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
+- ✅ Photo order rebalanced — Travel / Wellness / Motorsports, bright-dark-
+  bright with the skyline in the staggered middle slot (drift values stay
+  positional)
 - ✅ Austin skyline brightness — 15% CSS lift (brightness-[1.15]) on that
   img only; drop the imgClass in Human.tsx to revert
 - ✅ New Human-section photos — Ricoh shots landed: Porsche (DAVID plate),
