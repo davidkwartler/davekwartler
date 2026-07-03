@@ -47,6 +47,13 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
   → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
+- ✅ New Human-section photos — Ricoh shots landed: Porsche (DAVID plate),
+  Musée d'Orsay hall, Austin skyline from Lady Bird Lake. Third caption
+  changed Fitness → Austin to match the shot. Compressed to 1600px max
+  (EXIF orientation preserved; do NOT pixel-rotate these, browsers handle it)
+- ✅ Image cleanup — killed unused david-chicago/falcons/seattle JPGs and
+  identiverse.jpg, plus the three replaced photos (corvette, david-nyc,
+  bike-austin). Confirmed no resume PDF was ever in the repo
 - ✅ Sitemap question resolved — fragment URLs (/#career) aren't allowed by
   the sitemap protocol (Google strips them); section-level discovery already
   works via in-page anchors and nav links. Sitemap stays root-only
@@ -58,10 +65,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
 - **(S) Resume PDF download link** — blocked: David to provide the PDF. Add a
   "Download resume (PDF)" link in the career section
-- **(S) New images** — blocked: David to provide Ricoh GR IV shots (Porsche,
-  art museum, Austin skyline) for the three Human-section slots. Compress like
-  the others (max 1600px); captions Motorsports / Travel / Fitness may need
-  revisiting to match
 - **(S) Headshot grey outline** — tentative, David not sold: try the grey
   ring from the OG image around the hero headshot; preview against the galaxy
   before committing, easy to drop if it fights the breathing halo

@@ -13,21 +13,21 @@ import { Reveal } from "@/components/Reveal";
 
 const photos = [
   {
-    src: "/corvette.jpg",
-    alt: "Corvette racing at New England Dragway",
+    src: "/porsche.jpg",
+    alt: "White Porsche Cayman GTS with a Texas plate reading DAVID",
     caption: "Motorsports",
     drift: 28,
   },
   {
-    src: "/david-nyc.JPG",
-    alt: "David in New York City",
+    src: "/paris-orsay.jpg",
+    alt: "The main hall of the Musée d'Orsay in Paris",
     caption: "Travel",
     drift: -36,
   },
   {
-    src: "/bike-austin.jpg",
-    alt: "Biking the Town Lake Trail in Austin",
-    caption: "Fitness",
+    src: "/austin-skyline.jpg",
+    alt: "Downtown Austin skyline at dusk from Lady Bird Lake",
+    caption: "Austin",
     drift: 22,
   },
 ];
