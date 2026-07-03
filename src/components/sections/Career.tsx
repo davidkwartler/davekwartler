@@ -20,7 +20,7 @@ export default function Career() {
     <section id="career" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">
+          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
             {careerSection.label}
           </p>
           <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl font-[family-name:var(--font-playfair)] tracking-wide">

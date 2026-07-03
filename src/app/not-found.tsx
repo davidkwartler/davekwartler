@@ -17,7 +17,7 @@ export default function NotFound() {
           <GalaxyBackground timeScale={0.6} dim={0.8} starCount={110} />
         </div>
 
-        <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">
+        <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
           error=&quot;invalid_request&quot;
         </p>
         <h1 className="mt-4 text-7xl font-bold text-white sm:text-8xl font-[family-name:var(--font-playfair)] tracking-wide">

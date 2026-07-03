@@ -66,6 +66,18 @@ export default function Hero() {
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
             />
           )}
+          {/* Thin static ring, brighter at the top like overhead light */}
+          <div
+            aria-hidden
+            className="absolute -inset-1.5 rounded-full"
+            style={{
+              background:
+                "conic-gradient(from 0deg, rgba(255,255,255,0.55), rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.55))",
+              WebkitMask:
+                "radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px))",
+              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px))",
+            }}
+          />
           <Image
             id="hero-headshot-img"
             src="/dk-headshot.jpg"

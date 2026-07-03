@@ -11,7 +11,7 @@ export default function WhatIDo() {
     <section id="what-i-do" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">
+          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
             {whatIDo.label}
           </p>
           <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl font-[family-name:var(--font-playfair)] tracking-wide">
@@ -22,7 +22,7 @@ export default function WhatIDo() {
           {cards.map((card, i) => (
             <Reveal key={card.index} delay={i * 0.07} className="h-full">
               <GlowCard className="h-full">
-                <p className="text-sm text-gray-500 font-[family-name:var(--font-geist-mono)]">
+                <p className="text-sm text-gray-500 font-[family-name:var(--font-jetbrains)]">
                   {card.index}
                 </p>
                 <h3 className="mt-4 text-lg font-semibold text-white">

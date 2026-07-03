@@ -31,7 +31,7 @@ export default function Contact() {
       </div>
       <div className="mx-auto max-w-3xl text-center">
         <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">
+          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
             {contact.label}
           </p>
           <h2 className="mt-3 text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide">

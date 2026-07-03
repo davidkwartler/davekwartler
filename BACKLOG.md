@@ -84,6 +84,18 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Sitemap question resolved — fragment URLs (/#career) aren't allowed by
   the sitemap protocol (Google strips them); section-level discovery already
   works via in-page anchors and nav links. Sitemap stays root-only
+- ✅ Headshot ring (un-rejected) — thin static 2px silver ring around the hero
+  headshot, conic gradient brighter at top like overhead light. Colored
+  rotating version tried and killed ("reads Instagram story")
+- ✅ Body-font bug fix — body { font-family: var(--font-sans) } referenced a
+  variable Tailwind v4's @theme inline never emits at runtime, so the site
+  had been rendering the OS system font, never Geist. Now points at the
+  next/font variable directly
+- ✅ Font brainstorm → shipped palette C — sans: Schibsted Grotesk (body,
+  nav, UI), mono: JetBrains Mono (eyebrow labels, card numbers), Playfair
+  Display unchanged (hero name + headings). Geist/Geist Mono removed.
+  Runners-up: Instrument Sans (A), Hanken Grotesk (B), compared live via a
+  temporary FontTrial switcher (deleted after the decision)
 
 ## Do now
 
@@ -101,8 +113,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **(L) Hero animation experiments**: first pass done 2026-07-03 (subtle
   orange/pink accents); keep for further glow/color iteration with David in
   preview if he wants more
-- **(L) Font brainstorm**: everything other than the hero name (Playfair) is
-  boring; explore alternatives (iteration-heavy)
 
 ## Backlog
 
