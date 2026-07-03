@@ -84,6 +84,7 @@ export const human = {
       drift: 22,
     },
   ] satisfies Photo[],
+  photosCredit: "Shot by me on a Ricoh GR IV.",
 };
 
 export const contact = {

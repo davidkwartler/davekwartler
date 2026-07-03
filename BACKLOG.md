@@ -96,6 +96,8 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   Display unchanged (hero name + headings). Geist/Geist Mono removed.
   Runners-up: Instrument Sans (A), Hanken Grotesk (B), compared live via a
   temporary FontTrial switcher (deleted after the decision)
+- ✅ Photo credit line — "Shot by me on a Ricoh GR IV." under the Who I am
+  photo grid, tiny JetBrains Mono like EXIF data
 
 ## Do now
 

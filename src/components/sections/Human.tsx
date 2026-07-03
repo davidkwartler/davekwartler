@@ -85,6 +85,11 @@ export default function Human() {
             />
           ))}
         </div>
+        <Reveal delay={0.1}>
+          <p className="mt-10 text-center text-xs text-gray-600 font-[family-name:var(--font-jetbrains)]">
+            {human.photosCredit}
+          </p>
+        </Reveal>
       </div>
     </section>
   );
