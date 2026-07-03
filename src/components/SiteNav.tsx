@@ -7,10 +7,10 @@ import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 
 const sections = [
   { id: "top", label: "Home" },
-  { id: "what-i-do", label: "What I do" },
+  { id: "what-i-do", label: "Work" },
   { id: "career", label: "Career" },
   { id: "about", label: "About" },
-  { id: "contact", label: "Say hi" },
+  { id: "contact", label: "Contact" },
 ];
 
 export function SiteNav() {

@@ -47,6 +47,8 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
   → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
+- ✅ Header tabs renamed — Home / Work / Career / About / Contact (David's
+  call: boring but straightforward)
 - ✅ Photo order rebalanced — Travel / Wellness / Motorsports, bright-dark-
   bright with the skyline in the staggered middle slot (drift values stay
   positional)
@@ -79,8 +81,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **(S) Google Search Console revisit**: already set up (David did the
   verification). Post-redesign: submit the sitemap, confirm old /work and
   /about URLs re-index to the single page
-- **(M) Header tabs rename** — brainstorm together (current: Home / What I
-  do / Career / About / Say hi)
 - **(M) Copy pass — add detail everywhere** — do together with David.
   Direction by example: "long bike rides on the Town Lake trail", "I travel
   for vegan food, modern art museums, and good electronic music". (The
