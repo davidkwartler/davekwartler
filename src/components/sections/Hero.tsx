@@ -8,7 +8,7 @@ import {
   useTransform,
 } from "motion/react";
 import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
-import { resumeData } from "@/data/resume";
+import { hero } from "@/data/content";
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
@@ -80,18 +80,18 @@ export default function Hero() {
           {...fadeIn(0.05)}
           className="text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide"
         >
-          {resumeData.name}
+          {hero.name}
         </motion.h1>
         <motion.p {...fadeIn(0.15)} className="mt-4 text-xl text-gray-300">
-          Identity nerd, agentic-travel PM, occasional race car driver
+          {hero.tagline}
         </motion.p>
         <motion.p
           {...fadeIn(0.25)}
           className="mt-3 max-w-xl mx-auto text-lg text-gray-400"
         >
-          I design how AI agents get permission to act for you.
+          {hero.intro}
           <br />
-          Also: Porsche, vinyl, and a cat named Rey.
+          {hero.also}
         </motion.p>
       </div>
 

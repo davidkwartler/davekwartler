@@ -4,14 +4,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import { nav } from "@/data/content";
 
-const sections = [
-  { id: "top", label: "Home" },
-  { id: "what-i-do", label: "Work" },
-  { id: "career", label: "Career" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
-];
+const sections = nav.sections;
 
 export function SiteNav() {
   const prefersReducedMotion = useReducedMotion();
@@ -92,7 +87,7 @@ export function SiteNav() {
               className="h-9 w-9 max-w-none rounded-full"
             />
           </motion.span>
-          David Kwartler
+          {nav.name}
         </a>
 
         {/* Desktop: scrollspy links with sliding active pill */}

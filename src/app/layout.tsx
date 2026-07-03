@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "David Kwartler",
     description:
-      "Identity nerd, agentic-travel PM, occasional race car driver.",
+      "Identity nerd, travel-tech PM, occasional race car driver.",
     url: "https://www.davidkwartler.com",
     siteName: "David Kwartler",
     type: "website",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "David Kwartler",
     description:
-      "Identity nerd, agentic-travel PM, occasional race car driver.",
+      "Identity nerd, travel-tech PM, occasional race car driver.",
     images: ["/og.png"],
   },
 };

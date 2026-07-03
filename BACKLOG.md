@@ -47,6 +47,18 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - ✅ Expedia dollar figures collapsed to relative phrasing — $400M portfolio
   → "nine-figure", $15M/$3M/$4M → "multi-million-dollar"/"millions";
   percentages kept. David OK'd naming NAVER Pay and ChatGPT, so those stay
+- ✅ Full copy pass (done together, on branch) — hero: "travel-tech PM" +
+  "I build identity and authorization products for AI agents with OAuth.";
+  section heading system What I do / Where I've been / Who I am with
+  headings "Identity, consent, and AI agents." / "Consulting, electric
+  cars, and travel tech." / "Chasing momentum and catching eighty shows a
+  year."; Who I am intro rewritten (vinyl collection is the receipt, gravel
+  bikes, festivals, Rey kicker); career summaries and bullets first-personed
+  with resume verbs intact. Kept deliberately: card 02 cute line, boring
+  footer. Headshot grey ring: rejected, dropped from backlog
+- ✅ Content refactor — all rendered copy centralized in src/data/content.ts;
+  resume.ts slimmed to careerEntries with timeline presentation data; dead
+  summary/careerBackground deleted; Career.tsx lookup scaffolding removed
 - ✅ Contact copy rework — "Say hi." → "Get in touch."; "Email is the
   fastest way to reach me. I read everything." → "Work, AI agents, or the
   Porsche. All fair game.", then revised work-only per David: "Identity,
@@ -80,18 +92,12 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
 - **(S) Resume PDF download link** — blocked: David to provide the PDF. Add a
   "Download resume (PDF)" link in the career section
-- **(S) Headshot grey outline** — tentative, David not sold: try the grey
-  ring from the OG image around the hero headshot; preview against the galaxy
-  before committing, easy to drop if it fights the breathing halo
 - **(S) Google Search Console revisit**: already set up (David did the
   verification). Post-redesign: submit the sitemap, confirm old /work and
   /about URLs re-index to the single page
-- **(M) Copy pass — add detail everywhere** — do together with David.
-  Direction by example: "long bike rides on the Town Lake trail", "I travel
-  for vegan food, modern art museums, and good electronic music". (The
-  Expedia tone-down half shipped 2026-07-03; partner namedrops NAVER Pay and
-  ChatGPT approved by David. GM's "$16M in monthly CLV" left as-is — lower
-  heat, past employer — worth a look during this pass)
+- **(M) Career timeline switcher polish**: the UI for switching between the
+  four stops works but could be more solid, fluid, and beautiful — motion,
+  active states, transitions between detail panels (David, 2026-07-02)
 - **(L) Hero animation experiments**: first pass done 2026-07-03 (subtle
   orange/pink accents); keep for further glow/color iteration with David in
   preview if he wants more
@@ -100,6 +106,10 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
 ## Backlog
 
+- **(S) Live-music photo for Who I am**: music is David's #1 identity piece
+  and the heading stakes eighty shows a year, but no photo shows it —
+  consider swapping the skyline (or adding a fourth slot) when he has a
+  good live-show shot
 - **(S) Rey easter egg**: konami code shows the cat
 - **(M) OAuth consent screen easter egg**: first-visit parody consent dialog
   ("davidkwartler.com would like to access: your scroll position, your good

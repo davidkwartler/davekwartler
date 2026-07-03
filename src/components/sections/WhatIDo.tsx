@@ -2,24 +2,9 @@
 
 import { Reveal } from "@/components/Reveal";
 import { GlowCard } from "@/components/GlowCard";
+import { whatIDo } from "@/data/content";
 
-const cards = [
-  {
-    index: "01",
-    title: "Identity connectivity",
-    body: "I build the OAuth and OIDC systems that let travelers connect their Expedia accounts with loyalty programs, social platforms, and AI experiences. Done well, account linking is a growth engine.",
-  },
-  {
-    index: "02",
-    title: "AI agent authorization",
-    body: "I design how AI agents get permission to act for you: the consent and access models behind Expedia's MCP-based Gen AI integrations.",
-  },
-  {
-    index: "03",
-    title: "PM who builds",
-    body: "I prototype with AI and ship production changes myself, from UI design to API and OIDC changes. It's the fastest way to test an idea.",
-  },
-];
+const cards = whatIDo.cards;
 
 export default function WhatIDo() {
   return (
@@ -27,10 +12,10 @@ export default function WhatIDo() {
       <div className="mx-auto max-w-5xl">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">
-            What I do
+            {whatIDo.label}
           </p>
           <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl font-[family-name:var(--font-playfair)] tracking-wide">
-            Identity, consent, and AI agents.
+            {whatIDo.heading}
           </h2>
         </Reveal>
         <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">

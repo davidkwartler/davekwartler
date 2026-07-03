@@ -3,107 +3,17 @@
 import Image from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { resumeData } from "@/data/resume";
+import { careerEntries } from "@/data/resume";
+import { careerSection } from "@/data/content";
 import { Reveal } from "@/components/Reveal";
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
-const companyUrls: Record<string, string> = {
-  "Expedia Group": "https://www.expediagroup.com",
-  "General Motors": "https://www.gm.com",
-  "CVP": "https://www.cvpcorp.com",
-};
-
-type Entry = {
-  id: string;
-  logo: string;
-  node: string;
-  years: string;
-  title: string;
-  org: string;
-  orgUrl?: string;
-  location: string;
-  dates: string;
-  summary: string;
-  bullets: string[];
-  skills: string[];
-  certification?: string;
-};
-
-function job(company: string) {
-  const j = resumeData.experience.find((x) => x.company === company)!;
-  return j;
-}
-
-const expedia = job("Expedia Group");
-const gm = job("General Motors");
-const cvp = job("CVP");
-const edu = resumeData.education[0];
-
-const entries: Entry[] = [
-  {
-    id: "gw",
-    logo: "/gw-logo.png",
-    node: "GW School of Business",
-    years: "2015–19",
-    title: edu.degree,
-    org: edu.institution,
-    location: edu.location,
-    dates: edu.graduationDate,
-    summary: edu.details,
-    bullets: [],
-    skills: edu.skills,
-  },
-  {
-    id: "cvp",
-    logo: "/cvp-logo.png",
-    node: "CVP",
-    years: "2019–21",
-    title: cvp.position,
-    org: cvp.company,
-    orgUrl: companyUrls[cvp.company],
-    location: cvp.location,
-    dates: `${cvp.startDate} – ${cvp.endDate}`,
-    summary: cvp.workSummary,
-    bullets: cvp.highlights,
-    skills: cvp.skills,
-    certification: cvp.certification,
-  },
-  {
-    id: "gm",
-    logo: "/gm-logo.jpeg",
-    node: "General Motors",
-    years: "2021–24",
-    title: gm.position,
-    org: gm.company,
-    orgUrl: companyUrls[gm.company],
-    location: gm.location,
-    dates: `${gm.startDate} – ${gm.endDate}`,
-    summary: gm.workSummary,
-    bullets: gm.highlights,
-    skills: gm.skills,
-    certification: gm.certification,
-  },
-  {
-    id: "expedia",
-    logo: "/expedia-logo.jpg",
-    node: "Expedia",
-    years: "2024–now",
-    title: expedia.position,
-    org: expedia.company,
-    orgUrl: companyUrls[expedia.company],
-    location: expedia.location,
-    dates: `${expedia.startDate} – ${expedia.endDate}`,
-    summary: expedia.workSummary,
-    bullets: expedia.highlights,
-    skills: expedia.skills,
-    certification: expedia.certification,
-  },
-];
+const entries = careerEntries;
 
 export default function Career() {
   const prefersReducedMotion = useReducedMotion();
-  const [activeId, setActiveId] = useState("expedia");
+  const [activeId, setActiveId] = useState(entries[entries.length - 1].id);
   const active = entries.find((e) => e.id === activeId)!;
 
   return (
@@ -111,10 +21,10 @@ export default function Career() {
       <div className="mx-auto max-w-3xl">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-geist-mono)]">
-            Career
+            {careerSection.label}
           </p>
           <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl font-[family-name:var(--font-playfair)] tracking-wide">
-            Seven years of identity products.
+            {careerSection.heading}
           </h2>
         </Reveal>
 
