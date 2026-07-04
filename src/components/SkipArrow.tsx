@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
-const SECTIONS = ["top", "what-i-do", "career", "about", "contact"];
+const SECTIONS = ["home", "work", "career", "about", "contact"];
 
 // Persistent scroll cue: a small chevron fixed at the bottom center that
 // jumps to the next section. Bounces on the hero (where it replaces the old
 // one-off cue), sits still further down, and fades out on the last section.
 export default function SkipArrow() {
   const prefersReducedMotion = useReducedMotion();
-  const [next, setNext] = useState<string | null>("what-i-do");
+  const [next, setNext] = useState<string | null>("work");
   const [onHero, setOnHero] = useState(true);
 
   useEffect(() => {

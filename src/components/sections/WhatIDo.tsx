@@ -8,7 +8,7 @@ const cards = whatIDo.cards;
 
 export default function WhatIDo() {
   return (
-    <section id="what-i-do" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
+    <section id="work" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">

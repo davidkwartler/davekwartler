@@ -11,10 +11,25 @@ const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
 const entries = careerEntries;
 
+const panelVariants = {
+  enter: (dir: number) => ({ opacity: 0, x: 28 * dir, filter: "blur(4px)" }),
+  center: { opacity: 1, x: 0, filter: "blur(0px)" },
+  exit: (dir: number) => ({ opacity: 0, x: -20 * dir, filter: "blur(3px)" }),
+};
+
 export default function Career() {
   const prefersReducedMotion = useReducedMotion();
   const [activeId, setActiveId] = useState(entries[entries.length - 1].id);
+  const [dir, setDir] = useState(1);
   const active = entries.find((e) => e.id === activeId)!;
+  const activeIndex = entries.findIndex((e) => e.id === activeId);
+
+  const select = (id: string) => {
+    if (id === activeId) return;
+    const next = entries.findIndex((e) => e.id === id);
+    setDir(next > activeIndex ? 1 : -1);
+    setActiveId(id);
+  };
 
   return (
     <section id="career" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
@@ -31,7 +46,20 @@ export default function Career() {
         {/* Horizontal timeline: hover or tap a stop */}
         <Reveal delay={0.07}>
           <div className="relative mt-16">
-            <div className="absolute left-5 right-5 top-[22px] h-px bg-white/10" />
+            <div className="absolute left-5 right-5 top-[22px] h-px overflow-hidden bg-white/10">
+              <motion.div
+                className="h-full bg-gradient-to-r from-white/15 via-white/35 to-white/60"
+                initial={false}
+                animate={{
+                  width: `${(activeIndex / (entries.length - 1)) * 100}%`,
+                }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 0.45, ease: EASE }
+                }
+              />
+            </div>
             <div
               className="relative flex justify-between"
               role="tablist"
@@ -44,33 +72,50 @@ export default function Career() {
                     key={entry.id}
                     role="tab"
                     aria-selected={isActive}
-                    onClick={() => setActiveId(entry.id)}
-                    onMouseEnter={() => setActiveId(entry.id)}
-                    className="group flex flex-col items-center gap-2 focus:outline-none"
+                    onClick={() => select(entry.id)}
+                    onMouseEnter={() => select(entry.id)}
+                    className="group flex flex-col items-center gap-2 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-white/40"
                   >
                     <span
-                      className={`rounded-full transition-all duration-300 ${
+                      className={`relative rounded-full ring-1 transition-all duration-300 ${
                         isActive
-                          ? "ring-2 ring-white/70 shadow-[0_0_28px_rgba(255,255,255,0.18)]"
-                          : "ring-1 ring-white/10 opacity-55 group-hover:opacity-100"
+                          ? "ring-transparent"
+                          : "ring-white/10 opacity-55 group-hover:opacity-100"
                       }`}
                     >
+                      {isActive && (
+                        <motion.span
+                          layoutId="career-active-ring"
+                          className="absolute -inset-[3px] rounded-full ring-2 ring-white/70 shadow-[0_0_28px_rgba(255,255,255,0.22)]"
+                          transition={
+                            prefersReducedMotion
+                              ? { duration: 0 }
+                              : { type: "spring", stiffness: 420, damping: 34 }
+                          }
+                        />
+                      )}
                       <Image
                         src={entry.logo}
                         alt={`${entry.org} logo`}
                         width={44}
                         height={44}
-                        className="rounded-full bg-white/5"
+                        className={`rounded-full bg-white/5 transition-transform duration-300 ${
+                          isActive ? "scale-105" : "group-hover:scale-105"
+                        }`}
                       />
                     </span>
                     <span
-                      className={`max-w-[5.5rem] text-center text-xs leading-tight font-medium transition-colors sm:max-w-[9rem] sm:text-sm ${
+                      className={`flex min-h-[2lh] max-w-[5.5rem] items-start justify-center text-center text-xs leading-tight font-medium transition-colors sm:max-w-[9rem] sm:text-sm ${
                         isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
                       }`}
                     >
                       {entry.node}
                     </span>
-                    <span className="text-xs text-gray-600 tabular-nums">
+                    <span
+                      className={`text-xs tabular-nums transition-colors ${
+                        isActive ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       {entry.years}
                     </span>
                   </button>
@@ -82,13 +127,15 @@ export default function Career() {
 
         {/* Detail panel */}
         <div className="mt-10 min-h-[300px]">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" custom={dir} initial={false}>
             <motion.div
               key={active.id}
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.25, ease: EASE }}
+              custom={dir}
+              variants={panelVariants}
+              initial={prefersReducedMotion ? false : "enter"}
+              animate="center"
+              exit={prefersReducedMotion ? undefined : "exit"}
+              transition={{ duration: 0.3, ease: EASE }}
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                 <h3 className="text-lg font-semibold text-white">

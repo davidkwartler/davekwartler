@@ -37,7 +37,7 @@ export default function Contact() {
           <h2 className="mt-3 text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide">
             {contact.heading}
           </h2>
-          <p className="mt-5 text-lg text-gray-400">
+          <p className="mt-5 text-base text-balance text-gray-400 sm:text-lg">
             {contact.subline}
           </p>
         </Reveal>
@@ -51,7 +51,7 @@ export default function Contact() {
             </a>
           </div>
           <a
-            href="#top"
+            href="#home"
             className="mt-16 inline-flex flex-col items-center gap-1 text-sm text-gray-500 transition-colors hover:text-white"
           >
             <svg

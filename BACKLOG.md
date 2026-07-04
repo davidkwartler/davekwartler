@@ -9,6 +9,10 @@ iteration-heavy), XL (its own project).
 Shipped 2026-07-02: single-page scroll redesign (galaxy hero, horizontal career
 timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
+Batch shipped 2026-07-03 (branch timeline-mobile-map → main): timeline switcher
+polish, mobile type/layout pass, /travel map easter egg, hero/contact mobile
+type scale, URL scheme + vercel.json redirects. All live.
+
 ## Shipped 2026-07-03
 
 - ✅ Galaxy accent colors — hero orange/pink, contact blue/green, blended
@@ -98,20 +102,45 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   temporary FontTrial switcher (deleted after the decision)
 - ✅ Photo credit line — "Shot by me on a Ricoh GR IV." under the Who I am
   photo grid, tiny JetBrains Mono like EXIF data
+- ✅ Career timeline switcher polish — active ring now slides between logos
+  (shared layout element, spring), gradient progress fill along the track,
+  direction-aware panel transitions with a slight blur, brightened active
+  year, visible keyboard focus ring
+- ✅ Mobile optimization pass — audited every section at 375px and 320px
+  plus tablet: no horizontal overflow anywhere, menu/photos/contact/404 all
+  clean. One real defect found and fixed: timeline year labels misaligned
+  when a node name wrapped to two lines (min-height on the label block)
+- ✅ URL scheme cleanup — consistent 1:1 path↔anchor mapping
+  per David: anchors renamed #top→#home and #what-i-do→#work; vercel.json
+  now 308-redirects /home /work /career /about /contact to their anchors,
+  replacing the old JS-redirect stub pages for /work /about /resume (all
+  three deleted; /resume gets no redirect and 404s — David's call). Fixes
+  /contact and /career 404ing, and /work pointing at #career
+- ✅ Travel map easter egg v1 — /travel page, world map drawn
+  from 0/1 glyphs on canvas by sampling a 720x360 land bitmask generated
+  from world GeoJSON (scripts/gen-landmask.mjs → src/data/land-mask.ts, no
+  runtime image sampling). 20 cities from the spec: 5 with field-note cards
+  (warm glow), 15 pending (violet glow, "Field notes coming soon.").
+  Hover or tap opens the card; map scrolls horizontally on phones so tap
+  targets stay usable; noindex, off sitemap and nav; respects pause-motion
+  and reduced motion. Door: the Travel photo caption in Who I am links to
+  /travel. Iteration knobs for David: land glyph brightness, glow sizes,
+  page copy
 
 ## Do now
 
+- **(S) Google Search Console — finish re-indexing**: redirects now shipped
+  (real 308s via vercel.json). David re-indexed the homepage 2026-07-03.
+  Remaining: submit sitemap.xml in the Sitemaps panel (one root URL is
+  correct — fragment section URLs aren't sitemap-legal), and Request
+  indexing on /work and /about so Google picks up the new redirects. Watch
+  Indexing → Pages: /work + /about should move to "Page with redirect"
+  (that's the success state); /resume → "Not found (404)" is fine
 
 ## Do later
 
 - **(S) Resume PDF download link** — blocked: David to provide the PDF. Add a
   "Download resume (PDF)" link in the career section
-- **(S) Google Search Console revisit**: already set up (David did the
-  verification). Post-redesign: submit the sitemap, confirm old /work and
-  /about URLs re-index to the single page
-- **(M) Career timeline switcher polish**: the UI for switching between the
-  four stops works but could be more solid, fluid, and beautiful — motion,
-  active states, transitions between detail panels (David, 2026-07-02)
 - **(L) Hero animation experiments**: first pass done 2026-07-03 (subtle
   orange/pink accents); keep for further glow/color iteration with David in
   preview if he wants more
@@ -130,7 +159,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **(L) Now playing (Spotify)** in the footer — needs a serverless function
   (static export can't hold the Spotify token)
 - **(L) Writing section (MDX)**: short essays on agentic authorization
-- **(XL) Travel map easter egg** — full spec below
 - **(XL) David Kwartler AI ("chat with David")** — full spec below
 
 ## Ruled out (privacy boundary, 2026-07-01)
@@ -144,7 +172,11 @@ changes his mind (the travel map survived as a hidden noindex page):
 
 ---
 
-## Spec: Travel map easter egg (elaborated 2026-07-02)
+## Spec: Travel map easter egg (elaborated 2026-07-02; v1 built 2026-07-03)
+
+V1 shipped on branch — see Shipped 2026-07-03. Still open from the spec:
+field notes for the 15 pending pins (table below tracks what David has
+provided so far).
 
 Hidden page: clicking the "Travel" photo caption in the Human section opens a
 standalone interactive world map.
