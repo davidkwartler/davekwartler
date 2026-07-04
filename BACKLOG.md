@@ -101,17 +101,21 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 
 ## Do now
 
-
-## Do later
-
-- **(S) Resume PDF download link** — blocked: David to provide the PDF. Add a
-  "Download resume (PDF)" link in the career section
 - **(S) Google Search Console revisit**: already set up (David did the
   verification). Post-redesign: submit the sitemap, confirm old /work and
   /about URLs re-index to the single page
 - **(M) Career timeline switcher polish**: the UI for switching between the
   four stops works but could be more solid, fluid, and beautiful — motion,
   active states, transitions between detail panels (David, 2026-07-02)
+- **(L) Mobile optimization pass** (added 2026-07-03): improve the site at
+  mobile screen sizes — audit every section at phone width, fix layout,
+  spacing, and type issues
+- **(XL) Travel map easter egg** — full spec below
+
+## Do later
+
+- **(S) Resume PDF download link** — blocked: David to provide the PDF. Add a
+  "Download resume (PDF)" link in the career section
 - **(L) Hero animation experiments**: first pass done 2026-07-03 (subtle
   orange/pink accents); keep for further glow/color iteration with David in
   preview if he wants more
@@ -130,7 +134,6 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
 - **(L) Now playing (Spotify)** in the footer — needs a serverless function
   (static export can't hold the Spotify token)
 - **(L) Writing section (MDX)**: short essays on agentic authorization
-- **(XL) Travel map easter egg** — full spec below
 - **(XL) David Kwartler AI ("chat with David")** — full spec below
 
 ## Ruled out (privacy boundary, 2026-07-01)
