@@ -94,12 +94,15 @@ export default function Hero() {
         >
           {hero.name}
         </motion.h1>
-        <motion.p {...fadeIn(0.15)} className="mt-4 text-xl text-gray-300">
+        <motion.p
+          {...fadeIn(0.15)}
+          className="mt-4 text-lg text-balance text-gray-300 sm:text-xl"
+        >
           {hero.tagline}
         </motion.p>
         <motion.p
           {...fadeIn(0.25)}
-          className="mt-3 max-w-xl mx-auto text-lg text-gray-400"
+          className="mt-3 max-w-xl mx-auto text-base text-pretty text-gray-400 sm:text-lg"
         >
           {hero.intro}
           <br />

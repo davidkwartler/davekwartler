@@ -37,7 +37,7 @@ export default function Contact() {
           <h2 className="mt-3 text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide">
             {contact.heading}
           </h2>
-          <p className="mt-5 text-lg text-gray-400">
+          <p className="mt-5 text-base text-balance text-gray-400 sm:text-lg">
             {contact.subline}
           </p>
         </Reveal>
