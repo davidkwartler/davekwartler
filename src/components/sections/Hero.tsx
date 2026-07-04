@@ -39,7 +39,7 @@ export default function Hero() {
 
   return (
     <section
-      id="top"
+      id="home"
       className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
     >
       <motion.div

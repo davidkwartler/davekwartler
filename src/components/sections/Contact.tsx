@@ -51,7 +51,7 @@ export default function Contact() {
             </a>
           </div>
           <a
-            href="#top"
+            href="#home"
             className="mt-16 inline-flex flex-col items-center gap-1 text-sm text-gray-500 transition-colors hover:text-white"
           >
             <svg

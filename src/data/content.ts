@@ -3,8 +3,8 @@
 export const nav = {
   name: "David Kwartler",
   sections: [
-    { id: "top", label: "Home" },
-    { id: "what-i-do", label: "Work" },
+    { id: "home", label: "Home" },
+    { id: "work", label: "Work" },
     { id: "career", label: "Career" },
     { id: "about", label: "About" },
     { id: "contact", label: "Contact" },

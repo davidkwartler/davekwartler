@@ -10,7 +10,7 @@ const sections = nav.sections;
 
 export function SiteNav() {
   const prefersReducedMotion = useReducedMotion();
-  const [active, setActive] = useState("top");
+  const [active, setActive] = useState("home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
 
@@ -63,7 +63,7 @@ export function SiteNav() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a href="/#top" className="flex items-center font-semibold text-white">
+        <a href="/#home" className="flex items-center font-semibold text-white">
           <motion.span
             className="h-9 shrink-0 overflow-hidden rounded-full"
             initial={false}
