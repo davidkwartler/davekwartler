@@ -108,10 +108,10 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   when a node name wrapped to two lines (min-height on the label block)
 - ✅ URL scheme cleanup (on branch) — consistent 1:1 path↔anchor mapping
   per David: anchors renamed #top→#home and #what-i-do→#work; vercel.json
-  now 308-redirects /home /work /career /about /contact to their anchors
-  (plus /resume→/#career), replacing the old JS-redirect stub pages for
-  /work /about /resume, which are deleted. Fixes /contact and /career
-  404ing, and /work pointing at #career
+  now 308-redirects /home /work /career /about /contact to their anchors,
+  replacing the old JS-redirect stub pages for /work /about /resume (all
+  three deleted; /resume gets no redirect and 404s — David's call). Fixes
+  /contact and /career 404ing, and /work pointing at #career
 - ✅ Travel map easter egg v1 (on branch) — /travel page, world map drawn
   from 0/1 glyphs on canvas by sampling a 720x360 land bitmask generated
   from world GeoJSON (scripts/gen-landmask.mjs → src/data/land-mask.ts, no

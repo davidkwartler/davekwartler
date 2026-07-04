@@ -4,7 +4,6 @@
     { "source": "/work", "destination": "/#work", "permanent": true },
     { "source": "/career", "destination": "/#career", "permanent": true },
     { "source": "/about", "destination": "/#about", "permanent": true },
-    { "source": "/contact", "destination": "/#contact", "permanent": true },
-    { "source": "/resume", "destination": "/#career", "permanent": true }
+    { "source": "/contact", "destination": "/#contact", "permanent": true }
   ]
 }
