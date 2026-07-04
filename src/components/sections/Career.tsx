@@ -105,7 +105,7 @@ export default function Career() {
                       />
                     </span>
                     <span
-                      className={`max-w-[5.5rem] text-center text-xs leading-tight font-medium transition-colors sm:max-w-[9rem] sm:text-sm ${
+                      className={`flex min-h-[2lh] max-w-[5.5rem] items-start justify-center text-center text-xs leading-tight font-medium transition-colors sm:max-w-[9rem] sm:text-sm ${
                         isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
                       }`}
                     >
