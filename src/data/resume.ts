@@ -21,10 +21,10 @@ export const careerEntries: CareerEntry[] = [
   {
     id: "gw",
     logo: "/gw-logo.png",
-    node: "GW School of Business",
+    node: "GW University",
     years: "2015–19",
     title: "Bachelor of Business Administration",
-    org: "The George Washington University",
+    org: "The George Washington University School of Business",
     location: "Washington, DC",
     dates: "2015 – 2019",
     summary: "Major in Finance, Minor in Environmental Sustainability",

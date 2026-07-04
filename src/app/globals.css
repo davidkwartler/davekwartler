@@ -16,6 +16,22 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Career timeline: 0/1 stream flowing left→right along the progress fill */
+@keyframes career-binary-flow {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .career-binary-stream {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
