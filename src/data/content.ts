@@ -52,6 +52,8 @@ export type Photo = {
   caption: string;
   drift: number;
   imgClass?: string;
+  /** Easter-egg door: the caption becomes a quiet link */
+  href?: string;
 };
 
 export const human = {
@@ -66,6 +68,7 @@ export const human = {
       label: "Travel",
       caption: "Visiting the Musée d'Orsay in Paris",
       drift: 28,
+      href: "/travel",
     },
     {
       src: "/austin-skyline.jpg",

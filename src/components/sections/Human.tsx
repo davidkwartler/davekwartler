@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
 import {
   motion,
@@ -42,7 +43,16 @@ function ParallaxPhoto({
         <span className="block font-semibold text-gray-300">
           {photo.label}
         </span>
-        {photo.caption}
+        {photo.href ? (
+          <Link
+            href={photo.href}
+            className="underline-offset-4 transition-colors hover:text-gray-300 hover:underline"
+          >
+            {photo.caption}
+          </Link>
+        ) : (
+          photo.caption
+        )}
       </figcaption>
     </motion.figure>
   );

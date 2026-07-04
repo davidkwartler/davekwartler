@@ -98,19 +98,32 @@ timeline, 3-photo Human section, contact galaxy) — merged to main and live.
   temporary FontTrial switcher (deleted after the decision)
 - ✅ Photo credit line — "Shot by me on a Ricoh GR IV." under the Who I am
   photo grid, tiny JetBrains Mono like EXIF data
+- ✅ Career timeline switcher polish — active ring now slides between logos
+  (shared layout element, spring), gradient progress fill along the track,
+  direction-aware panel transitions with a slight blur, brightened active
+  year, visible keyboard focus ring
+- ✅ Mobile optimization pass — audited every section at 375px and 320px
+  plus tablet: no horizontal overflow anywhere, menu/photos/contact/404 all
+  clean. One real defect found and fixed: timeline year labels misaligned
+  when a node name wrapped to two lines (min-height on the label block)
+- ✅ Travel map easter egg v1 (on branch) — /travel page, world map drawn
+  from 0/1 glyphs on canvas by sampling a 720x360 land bitmask generated
+  from world GeoJSON (scripts/gen-landmask.mjs → src/data/land-mask.ts, no
+  runtime image sampling). 20 cities from the spec: 5 with field-note cards
+  (warm glow), 15 pending (violet glow, "Field notes coming soon.").
+  Hover or tap opens the card; map scrolls horizontally on phones so tap
+  targets stay usable; noindex, off sitemap and nav; respects pause-motion
+  and reduced motion. Door: the Travel photo caption in Who I am links to
+  /travel. Iteration knobs for David: land glyph brightness, glow sizes,
+  page copy
 
 ## Do now
 
 - **(S) Google Search Console revisit**: already set up (David did the
   verification). Post-redesign: submit the sitemap, confirm old /work and
-  /about URLs re-index to the single page
-- **(M) Career timeline switcher polish**: the UI for switching between the
-  four stops works but could be more solid, fluid, and beautiful — motion,
-  active states, transitions between detail panels (David, 2026-07-02)
-- **(L) Mobile optimization pass** (added 2026-07-03): improve the site at
-  mobile screen sizes — audit every section at phone width, fix layout,
-  spacing, and type issues
-- **(XL) Travel map easter egg** — full spec below
+  /about URLs re-index to the single page. 2026-07-03: groundwork verified
+  (sitemap live at www, /work + /about stubs serve noindex + redirect);
+  dashboard steps blocked on Chrome extension connection
 
 ## Do later
 
@@ -147,7 +160,11 @@ changes his mind (the travel map survived as a hidden noindex page):
 
 ---
 
-## Spec: Travel map easter egg (elaborated 2026-07-02)
+## Spec: Travel map easter egg (elaborated 2026-07-02; v1 built 2026-07-03)
+
+V1 shipped on branch — see Shipped 2026-07-03. Still open from the spec:
+field notes for the 15 pending pins (table below tracks what David has
+provided so far).
 
 Hidden page: clicking the "Travel" photo caption in the Human section opens a
 standalone interactive world map.
