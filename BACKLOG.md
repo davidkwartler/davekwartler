@@ -13,6 +13,47 @@ Batch shipped 2026-07-03 (branch timeline-mobile-map → main): timeline switche
 polish, mobile type/layout pass, /travel map easter egg, hero/contact mobile
 type scale, URL scheme + vercel.json redirects. All live.
 
+Batch shipped 2026-07-03 (branch career-timeline-redesign → main): full career
+timeline rework — click/keyboard switching, elevated detail card, phased-outline
+rail, blue selected glow, progress-gated white glow, pause-aware binary stream.
+All live.
+
+## Shipped 2026-07-03 (career timeline redesign)
+
+- ✅ Switching reworked — hover-to-select dropped (it was the jumpy part; now a
+  brighten-only cue) in favor of click + arrow-key roving tabindex, so touch and
+  desktop behave identically. The old sliding active ring (shared `layoutId`
+  spring) was replaced by a crossfading glow/rim on the selected logo — nothing
+  travels across the rail anymore
+- ✅ Detail panel → elevated card — lifted bg (`bg-white/[0.03]`), border,
+  top-highlight line + soft corner glow, logo+title header with dates as a
+  JetBrains-mono pill, bullets got dot markers echoing the rail, certification
+  became a check-icon badge. Content still centralized (resume.ts / content.ts)
+- ✅ Rail → phased outline (David's pick from a 4-option mockup) — one bordered
+  rounded container split into 4 `divide-x` cells; picking a cell lights it.
+  Fixed the date-gap bug: dropped `min-h-[2lh]` (it reserved 2 lines so
+  single-line names like CVP left dead space above the year); cells now
+  vertically center their logo/name/year, tolerant of wrapping on mobile
+- ✅ Personality layer — blue glow (`#60a5fa`) on the selected cell (radial +
+  logo halo + rim shadow, white rim kept for definition); progressive white
+  glow gated to *reached* cells only (fills the whole box, brightens toward the
+  active one, dark for anything ahead); a flowing 0/1 binary stream ("DK MCP" in
+  ASCII) clipped to the progress fill, brightest at the leading edge. Three
+  coordinated left→right signals (underline, glow, stream) all point at "now".
+  Called the stopping point — at the tasteful-maximalism ceiling, don't garnish
+- ✅ Binary stream behaves — 108s slow drift (David: "don't want people motion
+  sick"); respects the pause-motion button via the shared `galaxy-pause` store
+  and reduced-motion; content overflows the bar ~6× so reselecting a phase never
+  makes the stream "catch up"; `initial={false}` so it loads full on Expedia.
+  Animation set via longhand props (not the `animation` shorthand) to avoid
+  React's shorthand-vs-`animationPlayState` rerender warning
+- ✅ GW entry relabeled — rail node "GW University", card org "The George
+  Washington University School of Business"
+- ✅ Verified live in preview: Expedia default fills the whole bar on load; GW
+  select gates the glow to one cell and clips the binary to 25%; pause freezes
+  the stream; no console errors. Iteration knobs if wanted: blue strength
+  (`0.16`/`0.30`), stream brightness (`text-white/35`), speed (`108s`)
+
 ## Shipped 2026-07-03
 
 - ✅ Galaxy accent colors — hero orange/pink, contact blue/green, blended
@@ -156,6 +197,10 @@ type scale, URL scheme + vercel.json redirects. All live.
   ("davidkwartler.com would like to access: your scroll position, your good
   opinion, your vibes"). On-brand for identity work
 - **(M) /now page**: currently building, reading, listening to
+- **(L) Travel map v2 — globe**: rotatable globe instead of the flat map,
+  blue landmass glyphs, orange triangle pins, and strip the page text down to
+  a single "Where I've been" eyebrow. Full feedback in the Travel spec section
+  below (David's direction, 2026-07-03)
 - **(L) Now playing (Spotify)** in the footer — needs a serverless function
   (static export can't hold the Spotify token)
 - **(L) Writing section (MDX)**: short essays on agentic authorization
@@ -177,6 +222,31 @@ changes his mind (the travel map survived as a hidden noindex page):
 V1 shipped on branch — see Shipped 2026-07-03. Still open from the spec:
 field notes for the 15 pending pins (table below tracks what David has
 provided so far).
+
+### v2 — David feedback (2026-07-03)
+
+Next iteration on the shipped v1. "Good but not perfect." David's direction:
+
+- **Cut the page text.** Remove the intro paragraph and the large `<h1>` so the
+  map fills more of the page. Keep only the small JetBrains-mono eyebrow label,
+  relabeled "Where I've been" (today the eyebrow is "Travel" and the big
+  heading is "Where I've actually been." — travel.ts `label` / `heading` /
+  `intro`). Less text also helps the page not feel blank.
+- **Flat map → interactive globe.** Render the binary landmass on a rotatable
+  sphere; mousing over rotates the globe. A globe fills the mostly-blank page
+  better than the flat projection, since David has only been to North America
+  and Europe (a flat map leaves a lot of empty ocean).
+- **Recolor the landmass glyphs blue.** The 0/1 glyphs are "good but not great"
+  today — move them to blue.
+- **Pins → orange triangles.** Visited-city marks become orange triangles
+  instead of glowing "1" glyphs, so they read as a distinct shape + color
+  against the blue landmass.
+
+Effort: L. Globe = 3D projection + rotation interaction replacing the flat-map
+canvas sampling in `TravelMap.tsx`; the land-mask data (`src/data/land-mask.ts`)
+can likely be re-projected onto the sphere rather than regenerated. Open at
+build time: keep the hover/tap city cards, mapped onto globe coordinates and
+hidden when a pin rotates to the back face.
 
 Hidden page: clicking the "Travel" photo caption in the Human section opens a
 standalone interactive world map.
