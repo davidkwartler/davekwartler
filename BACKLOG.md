@@ -18,6 +18,17 @@ timeline rework — click/keyboard switching, elevated detail card, phased-outli
 rail, blue selected glow, progress-gated white glow, pause-aware binary stream.
 All live.
 
+Batch staged 2026-07-06 (branch polish-opus-arch-ux, awaiting David's ship
+call): image weight cut ~85% (About photos → 800px WebP, OG card → JPEG);
+career rail a11y finished (tabpanel wiring, Home/End) and mobile cell
+alignment fixed (logo/year pinned rows); scrollspy consolidated into
+useActiveSection (SkipArrow no longer hardcodes section ids) and the two lint
+errors on main fixed; canvas rAF/IntersectionObserver/pause scaffolding
+extracted to useCanvasLoop (galaxy + travel map); shared EASE + SectionHeading;
+Motion useScroll dev warning silenced (html position: relative). Verified in
+preview: desktop + mobile, career keyboard nav, pause freeze, travel map
+click-cards, clean console, clean build/lint/tsc.
+
 ## Shipped 2026-07-03 (career timeline redesign)
 
 - ✅ Switching reworked — hover-to-select dropped (it was the jumpy part; now a
