@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/og.png",
+        url: "/og.jpg",
         width: 1200,
         height: 630,
         alt: "David Kwartler — Senior Product Manager",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: "David Kwartler",
     description:
       "Identity nerd, travel-tech PM, occasional race car driver.",
-    images: ["/og.png"],
+    images: ["/og.jpg"],
   },
 };
 

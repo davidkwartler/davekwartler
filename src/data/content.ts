@@ -63,7 +63,7 @@ export const human = {
     "I grew up in Boston, studied in DC, and landed in Austin. Live music is my thing, and the vinyl collection is the receipt. I'm a big fan of track days in a Porsche or Corvette, and gravel bike rides on the Town Lake trail. I travel for vegan food, music festivals, and modern art museums. At home, my cat Rey is in charge.",
   photos: [
     {
-      src: "/paris-orsay.jpg",
+      src: "/paris-orsay.webp",
       alt: "The main hall of the Musée d'Orsay in Paris",
       label: "Travel",
       caption: "Visiting the Musée d'Orsay in Paris",
@@ -71,7 +71,7 @@ export const human = {
       href: "/travel",
     },
     {
-      src: "/austin-skyline.jpg",
+      src: "/austin-skyline.webp",
       alt: "Downtown Austin skyline at dusk from the Town Lake bike trail",
       label: "Wellness",
       caption: "Austin skyline from the Town Lake bike trail",
@@ -80,7 +80,7 @@ export const human = {
       imgClass: "brightness-[1.15]",
     },
     {
-      src: "/porsche.jpg",
+      src: "/porsche.webp",
       alt: "White Porsche 718 Cayman GTS with a Texas plate reading DAVID",
       label: "Motorsports",
       caption: "My Porsche 718 Cayman GTS",
