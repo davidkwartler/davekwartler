@@ -1,8 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-
-const EASE = [0.21, 0.47, 0.32, 0.98] as const;
+import { EASE } from "@/lib/motion";
 
 /**
  * Reveal - fade/rise-in on scroll, once, settles fast.

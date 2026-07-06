@@ -11,6 +11,7 @@ import {
   type MotionValue,
 } from "motion/react";
 import { Reveal } from "@/components/Reveal";
+import { SectionHeading } from "@/components/SectionHeading";
 import { human } from "@/data/content";
 
 const photos = human.photos;
@@ -73,12 +74,7 @@ export default function Human() {
     >
       <div className="mx-auto max-w-5xl">
         <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
-            {human.label}
-          </p>
-          <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl font-[family-name:var(--font-playfair)] tracking-wide">
-            {human.heading}
-          </h2>
+          <SectionHeading label={human.label} heading={human.heading} />
         </Reveal>
         <Reveal delay={0.07}>
           <p className="mt-6 max-w-2xl text-gray-300 leading-relaxed">

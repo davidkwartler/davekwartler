@@ -2,6 +2,7 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import PauseMotionButton from "@/components/PauseMotionButton";
 import TravelMap from "@/components/TravelMap";
+import { SectionHeading } from "@/components/SectionHeading";
 import { SiteNav } from "@/components/SiteNav";
 import { travelPage } from "@/data/travel";
 
@@ -18,12 +19,11 @@ export default function Travel() {
       <SiteNav />
       <main className="min-h-svh bg-neutral-950 px-4 pt-32 pb-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
-            {travelPage.label}
-          </p>
-          <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl font-[family-name:var(--font-playfair)] tracking-wide">
-            {travelPage.heading}
-          </h1>
+          <SectionHeading
+            label={travelPage.label}
+            heading={travelPage.heading}
+            as="h1"
+          />
           <p className="mt-6 max-w-2xl text-gray-300 leading-relaxed">
             {travelPage.intro}
           </p>
