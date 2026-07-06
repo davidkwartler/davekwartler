@@ -1,49 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { nav } from "@/data/content";
+import { useActiveSection } from "@/lib/use-active-section";
 
-const SECTIONS = ["home", "work", "career", "about", "contact"];
+const sectionIds = nav.sections.map((s) => s.id);
 
 // Persistent scroll cue: a small chevron fixed at the bottom center that
 // jumps to the next section. Bounces on the hero (where it replaces the old
 // one-off cue), sits still further down, and fades out on the last section.
 export default function SkipArrow() {
   const prefersReducedMotion = useReducedMotion();
-  const [next, setNext] = useState<string | null>("work");
-  const [onHero, setOnHero] = useState(true);
-
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const marker = window.scrollY + window.innerHeight * 0.35;
-      let current = 0;
-      for (let i = 0; i < SECTIONS.length; i++) {
-        const el = document.getElementById(SECTIONS[i]);
-        if (el && el.offsetTop <= marker) current = i;
-      }
-      if (
-        window.innerHeight + window.scrollY >=
-        document.body.scrollHeight - 2
-      ) {
-        current = SECTIONS.length - 1;
-      }
-      setNext(current < SECTIONS.length - 1 ? SECTIONS[current + 1] : null);
-      setOnHero(current === 0);
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
+  const active = useActiveSection(sectionIds);
+  const activeIndex = sectionIds.indexOf(active);
+  const next =
+    activeIndex < sectionIds.length - 1 ? sectionIds[activeIndex + 1] : null;
+  const onHero = activeIndex === 0;
 
   return (
     <motion.a
