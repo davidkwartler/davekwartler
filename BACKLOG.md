@@ -53,6 +53,9 @@ All live.
   select gates the glow to one cell and clips the binary to 25%; pause freezes
   the stream; no console errors. Iteration knobs if wanted: blue strength
   (`0.16`/`0.30`), stream brightness (`text-white/35`), speed (`108s`)
+- ✅ Card height floor lowered `min-h-[300px]` → `min-h-[160px]` — the GWU card
+  (no bullets) was over-padded; now sizes to content (~233px) while the floor
+  still prevents a collapse flash mid-transition
 
 ## Shipped 2026-07-03
 

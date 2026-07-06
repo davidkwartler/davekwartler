@@ -221,7 +221,7 @@ export default function Career() {
             <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
             <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-white/[0.05] blur-3xl" />
 
-            <div className="relative min-h-[300px]">
+            <div className="relative min-h-[160px]">
               <AnimatePresence mode="wait" custom={dir} initial={false}>
                 <motion.div
                   key={active.id}
