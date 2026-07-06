@@ -18,8 +18,9 @@ timeline rework — click/keyboard switching, elevated detail card, phased-outli
 rail, blue selected glow, progress-gated white glow, pause-aware binary stream.
 All live.
 
-Batch staged 2026-07-06 (branch polish-opus-arch-ux, awaiting David's ship
-call): image weight cut ~85% (About photos → 800px WebP, OG card → JPEG);
+Batch shipped 2026-07-06 (branch polish-opus-arch-ux → main): image weight
+cut ~85% (About photos → 800px WebP with EXIF orientation applied, OG card →
+JPEG);
 career rail a11y finished (tabpanel wiring, Home/End) and mobile cell
 alignment fixed (logo/year pinned rows); scrollspy consolidated into
 useActiveSection (SkipArrow no longer hardcodes section ids) and the two lint
