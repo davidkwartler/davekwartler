@@ -14,6 +14,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Motion's useScroll measures section targets against the scroll container
+     (the html element) and warns unless it's positioned */
+  position: relative;
 }
 
 /* Career timeline: 0/1 stream flowing left→right along the progress fill */

@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useReducedMotion } from "motion/react";
-import { isGalaxyPaused, subscribeGalaxyPause } from "@/lib/galaxy-pause";
+import { useRef } from "react";
+import { glyphSeed, useCanvasLoop } from "@/lib/use-canvas-loop";
 
 /**
  * GalaxyBackground - purple galaxy canvas.
@@ -20,8 +19,8 @@ import { isGalaxyPaused, subscribeGalaxyPause } from "@/lib/galaxy-pause";
  * Props tune the instance: timeScale slows all motion, dim scales all
  * light intensity, starCount sets star density, flip mirrors the nebula
  * composition. Draws a single static frame under prefers-reduced-motion.
- * The rAF loop stops while the canvas is offscreen (IntersectionObserver)
- * or while the user has paused motion via PauseMotionButton.
+ * The rAF loop (via useCanvasLoop) stops while the canvas is offscreen or
+ * while the user has paused motion via PauseMotionButton.
  */
 
 export type RGB = [number, number, number];
@@ -319,7 +318,7 @@ function drawFrame(
         alpha = Math.max(fieldAlpha, eggEnv * 0.38 * dim);
       } else {
         if (fieldAlpha < 0.02) continue;
-        const seed = i * 7919 + j * 104729;
+        const seed = glyphSeed(i, j);
         const flipTick = Math.floor(t / (2.5 + (seed % 5) * 0.7));
         char = (seed + flipTick) % 2 === 0 ? "0" : "1";
         alpha = fieldAlpha;
@@ -348,127 +347,89 @@ export default function GalaxyBackground({
   easterEggs?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const prefersReducedMotion = useReducedMotion();
   const accentsKey = accents ? accents.join(",") : "";
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  useCanvasLoop(
+    canvasRef,
+    (canvas, ctx) => {
+      const bands = accents ? [...BANDS, ...accentBands(accents)] : BANDS;
+      const stars = makeStars(starCount);
 
-    const bands = accents ? [...BANDS, ...accentBands(accents)] : BANDS;
-    const stars = makeStars(starCount);
+      let w = 0;
+      let h = 0;
+      let tAnim = 0;
+      let tReal = 0;
+      let meteor: Meteor | null = null;
+      let egg: Egg | null = null;
+      // One welcome meteor shortly after load, then the sparse schedule
+      let nextMeteorAt = 3;
+      let nextEggAt = 45 + Math.random() * 75;
 
-    let w = 0;
-    let h = 0;
-    let raf = 0;
-    let tAnim = 0;
-    let tReal = 0;
-    let last = 0;
-    let running = false;
-    let visible = false; // IntersectionObserver fires immediately with the real state
-    let userPaused = isGalaxyPaused();
-    let meteor: Meteor | null = null;
-    let egg: Egg | null = null;
-    // One welcome meteor shortly after load, then the sparse schedule
-    let nextMeteorAt = 3;
-    let nextEggAt = 45 + Math.random() * 75;
+      const draw = () =>
+        drawFrame(ctx, w, h, tAnim, tReal, stars, dim, bands, flip, meteor, egg);
 
-    const draw = () =>
-      drawFrame(ctx, w, h, tAnim, tReal, stars, dim, bands, flip, meteor, egg);
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = canvas.clientWidth;
+        h = canvas.clientHeight;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        draw();
+      };
 
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = canvas.clientWidth;
-      h = canvas.clientHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      draw();
-    };
-    resize();
-    window.addEventListener("resize", resize);
+      // Time accumulates only while the loop runs, so meteor/egg schedules
+      // pause with the canvas.
+      const frame = (dt: number) => {
+        tAnim += dt * timeScale;
+        tReal += dt;
 
-    const frame = (now: number) => {
-      // Clamp dt so a background-tab gap doesn't teleport the animation
-      const dt = Math.min((now - last) / 1000, 0.1);
-      last = now;
-      tAnim += dt * timeScale;
-      tReal += dt;
-
-      if (shootingStars) {
-        if (!meteor && tReal >= nextMeteorAt) meteor = spawnMeteor(tReal);
-        if (meteor && tReal > meteor.start + meteor.dur) {
-          meteor = null;
-          nextMeteorAt = tReal + 150 + Math.random() * 120;
+        if (shootingStars) {
+          if (!meteor && tReal >= nextMeteorAt) meteor = spawnMeteor(tReal);
+          if (meteor && tReal > meteor.start + meteor.dur) {
+            meteor = null;
+            nextMeteorAt = tReal + 150 + Math.random() * 120;
+          }
         }
-      }
-      if (easterEggs) {
-        if (!egg && tReal >= nextEggAt) egg = spawnEgg(tReal, tAnim, w, h);
-        if (egg && tReal > egg.start + egg.dur) {
-          egg = null;
-          nextEggAt = tReal + 120 + Math.random() * 180;
+        if (easterEggs) {
+          if (!egg && tReal >= nextEggAt) egg = spawnEgg(tReal, tAnim, w, h);
+          if (egg && tReal > egg.start + egg.dur) {
+            egg = null;
+            nextEggAt = tReal + 120 + Math.random() * 180;
+          }
         }
+
+        draw();
+      };
+
+      let debugApi: GalaxyDebug | undefined;
+      if (process.env.NODE_ENV === "development") {
+        debugApi = {
+          meteor: () => {
+            meteor = spawnMeteor(tReal - 0.5);
+            draw();
+          },
+          egg: (word?: string) => {
+            egg = spawnEgg(tReal - 2.5, tAnim, w, h, word);
+            draw();
+          },
+        };
+        (window.__galaxy ||= []).push(debugApi);
       }
 
-      draw();
-      raf = requestAnimationFrame(frame);
-    };
-
-    // The loop runs only while the canvas is onscreen, the user hasn't
-    // paused motion, and reduced motion isn't requested. Time accumulates
-    // only while running, so meteor/egg schedules pause with the canvas.
-    const sync = () => {
-      const shouldRun = !prefersReducedMotion && visible && !userPaused;
-      if (shouldRun && !running) {
-        running = true;
-        last = performance.now();
-        raf = requestAnimationFrame(frame);
-      } else if (!shouldRun && running) {
-        running = false;
-        cancelAnimationFrame(raf);
-      }
-    };
-
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      sync();
-    });
-    io.observe(canvas);
-
-    const unsubscribe = subscribeGalaxyPause(() => {
-      userPaused = isGalaxyPaused();
-      sync();
-    });
-
-    let debugApi: GalaxyDebug | undefined;
-    if (process.env.NODE_ENV === "development") {
-      debugApi = {
-        meteor: () => {
-          meteor = spawnMeteor(tReal - 0.5);
-          draw();
-        },
-        egg: (word?: string) => {
-          egg = spawnEgg(tReal - 2.5, tAnim, w, h, word);
-          draw();
+      return {
+        resize,
+        frame,
+        cleanup: () => {
+          if (debugApi && window.__galaxy) {
+            window.__galaxy = window.__galaxy.filter((api) => api !== debugApi);
+          }
         },
       };
-      (window.__galaxy ||= []).push(debugApi);
-    }
-
-    return () => {
-      cancelAnimationFrame(raf);
-      io.disconnect();
-      unsubscribe();
-      window.removeEventListener("resize", resize);
-      if (debugApi && window.__galaxy) {
-        window.__galaxy = window.__galaxy.filter((api) => api !== debugApi);
-      }
-    };
+    },
     // accentsKey stands in for the accents tuple (kept stable by parents)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefersReducedMotion, timeScale, dim, starCount, flip, shootingStars, easterEggs, accentsKey]);
+    [timeScale, dim, starCount, flip, shootingStars, easterEggs, accentsKey],
+  );
 
   return (
     <div className="absolute inset-0 overflow-hidden -z-10">

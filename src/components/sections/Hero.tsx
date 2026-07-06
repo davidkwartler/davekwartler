@@ -9,8 +9,7 @@ import {
 } from "motion/react";
 import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
 import { hero } from "@/data/content";
-
-const EASE = [0.21, 0.47, 0.32, 0.98] as const;
+import { EASE } from "@/lib/motion";
 
 // Subtle warm hints for the hero galaxy: orange and pink
 const HERO_ACCENTS: [RGB, RGB] = [

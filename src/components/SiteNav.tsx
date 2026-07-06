@@ -1,16 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { nav } from "@/data/content";
+import { useActiveSection } from "@/lib/use-active-section";
 
 const sections = nav.sections;
+const sectionIds = sections.map((s) => s.id);
 
 export function SiteNav() {
   const prefersReducedMotion = useReducedMotion();
-  const [active, setActive] = useState("home");
+  const active = useActiveSection(sectionIds);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
 
@@ -18,42 +21,15 @@ export function SiteNav() {
   useEffect(() => {
     const img = document.getElementById("hero-headshot-img");
     if (!img) {
-      setShowAvatar(true);
-      return;
+      // No hero on this page (travel, 404): reveal the avatar once mounted
+      const raf = requestAnimationFrame(() => setShowAvatar(true));
+      return () => cancelAnimationFrame(raf);
     }
     const io = new IntersectionObserver(([entry]) =>
       setShowAvatar(!entry.isIntersecting)
     );
     io.observe(img);
     return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const pos = window.scrollY + window.innerHeight * 0.35;
-        let current = sections[0].id;
-        for (const s of sections) {
-          const el = document.getElementById(s.id);
-          if (el && el.offsetTop <= pos) current = s.id;
-        }
-        // Bottom of page always counts as the last section
-        if (
-          window.innerHeight + window.scrollY >=
-          document.documentElement.scrollHeight - 2
-        ) {
-          current = sections[sections.length - 1].id;
-        }
-        setActive(current);
-        ticking = false;
-      });
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
@@ -63,7 +39,10 @@ export function SiteNav() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a href="/#home" className="flex items-center font-semibold text-white">
+        <Link
+          href="/#home"
+          className="flex items-center font-semibold text-white"
+        >
           <motion.span
             className="h-9 shrink-0 overflow-hidden rounded-full"
             initial={false}
@@ -88,12 +67,12 @@ export function SiteNav() {
             />
           </motion.span>
           {nav.name}
-        </a>
+        </Link>
 
         {/* Desktop: scrollspy links with sliding active pill */}
         <div className="hidden md:flex items-center gap-1">
           {sections.map((s) => (
-            <a
+            <Link
               key={s.id}
               href={`/#${s.id}`}
               className={`relative rounded-full px-3 py-1.5 text-sm transition-colors ${
@@ -114,7 +93,7 @@ export function SiteNav() {
                 />
               )}
               <span className="relative">{s.label}</span>
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -160,7 +139,7 @@ export function SiteNav() {
         <div className="md:hidden border-t border-white/10 bg-neutral-950/90 backdrop-blur-md px-4 pb-4 sm:px-6">
           <div className="flex flex-col space-y-1 pt-3">
             {sections.map((s) => (
-              <a
+              <Link
                 key={s.id}
                 href={`/#${s.id}`}
                 onClick={() => setIsMenuOpen(false)}
@@ -171,7 +150,7 @@ export function SiteNav() {
                 }`}
               >
                 {s.label}
-              </a>
+              </Link>
             ))}
             <a
               href="https://www.linkedin.com/in/dkwartler/"
