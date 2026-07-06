@@ -6,9 +6,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { careerEntries } from "@/data/resume";
 import { careerSection } from "@/data/content";
 import { Reveal } from "@/components/Reveal";
+import { SectionHeading } from "@/components/SectionHeading";
 import { isGalaxyPaused, subscribeGalaxyPause } from "@/lib/galaxy-pause";
-
-const EASE = [0.21, 0.47, 0.32, 0.98] as const;
+import { EASE } from "@/lib/motion";
 
 const entries = careerEntries;
 
@@ -46,10 +46,14 @@ export default function Career() {
   };
 
   const onStopKeyDown = (e: React.KeyboardEvent, index: number) => {
-    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    let nextIndex: number;
+    if (e.key === "ArrowRight") nextIndex = (index + 1) % entries.length;
+    else if (e.key === "ArrowLeft")
+      nextIndex = (index - 1 + entries.length) % entries.length;
+    else if (e.key === "Home") nextIndex = 0;
+    else if (e.key === "End") nextIndex = entries.length - 1;
+    else return;
     e.preventDefault();
-    const delta = e.key === "ArrowRight" ? 1 : -1;
-    const nextIndex = (index + delta + entries.length) % entries.length;
     select(entries[nextIndex].id);
     stopRefs.current[nextIndex]?.focus();
   };
@@ -58,12 +62,10 @@ export default function Career() {
     <section id="career" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
-            {careerSection.label}
-          </p>
-          <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl font-[family-name:var(--font-playfair)] tracking-wide">
-            {careerSection.heading}
-          </h2>
+          <SectionHeading
+            label={careerSection.label}
+            heading={careerSection.heading}
+          />
         </Reveal>
 
         {/* Phased timeline: four bordered cells, tap one to select */}
@@ -87,12 +89,14 @@ export default function Career() {
                     ref={(el) => {
                       stopRefs.current[i] = el;
                     }}
+                    id={`career-tab-${entry.id}`}
                     role="tab"
                     aria-selected={isActive}
+                    aria-controls="career-panel"
                     tabIndex={isActive ? 0 : -1}
                     onClick={() => select(entry.id)}
                     onKeyDown={(e) => onStopKeyDown(e, i)}
-                    className="group relative flex flex-col items-center justify-center gap-2.5 px-2 py-7 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40"
+                    className="group relative flex flex-col items-center px-2 py-7 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40"
                   >
                     {/* progressive white glow — fills the whole reached cell,
                         brighter toward the active one */}
@@ -145,8 +149,11 @@ export default function Career() {
                         }`}
                       />
                     </span>
+                    {/* flex-1 middle band: logos pin to the top and years to
+                        the bottom of every cell, so rows stay aligned when a
+                        name wraps to two lines on narrow screens */}
                     <span
-                      className={`relative text-center text-xs leading-tight font-medium transition-colors sm:text-sm ${
+                      className={`relative my-2.5 flex flex-1 items-center text-center text-xs leading-tight font-medium transition-colors sm:text-sm ${
                         isActive
                           ? "text-white"
                           : "text-gray-500 group-hover:text-gray-300"
@@ -221,7 +228,12 @@ export default function Career() {
             <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
             <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-white/[0.05] blur-3xl" />
 
-            <div className="relative min-h-[160px]">
+            <div
+              role="tabpanel"
+              id="career-panel"
+              aria-labelledby={`career-tab-${active.id}`}
+              className="relative min-h-[160px]"
+            >
               <AnimatePresence mode="wait" custom={dir} initial={false}>
                 <motion.div
                   key={active.id}
