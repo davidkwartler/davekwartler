@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
-import { isGalaxyPaused, subscribeGalaxyPause } from "@/lib/galaxy-pause";
+import { glyphSeed, useCanvasLoop } from "@/lib/use-canvas-loop";
 import { landAt } from "@/data/land-mask";
 import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 
@@ -56,7 +55,7 @@ function buildLandCells(w: number, h: number): LandCell[] {
       const lon = (x / w) * 360 - 180;
       const lat = LAT_MAX - (y / h) * (LAT_MAX - LAT_MIN);
       if (landAt(lon, lat)) {
-        cells.push({ x, y, seed: i * 7919 + j * 104729 });
+        cells.push({ x, y, seed: glyphSeed(i, j) });
       }
     }
   }
@@ -114,7 +113,6 @@ function drawMap(
 export default function TravelMap() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const prefersReducedMotion = useReducedMotion();
   const [active, setActive] = useState<CityPoint | null>(null);
   const [pinned, setPinned] = useState(false);
   const [mapSize, setMapSize] = useState({ w: 0, h: 0 });
@@ -133,86 +131,48 @@ export default function TravelMap() {
     }));
   }, [mapSize]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const wrap = wrapRef.current;
-    if (!canvas || !wrap) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  useCanvasLoop(
+    canvasRef,
+    (canvas, ctx) => {
+      const wrap = wrapRef.current;
 
-    let w = 0;
-    let h = 0;
-    let land: LandCell[] = [];
-    let pts: CityPoint[] = [];
-    let raf = 0;
-    let t = 0;
-    let last = 0;
-    let running = false;
-    let visible = false;
-    let userPaused = isGalaxyPaused();
+      let w = 0;
+      let h = 0;
+      let land: LandCell[] = [];
+      let pts: CityPoint[] = [];
+      let t = 0;
 
-    const draw = () =>
-      drawMap(ctx, w, h, t, land, pts, activeRef.current?.city.name ?? null);
+      const draw = () =>
+        drawMap(ctx, w, h, t, land, pts, activeRef.current?.city.name ?? null);
 
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = Math.max(wrap.clientWidth, MIN_MAP_WIDTH);
-      h = Math.round(w * ((LAT_MAX - LAT_MIN) / 360));
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      land = buildLandCells(w, h);
-      pts = travelCities.map((city) => ({
-        city,
-        ...lonLatToXY(city.lon, city.lat, w, h),
-      }));
-      setMapSize({ w, h });
-      draw();
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const frame = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 0.1);
-      last = now;
-      t += dt;
-      draw();
-      raf = requestAnimationFrame(frame);
-    };
-
-    const sync = () => {
-      const shouldRun = !prefersReducedMotion && visible && !userPaused;
-      if (shouldRun && !running) {
-        running = true;
-        last = performance.now();
-        raf = requestAnimationFrame(frame);
-      } else if (!shouldRun && running) {
-        running = false;
-        cancelAnimationFrame(raf);
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = Math.max(wrap?.clientWidth ?? MIN_MAP_WIDTH, MIN_MAP_WIDTH);
+        h = Math.round(w * ((LAT_MAX - LAT_MIN) / 360));
+        canvas.style.width = `${w}px`;
+        canvas.style.height = `${h}px`;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        land = buildLandCells(w, h);
+        pts = travelCities.map((city) => ({
+          city,
+          ...lonLatToXY(city.lon, city.lat, w, h),
+        }));
+        setMapSize({ w, h });
         draw();
-      }
-    };
+      };
 
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      sync();
-    });
-    io.observe(canvas);
+      const frame = (dt: number) => {
+        t += dt;
+        draw();
+      };
 
-    const unsubscribe = subscribeGalaxyPause(() => {
-      userPaused = isGalaxyPaused();
-      sync();
-    });
-
-    return () => {
-      cancelAnimationFrame(raf);
-      io.disconnect();
-      unsubscribe();
-      window.removeEventListener("resize", resize);
-    };
-  }, [prefersReducedMotion]);
+      // Redraw once on halt so the last frame reflects the current state
+      return { resize, frame, onStop: draw };
+    },
+    [],
+  );
 
   const findCity = (e: React.MouseEvent) => {
     const canvas = canvasRef.current;
