@@ -208,6 +208,13 @@ click-cards, clean console, clean build/lint/tsc.
   consider swapping the skyline (or adding a fourth slot) when he has a
   good live-show shot
 - **(S) Rey easter egg**: konami code shows the cat
+- **(S) Reveal robustness** — the below-fold `Reveal` sections still ship at
+  `opacity:0` and wait for JS to fade in (same class of issue the hero-load-flash
+  branch fixed for the hero). Not a visible bug today: they're below `min-h-svh`
+  so the JS bundle lands before you scroll to them. Belt-and-suspenders fix (for
+  slow-3G fast-scrollers / no-JS): convert `Reveal` from Motion `whileInView`
+  to a small IntersectionObserver + CSS-class pattern. Separate change, real
+  test surface — not worth folding into anything else
 - **(M) OAuth consent screen easter egg**: first-visit parody consent dialog
   ("davidkwartler.com would like to access: your scroll position, your good
   opinion, your vibes"). On-brand for identity work
