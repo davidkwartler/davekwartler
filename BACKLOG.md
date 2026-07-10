@@ -18,6 +18,14 @@ timeline rework — click/keyboard switching, elevated detail card, phased-outli
 rail, blue selected glow, progress-gated white glow, pause-aware binary stream.
 All live.
 
+Batch shipped 2026-07-10 (branch hero-load-flash → main): fixed the page-load
+flash — hero name/tagline/intro were Motion components with initial opacity:0,
+so the static HTML shipped them invisible and they only appeared after the JS
+bundle hydrated (a visible pop-in on production latency). Moved the entrance to
+a pure CSS @keyframes (hero-rise, same EASE/16px/0.5s, staggered delays) that
+runs at first paint independent of JS, with a prefers-reduced-motion override.
+Fable-agent verified: PASS, endorsed the CSS approach over the alternatives.
+
 Batch shipped 2026-07-06 (branch polish-opus-arch-ux → main): image weight
 cut ~85% (About photos → 800px WebP with EXIF orientation applied, OG card →
 JPEG);
