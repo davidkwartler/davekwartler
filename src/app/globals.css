@@ -19,6 +19,35 @@ html {
   position: relative;
 }
 
+/* Hero entrance: CSS-driven (not JS/Motion-gated) so above-the-fold content
+   fades in on a fixed schedule at first paint, instead of staying invisible
+   until the JS bundle downloads and hydrates. Matches the hero's prior
+   Motion fade-in: shared EASE (0.21,0.47,0.32,0.98), 16px rise, 0.5s. The
+   `both` fill mode keeps content invisible through the stagger delay and
+   settles it visible, so no base opacity is needed (and if animations are
+   disabled entirely, content stays visible rather than blank). */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-rise {
+  animation: hero-rise 0.5s cubic-bezier(0.21, 0.47, 0.32, 0.98) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* Career timeline: 0/1 stream flowing left→right along the progress fill */
 @keyframes career-binary-flow {
   from {

@@ -9,7 +9,6 @@ import {
 } from "motion/react";
 import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
 import { hero } from "@/data/content";
-import { EASE } from "@/lib/motion";
 
 // Subtle warm hints for the hero galaxy: orange and pink
 const HERO_ACCENTS: [RGB, RGB] = [
@@ -26,15 +25,6 @@ export default function Hero() {
     if (typeof window === "undefined") return 1;
     return Math.max(0, 1 - v / (window.innerHeight * 0.75));
   });
-
-  const fadeIn = (delay: number) =>
-    prefersReducedMotion
-      ? {}
-      : {
-          initial: { opacity: 0, y: 16 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.5, delay, ease: EASE },
-        };
 
   return (
     <section
@@ -87,26 +77,26 @@ export default function Hero() {
             priority
           />
         </div>
-        <motion.h1
-          {...fadeIn(0.05)}
-          className="text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide"
+        <h1
+          style={{ animationDelay: "0.05s" }}
+          className="hero-rise text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide"
         >
           {hero.name}
-        </motion.h1>
-        <motion.p
-          {...fadeIn(0.15)}
-          className="mt-4 text-lg text-balance text-gray-300 sm:text-xl"
+        </h1>
+        <p
+          style={{ animationDelay: "0.15s" }}
+          className="hero-rise mt-4 text-lg text-balance text-gray-300 sm:text-xl"
         >
           {hero.tagline}
-        </motion.p>
-        <motion.p
-          {...fadeIn(0.25)}
-          className="mt-3 max-w-xl mx-auto text-base text-pretty text-gray-400 sm:text-lg"
+        </p>
+        <p
+          style={{ animationDelay: "0.25s" }}
+          className="hero-rise mt-3 max-w-xl mx-auto text-base text-pretty text-gray-400 sm:text-lg"
         >
           {hero.intro}
           <br />
           {hero.also}
-        </motion.p>
+        </p>
       </div>
 
     </section>
