@@ -17,10 +17,7 @@ export type TravelCity = {
 };
 
 export const travelPage = {
-  label: "Travel",
-  heading: "Where I've actually been.",
-  intro:
-    "A map for the miles, drawn in the site's native alphabet. The bright cities have field notes: where to eat, what art to see, what was playing. Hover or tap a glow.",
+  label: "Where I've been",
   backLink: "Back to the site",
   pendingNote: "Field notes coming soon.",
 };

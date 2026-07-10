@@ -1,111 +1,242 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { glyphSeed, useCanvasLoop } from "@/lib/use-canvas-loop";
+import { useRef, useState, useEffect } from "react";
+import { useCanvasLoop } from "@/lib/use-canvas-loop";
 import { landAt } from "@/data/land-mask";
 import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 
 /**
- * TravelMap - the hidden /travel easter egg.
+ * TravelMap - the hidden /travel easter egg, v2: a binary-glyph globe.
  *
- * Continents are drawn as a grid of 0/1 glyphs (the galaxy's binary field,
- * repurposed as landmass) by sampling an equirectangular land bitmask at
- * each grid cell. Destination cities glow brighter than the land around
- * them; hovering or tapping one reveals a field-notes card. The canvas is
- * given a minimum width and wrapped in a horizontal scroller so city tap
- * targets stay usable on phones.
+ * The continents are drawn as electric-blue 0/1 glyphs sampled from the same
+ * equirectangular land mask as v1, but projected onto an orthographic sphere.
+ * The globe idles with a very slow wobble constrained to the Atlantic face
+ * (North America + Europe), so it never rotates round to the empty Pacific
+ * back where David has no pins. Grab-and-drag nudges it within that envelope
+ * and it eases back to center. Cities are bright-orange triangles that hide as
+ * they cross to the back hemisphere; hover or tap one to freeze the globe and
+ * open a field-notes card. Night-vision palette: blue land, orange pins.
  */
 
+const DEG = Math.PI / 180;
 const TAU = Math.PI * 2;
-const CELL = 11; // px between glyphs
-const LAT_MAX = 74; // crop empty poles so land fills the frame
-const LAT_MIN = -56;
-const MIN_MAP_WIDTH = 880; // below this, the map scrolls horizontally
-const HIT_RADIUS = 24;
-const VIOLET = "196, 181, 253";
-const WARM = "255, 244, 235";
 
-type LandCell = { x: number; y: number; seed: number };
-type CityPoint = { city: TravelCity; x: number; y: number };
+// Framing
+const MAX_CANVAS = 620; // px; the globe canvas is square and caps here
+const GLOBE_FRACTION = 0.44; // radius as a fraction of the canvas dimension
 
-function lonLatToXY(lon: number, lat: number, w: number, h: number) {
-  return {
-    x: ((lon + 180) / 360) * w,
-    y: ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * h,
-  };
-}
+// Rest orientation: mid-Atlantic, tilted north so North America (left) and
+// Europe (right) both sit on the visible face at rest.
+const CENTER_LON = -45;
+const CENTER_LAT = 32;
 
-function shimmer(x: number, y: number, t: number) {
-  return (
-    0.5 +
-    0.5 *
-      Math.sin(x * 0.014 + t * 0.5) *
-      Math.sin(y * 0.02 - t * 0.35 + Math.sin((x + y) * 0.006))
-  );
-}
+// Constrained wobble — a slow idle oscillation that never swings to the empty
+// back. Drag adds a manual offset (capped) that eases back to the wobble center.
+const LON_AMP = 20; // wobble reach in longitude degrees
+const LON_PERIOD = 82; // seconds per wobble cycle — deliberately very slow
+const LAT_AMP = 5;
+const LAT_PERIOD = 104;
+const MANUAL_LON_MAX = 42; // how far a drag can push longitude past the wobble
+const CENTER_LAT_MIN = 8;
+const CENTER_LAT_MAX = 58;
+const DRAG_SENS = 0.28; // degrees per pixel dragged
+const MANUAL_HALFLIFE = 0.9; // seconds for a released drag to ease halfway back
 
-function buildLandCells(w: number, h: number): LandCell[] {
-  const cells: LandCell[] = [];
-  const cols = Math.ceil(w / CELL);
-  const rows = Math.ceil(h / CELL);
-  for (let i = 0; i <= cols; i++) {
-    for (let j = 0; j <= rows; j++) {
-      const x = i * CELL + CELL / 2;
-      const y = j * CELL + CELL / 2;
-      const lon = (x / w) * 360 - 180;
-      const lat = LAT_MAX - (y / h) * (LAT_MAX - LAT_MIN);
-      if (landAt(lon, lat)) {
-        cells.push({ x, y, seed: glyphSeed(i, j) });
-      }
+// Land glyph field: Fibonacci samples over the whole sphere, filtered to land.
+const LAND_SAMPLES = 5200;
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+
+// Night-vision palette
+const BLUE = "56, 189, 248"; // electric blue landmass
+const ORANGE = "255, 120, 24"; // bright electric orange pins
+
+// Phosphor scan band drifting across the globe. Set STRENGTH to 0 to kill it.
+const SWEEP_STRENGTH = 0.26;
+const SWEEP_PERIOD = 15; // seconds for the band to cross
+const SWEEP_WIDTH = 0.15; // fraction of the globe diameter
+
+const HIT_RADIUS = 26;
+const DRAG_THRESHOLD = 5; // px of movement before a press counts as a drag
+
+type LandPoint = { lon: number; lat: number; seed: number };
+type Proj = { x: number; y: number; cosc: number };
+type Active = { city: TravelCity; x: number; y: number };
+
+const clamp = (v: number, lo: number, hi: number) =>
+  Math.min(hi, Math.max(lo, v));
+
+// Evenly spread points over the sphere, keep the ones that land on land.
+function buildLandPoints(): LandPoint[] {
+  const pts: LandPoint[] = [];
+  for (let i = 0; i < LAND_SAMPLES; i++) {
+    const y = 1 - (i / (LAND_SAMPLES - 1)) * 2; // 1 → -1
+    const r = Math.sqrt(Math.max(0, 1 - y * y));
+    const theta = i * GOLDEN_ANGLE;
+    const x = Math.cos(theta) * r;
+    const z = Math.sin(theta) * r;
+    const lat = Math.asin(y) / DEG;
+    const lon = Math.atan2(x, z) / DEG;
+    if (landAt(lon, lat)) {
+      pts.push({ lon, lat, seed: (i * 2654435761) >>> 0 });
     }
   }
-  return cells;
+  return pts;
 }
 
-function drawMap(
+let LAND_CACHE: LandPoint[] | null = null;
+const landPoints = () => (LAND_CACHE ??= buildLandPoints());
+
+// Orthographic projection centered on (centerLon, centerLat). cosc is the
+// cosine of the angular distance from the globe center: >0 means the point is
+// on the visible front hemisphere, and it doubles as a facing/limb factor.
+function project(
+  lon: number,
+  lat: number,
+  centerLon: number,
+  centerLat: number,
+  cx: number,
+  cy: number,
+  R: number,
+): Proj {
+  const lat0 = centerLat * DEG;
+  const phi = lat * DEG;
+  const dl = (lon - centerLon) * DEG;
+  const cosPhi = Math.cos(phi);
+  const sinPhi = Math.sin(phi);
+  const cosc =
+    Math.sin(lat0) * sinPhi + Math.cos(lat0) * cosPhi * Math.cos(dl);
+  const x = cx + R * cosPhi * Math.sin(dl);
+  const y =
+    cy - R * (Math.cos(lat0) * sinPhi - Math.sin(lat0) * cosPhi * Math.cos(dl));
+  return { x, y, cosc };
+}
+
+type View = {
+  phase: number; // wobble clock (s); frozen while dragging or a card is open
+  t: number; // pulse/flip/sweep clock (s)
+  manualLon: number;
+  manualLat: number;
+  dragging: boolean;
+  activeName: string | null;
+};
+
+function currentCenter(v: View) {
+  const wobLon = LON_AMP * Math.sin((v.phase / LON_PERIOD) * TAU);
+  const wobLat = LAT_AMP * Math.sin((v.phase / LAT_PERIOD) * TAU + 1.3);
+  const lon =
+    CENTER_LON +
+    clamp(wobLon + v.manualLon, -(LON_AMP + MANUAL_LON_MAX), LON_AMP + MANUAL_LON_MAX);
+  const lat = clamp(CENTER_LAT + wobLat + v.manualLat, CENTER_LAT_MIN, CENTER_LAT_MAX);
+  return { lon, lat };
+}
+
+function drawTriangle(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  s: number,
+  fill: string,
+) {
+  ctx.fillStyle = fill;
+  ctx.beginPath();
+  ctx.moveTo(x, y - s);
+  ctx.lineTo(x - s * 0.9, y + s * 0.72);
+  ctx.lineTo(x + s * 0.9, y + s * 0.72);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawGlobe(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
+  cx: number,
+  cy: number,
+  R: number,
+  centerLon: number,
+  centerLat: number,
+  land: LandPoint[],
   t: number,
-  land: LandCell[],
-  cities: CityPoint[],
-  activeName: string | null
+  sweepPos: number,
+  activeName: string | null,
 ) {
   ctx.clearRect(0, 0, w, h);
+
+  // Faint sphere: a dim ocean fill and an atmosphere rim so the globe reads
+  // even across empty water.
+  const ocean = ctx.createRadialGradient(cx, cy - R * 0.2, R * 0.1, cx, cy, R);
+  ocean.addColorStop(0, `rgba(${BLUE}, 0.055)`);
+  ocean.addColorStop(0.75, `rgba(${BLUE}, 0.02)`);
+  ocean.addColorStop(1, `rgba(${BLUE}, 0)`);
+  ctx.fillStyle = ocean;
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, TAU);
+  ctx.fill();
+
+  const atmo = ctx.createRadialGradient(cx, cy, R * 0.92, cx, cy, R * 1.06);
+  atmo.addColorStop(0, `rgba(${BLUE}, 0)`);
+  atmo.addColorStop(0.6, `rgba(${BLUE}, 0.1)`);
+  atmo.addColorStop(1, `rgba(${BLUE}, 0)`);
+  ctx.fillStyle = atmo;
+  ctx.beginPath();
+  ctx.arc(cx, cy, R * 1.06, 0, TAU);
+  ctx.fill();
+
+  // Landmass glyphs
   ctx.font = "10px var(--font-jetbrains), ui-monospace, monospace";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-
-  // Landmass: dim violet glyphs with a slow traveling shimmer
-  for (const c of land) {
-    const wave = shimmer(c.x, c.y, t);
-    const alpha = 0.16 + 0.2 * wave * wave;
-    const flipTick = Math.floor(t / (3 + (c.seed % 5) * 0.8));
-    const char = (c.seed + flipTick) % 2 === 0 ? "0" : "1";
-    ctx.fillStyle = `rgba(${VIOLET}, ${alpha})`;
-    ctx.fillText(char, c.x, c.y);
+  const left = cx - R;
+  for (const p of land) {
+    const pr = project(p.lon, p.lat, centerLon, centerLat, cx, cy, R);
+    if (pr.cosc <= 0.02) continue; // front hemisphere only
+    // Limb darkening: bright at the center of the disc, fading to the edge.
+    let alpha = (0.16 + 0.55 * pr.cosc) * pr.cosc;
+    if (sweepPos >= 0) {
+      const nx = (pr.x - left) / (2 * R);
+      const d = Math.abs(nx - sweepPos);
+      if (d < SWEEP_WIDTH) {
+        const b = 1 - d / SWEEP_WIDTH;
+        alpha += SWEEP_STRENGTH * b * b * pr.cosc;
+      }
+    }
+    const flipTick = Math.floor(t / (3 + (p.seed % 5) * 0.8));
+    const char = (p.seed + flipTick) % 2 === 0 ? "0" : "1";
+    ctx.fillStyle = `rgba(${BLUE}, ${Math.min(alpha, 0.95)})`;
+    ctx.fillText(char, pr.x, pr.y);
   }
 
-  // Cities: a warm glow, a bright glyph, and a halo when active
+  // City pins — orange triangles, hidden on the back hemisphere
   ctx.globalCompositeOperation = "lighter";
-  for (const p of cities) {
-    const isActive = p.city.name === activeName;
-    const hasNotes = !!p.city.notes;
-    const pulse = 0.75 + 0.25 * Math.sin(t * 1.6 + p.x * 0.05);
-    const base = hasNotes ? 0.95 : 0.55;
-    const glowR = (hasNotes ? 12 : 8) * (isActive ? 1.7 : 1) * pulse;
+  for (const city of travelCities) {
+    const pr = project(city.lon, city.lat, centerLon, centerLat, cx, cy, R);
+    if (pr.cosc <= 0.06) continue;
+    const hasNotes = !!city.notes;
+    const isActive = city.name === activeName;
+    const pulse = 0.7 + 0.3 * Math.sin(t * 1.5 + city.lon * 0.05);
+    const facing = 0.55 + 0.45 * pr.cosc;
+    const size = (hasNotes ? 7 : 5.5) * (isActive ? 1.45 : 1);
+    const base = (hasNotes ? 0.95 : 0.6) * facing;
+    const alpha = isActive ? 1 : base * (0.72 + 0.28 * pulse);
 
-    const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR);
-    const tint = hasNotes ? WARM : VIOLET;
-    glow.addColorStop(0, `rgba(${tint}, ${0.5 * base * (isActive ? 1 : pulse)})`);
-    glow.addColorStop(1, `rgba(${tint}, 0)`);
-    ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, glowR, 0, TAU);
-    ctx.fill();
+    if (hasNotes || isActive) {
+      const gR = size * (isActive ? 3.4 : 2.4) * pulse;
+      const glow = ctx.createRadialGradient(pr.x, pr.y, 0, pr.x, pr.y, gR);
+      glow.addColorStop(0, `rgba(${ORANGE}, ${0.5 * alpha})`);
+      glow.addColorStop(1, `rgba(${ORANGE}, 0)`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(pr.x, pr.y, gR, 0, TAU);
+      ctx.fill();
+    }
 
-    ctx.fillStyle = `rgba(255, 255, 255, ${base * (isActive ? 1 : 0.75 + 0.25 * pulse)})`;
-    ctx.fillText("1", p.x, p.y);
+    drawTriangle(ctx, pr.x, pr.y, size, `rgba(${ORANGE}, ${alpha})`);
+    if (isActive) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.beginPath();
+      ctx.arc(pr.x, pr.y + size * 0.1, 1.3, 0, TAU);
+      ctx.fill();
+    }
   }
   ctx.globalCompositeOperation = "source-over";
 }
@@ -113,104 +244,176 @@ function drawMap(
 export default function TravelMap() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [active, setActive] = useState<CityPoint | null>(null);
+  const [active, setActive] = useState<Active | null>(null);
   const [pinned, setPinned] = useState(false);
-  const [mapSize, setMapSize] = useState({ w: 0, h: 0 });
-  const activeRef = useRef<CityPoint | null>(null);
-  useEffect(() => {
-    activeRef.current = active;
-  }, [active]);
+  const [size, setSize] = useState({ w: 0, h: 0 });
 
-  // City pixel positions for the current canvas size (drives the card and
-  // hit-testing; the draw loop recomputes the same coords in resize())
-  const cityPoints = useMemo<CityPoint[]>(() => {
-    if (!mapSize.w) return [];
-    return travelCities.map((city) => ({
-      city,
-      ...lonLatToXY(city.lon, city.lat, mapSize.w, mapSize.h),
-    }));
-  }, [mapSize]);
+  const view = useRef<View>({
+    phase: 0,
+    t: 0,
+    manualLon: 0,
+    manualLat: 0,
+    dragging: false,
+    activeName: null,
+  });
+  const geom = useRef({ w: 0, h: 0, cx: 0, cy: 0, R: 0 });
+  const drawRef = useRef<() => void>(() => {});
+  const pinnedRef = useRef(false);
+  const drag = useRef({ downX: 0, downY: 0, lastX: 0, lastY: 0, moved: false, id: -1 });
+
+  useEffect(() => {
+    pinnedRef.current = pinned;
+  }, [pinned]);
 
   useCanvasLoop(
     canvasRef,
     (canvas, ctx) => {
-      const wrap = wrapRef.current;
+      const land = landPoints();
 
-      let w = 0;
-      let h = 0;
-      let land: LandCell[] = [];
-      let pts: CityPoint[] = [];
-      let t = 0;
-
-      const draw = () =>
-        drawMap(ctx, w, h, t, land, pts, activeRef.current?.city.name ?? null);
+      const draw = () => {
+        const g = geom.current;
+        const v = view.current;
+        const { lon, lat } = currentCenter(v);
+        const sweep = SWEEP_STRENGTH > 0 ? (v.t / SWEEP_PERIOD) % 1 : -1;
+        drawGlobe(ctx, g.w, g.h, g.cx, g.cy, g.R, lon, lat, land, v.t, sweep, v.activeName);
+      };
+      drawRef.current = draw;
 
       const resize = () => {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = Math.max(wrap?.clientWidth ?? MIN_MAP_WIDTH, MIN_MAP_WIDTH);
-        h = Math.round(w * ((LAT_MAX - LAT_MIN) / 360));
-        canvas.style.width = `${w}px`;
-        canvas.style.height = `${h}px`;
-        canvas.width = Math.round(w * dpr);
-        canvas.height = Math.round(h * dpr);
+        const cw = Math.min(wrapRef.current?.clientWidth ?? MAX_CANVAS, MAX_CANVAS);
+        canvas.style.width = `${cw}px`;
+        canvas.style.height = `${cw}px`;
+        canvas.width = Math.round(cw * dpr);
+        canvas.height = Math.round(cw * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        land = buildLandCells(w, h);
-        pts = travelCities.map((city) => ({
-          city,
-          ...lonLatToXY(city.lon, city.lat, w, h),
-        }));
-        setMapSize({ w, h });
+        const R = cw * GLOBE_FRACTION;
+        geom.current = { w: cw, h: cw, cx: cw / 2, cy: cw / 2, R };
+        setSize({ w: cw, h: cw });
         draw();
       };
 
       const frame = (dt: number) => {
-        t += dt;
+        const v = view.current;
+        v.t += dt;
+        const frozen = v.dragging || v.activeName !== null;
+        if (!frozen) {
+          v.phase += dt;
+          const decay = Math.pow(0.5, dt / MANUAL_HALFLIFE);
+          v.manualLon *= decay;
+          v.manualLat *= decay;
+          if (Math.abs(v.manualLon) < 0.02) v.manualLon = 0;
+          if (Math.abs(v.manualLat) < 0.02) v.manualLat = 0;
+        }
         draw();
       };
 
-      // Redraw once on halt so the last frame reflects the current state
       return { resize, frame, onStop: draw };
     },
     [],
   );
 
-  const findCity = (e: React.MouseEvent) => {
+  const hitTest = (clientX: number, clientY: number): Active | null => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    let best: CityPoint | null = null;
-    let bestDist = HIT_RADIUS;
-    for (const p of cityPoints) {
-      const d = Math.hypot(p.x - mx, p.y - my);
-      if (d < bestDist) {
-        best = p;
-        bestDist = d;
+    const mx = clientX - rect.left;
+    const my = clientY - rect.top;
+    const g = geom.current;
+    const { lon, lat } = currentCenter(view.current);
+    let best: Active | null = null;
+    let bestD = HIT_RADIUS;
+    for (const city of travelCities) {
+      const pr = project(city.lon, city.lat, lon, lat, g.cx, g.cy, g.R);
+      if (pr.cosc <= 0.06) continue;
+      const d = Math.hypot(pr.x - mx, pr.y - my);
+      if (d < bestD) {
+        best = { city, x: pr.x, y: pr.y };
+        bestD = d;
       }
     }
     return best;
   };
 
-  const onMove = (e: React.MouseEvent) => {
-    if (pinned) return;
-    setActive(findCity(e));
+  const setHover = (hit: Active | null) => {
+    view.current.activeName = hit?.city.name ?? null;
+    setActive((prev) =>
+      prev?.city.name === hit?.city.name ? prev : hit,
+    );
   };
 
-  const onClick = (e: React.MouseEvent) => {
-    const hit = findCity(e);
-    if (hit && (!pinned || hit.city.name !== active?.city.name)) {
-      setActive(hit);
-      setPinned(true);
-    } else {
-      setActive(null);
-      setPinned(false);
+  const onPointerDown = (e: React.PointerEvent) => {
+    canvasRef.current?.setPointerCapture(e.pointerId);
+    drag.current = {
+      downX: e.clientX,
+      downY: e.clientY,
+      lastX: e.clientX,
+      lastY: e.clientY,
+      moved: false,
+      id: e.pointerId,
+    };
+    view.current.dragging = true;
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    const ds = drag.current;
+    if (view.current.dragging && ds.id === e.pointerId) {
+      const dx = e.clientX - ds.lastX;
+      const dy = e.clientY - ds.lastY;
+      ds.lastX = e.clientX;
+      ds.lastY = e.clientY;
+      if (Math.hypot(e.clientX - ds.downX, e.clientY - ds.downY) > DRAG_THRESHOLD) {
+        ds.moved = true;
+      }
+      if (ds.moved) {
+        const v = view.current;
+        v.manualLon = clamp(v.manualLon - dx * DRAG_SENS, -MANUAL_LON_MAX, MANUAL_LON_MAX);
+        v.manualLat = clamp(
+          v.manualLat + dy * DRAG_SENS,
+          CENTER_LAT_MIN - CENTER_LAT,
+          CENTER_LAT_MAX - CENTER_LAT,
+        );
+        if (!pinnedRef.current && v.activeName) setHover(null);
+        drawRef.current();
+      }
+      return;
+    }
+    if (!pinnedRef.current) {
+      setHover(hitTest(e.clientX, e.clientY));
+      drawRef.current();
+    }
+  };
+
+  const endDrag = (e: React.PointerEvent) => {
+    const ds = drag.current;
+    const wasDrag = view.current.dragging && ds.id === e.pointerId;
+    view.current.dragging = false;
+    canvasRef.current?.releasePointerCapture?.(e.pointerId);
+    if (wasDrag && !ds.moved) {
+      const hit = hitTest(e.clientX, e.clientY);
+      if (hit) {
+        view.current.activeName = hit.city.name;
+        setActive(hit);
+        setPinned(true);
+      } else {
+        setHover(null);
+        setPinned(false);
+      }
+    }
+    drawRef.current();
+  };
+
+  const onPointerLeave = () => {
+    if (!view.current.dragging && !pinnedRef.current) {
+      setHover(null);
+      drawRef.current();
     }
   };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        view.current.activeName = null;
         setActive(null);
         setPinned(false);
       }
@@ -219,32 +422,38 @@ export default function TravelMap() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Card placement: centered on the city, clamped to the map, above or
-  // below depending on which half of the map the city sits in
+  // Card placement: centered over the pin, clamped to the canvas, flipped above
+  // or below depending on which half the pin sits in. The globe is frozen while
+  // a card is open, so the anchor stays put.
   const CARD_W = 264;
   const cardStyle = active
     ? {
-        left: Math.min(Math.max(active.x - CARD_W / 2, 10), mapSize.w - CARD_W - 10),
-        ...(active.y < mapSize.h * 0.45
-          ? { top: active.y + 18 }
-          : { bottom: mapSize.h - active.y + 18 }),
+        left: clamp(active.x - CARD_W / 2, 10, size.w - CARD_W - 10),
+        ...(active.y < size.h * 0.5
+          ? { top: active.y + 20 }
+          : { bottom: size.h - active.y + 20 }),
       }
     : undefined;
 
+  // Grabbing state comes from CSS :active so render never reads the drag ref.
+  const cursor = active ? "cursor-pointer" : "cursor-grab active:cursor-grabbing";
+
   return (
-    <div ref={wrapRef} className="overflow-x-auto overscroll-x-contain">
-      <div className="relative w-fit">
+    <div ref={wrapRef} className="mx-auto w-full max-w-[620px]">
+      <div className="relative" style={{ width: size.w, height: size.h }}>
         <canvas
           ref={canvasRef}
-          onMouseMove={onMove}
-          onMouseLeave={() => !pinned && setActive(null)}
-          onClick={onClick}
-          className={active ? "cursor-pointer" : "cursor-crosshair"}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onPointerLeave={onPointerLeave}
+          className={`touch-none select-none ${cursor}`}
         />
 
         {active && (
           <div
-            className="pointer-events-none absolute z-10 w-[264px] rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(139,92,246,0.15)] backdrop-blur-md"
+            className="pointer-events-none absolute z-10 w-[264px] rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
             style={cardStyle}
           >
             <p className="font-semibold text-white">{active.city.name}</p>
@@ -269,9 +478,7 @@ export default function TravelMap() {
                   ))}
               </dl>
             ) : (
-              <p className="mt-3 text-sm text-gray-500">
-                {travelPage.pendingNote}
-              </p>
+              <p className="mt-3 text-sm text-gray-500">{travelPage.pendingNote}</p>
             )}
           </div>
         )}
