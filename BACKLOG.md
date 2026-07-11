@@ -28,8 +28,8 @@ a field-notes card opens. Hover push-in (1.12x) anchored on the city, ease-in-ou
 0.4s in / 0.6s out. Immersive single-screen page (globe bleeds the edges, "Where
 I've been" eyebrow up top, back-link pinned bottom by the pause button). Hidden
 /travel link moved from the Paris caption to the "Travel" label. Card clamps to
-the viewport for edge pins. All live. Still open: v3 moon (next), field notes for
-the 15 pending pins.
+the viewport for edge pins. All live. Still open: field notes for the 15
+pending pins.
 
 Batch shipped 2026-07-10 (branch hero-load-flash → main): fixed the page-load
 flash — hero name/tagline/intro were Motion components with initial opacity:0,
@@ -239,12 +239,6 @@ click-cards, clean console, clean build/lint/tsc.
 - **(M) OAuth consent screen easter egg**: first-visit parody consent dialog
   ("davidkwartler.com would like to access: your scroll position, your good
   opinion, your vibes"). On-brand for identity work
-- **(M) Travel globe — moon**: add a subtle moon in the background of the
-  /travel globe that casts a faint light on the earth. Position it around the
-  earth (its angle on the 360° orbit) from the calendar date so it roughly
-  tracks the real lunar cycle — doesn't need to be astronomically exact, just a
-  believable phase/position that shifts day to day. The cast light would bias
-  the globe's limb lighting toward the moon's side (David's idea, 2026-07-10)
 - **(M) /now page**: currently building, reading, listening to
 - **(L) Travel map v2 — globe**: rotatable globe instead of the flat map,
   blue landmass glyphs, orange triangle pins, and strip the page text down to
