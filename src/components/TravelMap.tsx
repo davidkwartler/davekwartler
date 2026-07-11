@@ -29,10 +29,16 @@ const CANVAS_MIN = 340;
 const CANVAS_MAX = 1200;
 const GLOBE_FRACTION = 0.49; // globe radius as a fraction of the canvas size
 
-// Hover zoom: a slight, fast push-in that keeps the hovered city pinned in
-// place while the globe grows around it, so you can read where it sits.
+// Hover zoom: a slight push-in that keeps the hovered city pinned in place
+// while the globe grows around it, so you can read where it sits.
 const HOVER_ZOOM = 1.12;
-const ZOOM_SPEED = 18; // higher eases in faster
+const ZOOM_DURATION = 0.34; // seconds for the push-in (and pull-out) to complete
+
+// Cubic ease-in-out: velocity ramps up from rest and eases back to rest, so the
+// push-in accelerates and settles instead of snapping the way the old
+// exponential smoothing (fastest at the very start) did.
+const easeInOut = (p: number) =>
+  p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
 
 // Rest orientation: mid-Atlantic, tilted north so North America (left) and
 // Europe (right) both sit on the visible face at rest.
@@ -130,8 +136,9 @@ type View = {
   manualLat: number;
   dragging: boolean;
   activeName: string | null;
-  zoom: number; // current hover-zoom factor
-  zoomTarget: number; // eases toward this (1 idle, HOVER_ZOOM on a city)
+  zoom: number; // current hover-zoom factor (derived from zoomProg each frame)
+  zoomProg: number; // 0..1 tween progress, mapped through easeInOut into zoom
+  zoomGoal: number; // 0 (out) or 1 (in) — zoomProg advances toward this
   zoomCity: string | null; // the city the zoom anchors to
 };
 
@@ -294,7 +301,8 @@ export default function TravelMap() {
     dragging: false,
     activeName: null,
     zoom: 1,
-    zoomTarget: 1,
+    zoomProg: 0,
+    zoomGoal: 0,
     zoomCity: null,
   });
   const geom = useRef({ w: 0, h: 0, cx: 0, cy: 0, R: 0 });
@@ -338,12 +346,15 @@ export default function TravelMap() {
       const frame = (dt: number) => {
         const v = view.current;
         v.t += dt;
-        // Hover zoom eases even while the globe is frozen on an open card.
-        v.zoom += (v.zoomTarget - v.zoom) * Math.min(1, dt * ZOOM_SPEED);
-        if (v.zoomTarget === 1 && Math.abs(v.zoom - 1) < 0.001) {
-          v.zoom = 1;
-          v.zoomCity = null;
-        }
+        // Hover zoom tweens even while the globe is frozen on an open card.
+        // Progress advances linearly toward the goal, then eases into `zoom`.
+        const step = dt / ZOOM_DURATION;
+        if (v.zoomProg < v.zoomGoal)
+          v.zoomProg = Math.min(v.zoomGoal, v.zoomProg + step);
+        else if (v.zoomProg > v.zoomGoal)
+          v.zoomProg = Math.max(v.zoomGoal, v.zoomProg - step);
+        v.zoom = 1 + (HOVER_ZOOM - 1) * easeInOut(v.zoomProg);
+        if (v.zoomGoal === 0 && v.zoomProg === 0) v.zoomCity = null;
         const frozen = v.dragging || v.activeName !== null;
         if (!frozen) {
           v.phase += dt;
@@ -387,10 +398,10 @@ export default function TravelMap() {
     const v = view.current;
     v.activeName = hit?.city.name ?? null;
     if (hit) {
-      v.zoomTarget = HOVER_ZOOM;
+      v.zoomGoal = 1;
       v.zoomCity = hit.city.name;
     } else {
-      v.zoomTarget = 1;
+      v.zoomGoal = 0;
     }
     setActive((prev) => (prev?.city.name === hit?.city.name ? prev : hit));
   };
@@ -447,7 +458,7 @@ export default function TravelMap() {
       if (hit) {
         const v = view.current;
         v.activeName = hit.city.name;
-        v.zoomTarget = HOVER_ZOOM;
+        v.zoomGoal = 1;
         v.zoomCity = hit.city.name;
         setActive(hit);
         setPinned(true);
@@ -470,7 +481,7 @@ export default function TravelMap() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         view.current.activeName = null;
-        view.current.zoomTarget = 1;
+        view.current.zoomGoal = 0;
         setActive(null);
         setPinned(false);
       }
