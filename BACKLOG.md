@@ -226,6 +226,12 @@ click-cards, clean console, clean build/lint/tsc.
 - **(M) OAuth consent screen easter egg**: first-visit parody consent dialog
   ("davidkwartler.com would like to access: your scroll position, your good
   opinion, your vibes"). On-brand for identity work
+- **(M) Travel globe — moon**: add a subtle moon in the background of the
+  /travel globe that casts a faint light on the earth. Position it around the
+  earth (its angle on the 360° orbit) from the calendar date so it roughly
+  tracks the real lunar cycle — doesn't need to be astronomically exact, just a
+  believable phase/position that shifts day to day. The cast light would bias
+  the globe's limb lighting toward the moon's side (David's idea, 2026-07-10)
 - **(M) /now page**: currently building, reading, listening to
 - **(L) Travel map v2 — globe**: rotatable globe instead of the flat map,
   blue landmass glyphs, orange triangle pins, and strip the page text down to

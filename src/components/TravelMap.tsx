@@ -21,9 +21,18 @@ import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 const DEG = Math.PI / 180;
 const TAU = Math.PI * 2;
 
-// Framing
-const MAX_CANVAS = 620; // px; the globe canvas is square and caps here
-const GLOBE_FRACTION = 0.44; // radius as a fraction of the canvas dimension
+// Framing — the globe is oversized so it bleeds past the viewport edges and
+// the destinations read large. The square canvas is sized off the smaller
+// viewport axis; GLOBE_VIEW_FRACTION > 1 pushes the sphere past that axis.
+const GLOBE_VIEW_FRACTION = 1.22;
+const CANVAS_MIN = 340;
+const CANVAS_MAX = 1200;
+const GLOBE_FRACTION = 0.49; // globe radius as a fraction of the canvas size
+
+// Hover zoom: a slight, fast push-in that keeps the hovered city pinned in
+// place while the globe grows around it, so you can read where it sits.
+const HOVER_ZOOM = 1.12;
+const ZOOM_SPEED = 18; // higher eases in faster
 
 // Rest orientation: mid-Atlantic, tilted north so North America (left) and
 // Europe (right) both sit on the visible face at rest.
@@ -43,7 +52,8 @@ const DRAG_SENS = 0.28; // degrees per pixel dragged
 const MANUAL_HALFLIFE = 0.9; // seconds for a released drag to ease halfway back
 
 // Land glyph field: Fibonacci samples over the whole sphere, filtered to land.
-const LAND_SAMPLES = 5200;
+// Denser now that the globe is larger, so continents don't read as sparse.
+const LAND_SAMPLES = 7500;
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
 // Night-vision palette
@@ -64,6 +74,8 @@ type Active = { city: TravelCity; x: number; y: number };
 
 const clamp = (v: number, lo: number, hi: number) =>
   Math.min(hi, Math.max(lo, v));
+
+const CITY_BY_NAME = new Map(travelCities.map((c) => [c.name, c] as const));
 
 // Evenly spread points over the sphere, keep the ones that land on land.
 function buildLandPoints(): LandPoint[] {
@@ -118,7 +130,12 @@ type View = {
   manualLat: number;
   dragging: boolean;
   activeName: string | null;
+  zoom: number; // current hover-zoom factor
+  zoomTarget: number; // eases toward this (1 idle, HOVER_ZOOM on a city)
+  zoomCity: string | null; // the city the zoom anchors to
 };
+
+type Geom = { w: number; h: number; cx: number; cy: number; R: number };
 
 function currentCenter(v: View) {
   const wobLon = LON_AMP * Math.sin((v.phase / LON_PERIOD) * TAU);
@@ -128,6 +145,27 @@ function currentCenter(v: View) {
     clamp(wobLon + v.manualLon, -(LON_AMP + MANUAL_LON_MAX), LON_AMP + MANUAL_LON_MAX);
   const lat = clamp(CENTER_LAT + wobLat + v.manualLat, CENTER_LAT_MIN, CENTER_LAT_MAX);
   return { lon, lat };
+}
+
+// The projection parameters for the current frame: globe center + on-screen
+// center/radius, incorporating the hover zoom. Zooming scales the radius about
+// the anchored city so that city stays fixed while the globe grows around it.
+// Shared by the draw loop and hit-testing so clicks land on what's drawn.
+function resolveView(v: View, g: Geom) {
+  const { lon, lat } = currentCenter(v);
+  let cx = g.cx;
+  let cy = g.cy;
+  let R = g.R;
+  if (v.zoom > 1.001 && v.zoomCity) {
+    const city = CITY_BY_NAME.get(v.zoomCity);
+    if (city) {
+      const b = project(city.lon, city.lat, lon, lat, g.cx, g.cy, g.R);
+      R = g.R * v.zoom;
+      cx = g.cx + (b.x - g.cx) * (1 - v.zoom);
+      cy = g.cy + (b.y - g.cy) * (1 - v.zoom);
+    }
+  }
+  return { lon, lat, cx, cy, R };
 }
 
 function drawTriangle(
@@ -215,7 +253,7 @@ function drawGlobe(
     const isActive = city.name === activeName;
     const pulse = 0.7 + 0.3 * Math.sin(t * 1.5 + city.lon * 0.05);
     const facing = 0.55 + 0.45 * pr.cosc;
-    const size = (hasNotes ? 7 : 5.5) * (isActive ? 1.45 : 1);
+    const size = (hasNotes ? 8 : 6) * (isActive ? 1.4 : 1);
     const base = (hasNotes ? 0.95 : 0.6) * facing;
     const alpha = isActive ? 1 : base * (0.72 + 0.28 * pulse);
 
@@ -255,6 +293,9 @@ export default function TravelMap() {
     manualLat: 0,
     dragging: false,
     activeName: null,
+    zoom: 1,
+    zoomTarget: 1,
+    zoomCity: null,
   });
   const geom = useRef({ w: 0, h: 0, cx: 0, cy: 0, R: 0 });
   const drawRef = useRef<() => void>(() => {});
@@ -273,15 +314,16 @@ export default function TravelMap() {
       const draw = () => {
         const g = geom.current;
         const v = view.current;
-        const { lon, lat } = currentCenter(v);
+        const rv = resolveView(v, g);
         const sweep = SWEEP_STRENGTH > 0 ? (v.t / SWEEP_PERIOD) % 1 : -1;
-        drawGlobe(ctx, g.w, g.h, g.cx, g.cy, g.R, lon, lat, land, v.t, sweep, v.activeName);
+        drawGlobe(ctx, g.w, g.h, rv.cx, rv.cy, rv.R, rv.lon, rv.lat, land, v.t, sweep, v.activeName);
       };
       drawRef.current = draw;
 
       const resize = () => {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const cw = Math.min(wrapRef.current?.clientWidth ?? MAX_CANVAS, MAX_CANVAS);
+        const base = Math.min(window.innerWidth, window.innerHeight);
+        const cw = clamp(base * GLOBE_VIEW_FRACTION, CANVAS_MIN, CANVAS_MAX);
         canvas.style.width = `${cw}px`;
         canvas.style.height = `${cw}px`;
         canvas.width = Math.round(cw * dpr);
@@ -296,6 +338,12 @@ export default function TravelMap() {
       const frame = (dt: number) => {
         const v = view.current;
         v.t += dt;
+        // Hover zoom eases even while the globe is frozen on an open card.
+        v.zoom += (v.zoomTarget - v.zoom) * Math.min(1, dt * ZOOM_SPEED);
+        if (v.zoomTarget === 1 && Math.abs(v.zoom - 1) < 0.001) {
+          v.zoom = 1;
+          v.zoomCity = null;
+        }
         const frozen = v.dragging || v.activeName !== null;
         if (!frozen) {
           v.phase += dt;
@@ -320,11 +368,11 @@ export default function TravelMap() {
     const mx = clientX - rect.left;
     const my = clientY - rect.top;
     const g = geom.current;
-    const { lon, lat } = currentCenter(view.current);
+    const rv = resolveView(view.current, g);
     let best: Active | null = null;
     let bestD = HIT_RADIUS;
     for (const city of travelCities) {
-      const pr = project(city.lon, city.lat, lon, lat, g.cx, g.cy, g.R);
+      const pr = project(city.lon, city.lat, rv.lon, rv.lat, rv.cx, rv.cy, rv.R);
       if (pr.cosc <= 0.06) continue;
       const d = Math.hypot(pr.x - mx, pr.y - my);
       if (d < bestD) {
@@ -336,10 +384,15 @@ export default function TravelMap() {
   };
 
   const setHover = (hit: Active | null) => {
-    view.current.activeName = hit?.city.name ?? null;
-    setActive((prev) =>
-      prev?.city.name === hit?.city.name ? prev : hit,
-    );
+    const v = view.current;
+    v.activeName = hit?.city.name ?? null;
+    if (hit) {
+      v.zoomTarget = HOVER_ZOOM;
+      v.zoomCity = hit.city.name;
+    } else {
+      v.zoomTarget = 1;
+    }
+    setActive((prev) => (prev?.city.name === hit?.city.name ? prev : hit));
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -392,7 +445,10 @@ export default function TravelMap() {
     if (wasDrag && !ds.moved) {
       const hit = hitTest(e.clientX, e.clientY);
       if (hit) {
-        view.current.activeName = hit.city.name;
+        const v = view.current;
+        v.activeName = hit.city.name;
+        v.zoomTarget = HOVER_ZOOM;
+        v.zoomCity = hit.city.name;
         setActive(hit);
         setPinned(true);
       } else {
@@ -414,6 +470,7 @@ export default function TravelMap() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         view.current.activeName = null;
+        view.current.zoomTarget = 1;
         setActive(null);
         setPinned(false);
       }
@@ -422,16 +479,27 @@ export default function TravelMap() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Card placement: centered over the pin, clamped to the canvas, flipped above
-  // or below depending on which half the pin sits in. The globe is frozen while
-  // a card is open, so the anchor stays put.
+  // Card placement: the globe bleeds off the viewport, so anchor the card in
+  // viewport (fixed) coordinates and clamp it fully on-screen, rather than to
+  // the oversized canvas. active.x/y are canvas-local; the square is centered,
+  // so its viewport offset is (viewport - canvas) / 2. Flip above/below the pin
+  // depending on which half it sits in. The globe is frozen while a card is
+  // open, so the anchor stays put.
   const CARD_W = 264;
+  const CARD_M = 12;
+  const vw = typeof window !== "undefined" ? window.innerWidth : size.w;
+  const vh = typeof window !== "undefined" ? window.innerHeight : size.h;
+  const pinX = active ? (vw - size.w) / 2 + active.x : 0;
+  const pinY = active ? (vh - size.h) / 2 + active.y : 0;
+  const cardH = active?.city.notes ? 210 : 130;
   const cardStyle = active
     ? {
-        left: clamp(active.x - CARD_W / 2, 10, size.w - CARD_W - 10),
-        ...(active.y < size.h * 0.5
-          ? { top: active.y + 20 }
-          : { bottom: size.h - active.y + 20 }),
+        left: clamp(pinX - CARD_W / 2, CARD_M, Math.max(CARD_M, vw - CARD_M - CARD_W)),
+        top: clamp(
+          pinY < vh / 2 ? pinY + 22 : pinY - 22 - cardH,
+          CARD_M,
+          Math.max(CARD_M, vh - CARD_M - cardH),
+        ),
       }
     : undefined;
 
@@ -439,7 +507,10 @@ export default function TravelMap() {
   const cursor = active ? "cursor-pointer" : "cursor-grab active:cursor-grabbing";
 
   return (
-    <div ref={wrapRef} className="mx-auto w-full max-w-[620px]">
+    <div
+      ref={wrapRef}
+      className="absolute inset-0 flex items-center justify-center"
+    >
       <div className="relative" style={{ width: size.w, height: size.h }}>
         <canvas
           ref={canvasRef}
@@ -453,7 +524,7 @@ export default function TravelMap() {
 
         {active && (
           <div
-            className="pointer-events-none absolute z-10 w-[264px] rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
+            className="pointer-events-none fixed z-50 w-[264px] rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
             style={cardStyle}
           >
             <p className="font-semibold text-white">{active.city.name}</p>

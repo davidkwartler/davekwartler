@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Footer from "@/components/Footer";
 import PauseMotionButton from "@/components/PauseMotionButton";
 import TravelMap from "@/components/TravelMap";
 import { SiteNav } from "@/components/SiteNav";
@@ -16,27 +15,25 @@ export default function Travel() {
   return (
     <>
       <SiteNav />
-      <main className="min-h-svh bg-neutral-950 px-4 pt-28 pb-20 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-5xl flex-col items-center">
-          <h1 className="text-center text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
-            {travelPage.label}
-          </h1>
+      {/* Single immersive screen: the globe fills it and bleeds past the edges,
+          with the eyebrow floating up top and the back-link pinned to the
+          bottom, level with the pause button. */}
+      <main className="relative h-svh overflow-hidden bg-neutral-950">
+        <h1 className="absolute inset-x-0 top-24 z-10 text-center text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
+          {travelPage.label}
+        </h1>
 
-          <div className="mt-8 w-full">
-            <TravelMap />
-          </div>
+        <TravelMap />
 
-          <p className="mt-10 text-sm text-gray-500">
-            <Link
-              href="/#about"
-              className="text-gray-400 underline-offset-4 hover:text-white hover:underline"
-            >
-              ← {travelPage.backLink}
-            </Link>
-          </p>
-        </div>
+        <p className="fixed inset-x-0 bottom-3 z-40 flex h-7 items-center justify-center text-sm">
+          <Link
+            href="/#about"
+            className="text-gray-400 underline-offset-4 hover:text-white hover:underline"
+          >
+            ← {travelPage.backLink}
+          </Link>
+        </p>
       </main>
-      <Footer />
       <PauseMotionButton />
     </>
   );
