@@ -76,11 +76,29 @@ const DRAG_THRESHOLD = 5; // px of movement before a press counts as a drag
 // the globe. Its bearing around the globe and its lit fraction both come from
 // today's position in the lunar cycle — believable, not astronomically exact.
 const MOON = "214, 224, 240"; // cool moonlight silver-white
-const MOON_ORBIT = 0.74; // distance from globe center (fraction of min(vw,vh)) — far sky
-const MOON_CORE = 3.2; // core radius in px — a small bright point, just past a star
-const MOON_GLOW = 30; // soft corona radius in px
+const MOON_CORE = 5; // core radius in px — a small bright point, just past a star
+const MOON_GLOW = 85; // soft corona radius in px
+const MOON_HALO = 170; // wide, very faint ambient bloom radius in px
 const MOON_MARGIN = 22; // keep the moon this far off the viewport edge / controls
 const MOON_CAST = 0.16; // soft horizon glow the moon throws on the near limb
+// The moon sits out at this fraction of its available sky box (leaving
+// headroom on every side) so parallax and zoom drift have room to actually
+// move it, instead of pinning it to a screen-edge clamp where those shifts
+// get silently absorbed.
+const MOON_BASE_FRACTION = 0.62;
+// Parallax: the moon drifts as the globe pans (idle wobble or a drag), so it
+// reads as a fixed point in a real sky the camera is panning past, rather
+// than a sticker glued to the screen. Px of drift per degree of camera pan.
+const MOON_PARALLAX_LON = 2.2;
+const MOON_PARALLAX_LAT = 1.6;
+// Hover-zoom is a camera push-in; the far sky should drift/grow too, the way
+// a distant background subtly shifts when a camera dollies forward.
+const MOON_ZOOM_DRIFT = 0.9;
+const MOON_ZOOM_GROW = 0.7;
+// A faint independent pulse so the moon never sits perfectly static even at
+// rest — bright stars and planets visibly twinkle to the eye.
+const MOON_TWINKLE_AMP = 0.08;
+const MOON_TWINKLE_PERIOD = 5.5;
 const SYNODIC = 29.530588853; // days in a lunar cycle
 
 // Where the moon is in its cycle for a given date: age (days since new moon),
@@ -171,56 +189,91 @@ type Geom = {
   vh: number;
 };
 
-// The moon's on-screen position and lit fraction. Bearing comes from the lunar
-// phase; the disc is clamped inside the viewport so it stays visible even where
-// the oversized globe bleeds off the edge.
-function moonPlacement(g: Geom, phaseAngle: number) {
-  const base = Math.min(g.vw, g.vh);
+// The moon's on-screen position and lit fraction. Its bearing anchors to the
+// lunar phase, but it isn't glued in place: it drifts with the globe's pan
+// (parallax) and eases outward slightly on hover-zoom (dolly), so it feels
+// like a real object out in the sky rather than a static decal. The disc is
+// clamped inside the viewport so it stays visible even where the oversized
+// globe bleeds off the edge.
+function moonPlacement(
+  g: Geom,
+  phaseAngle: number,
+  panLon: number,
+  panLat: number,
+  zoom: number,
+) {
   const ux = Math.cos(phaseAngle);
   const uy = Math.sin(phaseAngle);
+  const distScale = 1 + (zoom - 1) * MOON_ZOOM_DRIFT;
+  const sizeScale = 1 + (zoom - 1) * MOON_ZOOM_GROW;
   // Keep the moon in clean sky: side margins plus larger top/bottom insets so
   // it never collides with the nav/eyebrow up top or the controls down bottom.
   const insetX = MOON_GLOW + MOON_MARGIN;
   const insetTop = MOON_GLOW + 96;
   const insetBottom = MOON_GLOW + 52;
-  const mx = clamp(g.cx + ux * base * MOON_ORBIT, g.cx - g.vw / 2 + insetX, g.cx + g.vw / 2 - insetX);
-  const my = clamp(g.cy - uy * base * MOON_ORBIT, g.cy - g.vh / 2 + insetTop, g.cy + g.vh / 2 - insetBottom);
+  // Base position sits at MOON_BASE_FRACTION of the available sky box in the
+  // lunar-phase direction — not pinned to the corner — so parallax and zoom
+  // drift below have real room to move it rather than being swallowed by the
+  // edge clamp.
+  const halfX = g.vw / 2 - insetX;
+  const halfYUp = g.vh / 2 - insetTop;
+  const halfYDown = g.vh / 2 - insetBottom;
+  const baseX = ux * halfX * MOON_BASE_FRACTION * distScale;
+  const baseY = -uy * (uy >= 0 ? halfYUp : halfYDown) * MOON_BASE_FRACTION * distScale;
+  const rawX = g.cx + baseX - panLon * MOON_PARALLAX_LON;
+  const rawY = g.cy + baseY - panLat * MOON_PARALLAX_LAT;
+  const mx = clamp(rawX, g.cx - g.vw / 2 + insetX, g.cx + g.vw / 2 - insetX);
+  const my = clamp(rawY, g.cy - g.vh / 2 + insetTop, g.cy + g.vh / 2 - insetBottom);
   // Unit vector from globe center toward the moon, for the cast light.
   const dx = mx - g.cx;
   const dy = my - g.cy;
   const len = Math.hypot(dx, dy) || 1;
-  return { mx, my, castX: dx / len, castY: dy / len };
+  return { mx, my, castX: dx / len, castY: dy / len, scale: sizeScale };
 }
 
 // A small, bright point in the far sky — a touch bigger than a star, clearly a
-// moon. No disc/texture. Its brightness leans on the lit fraction so a full moon
-// glows a little stronger than a new one.
+// moon. No disc/texture. Its brightness leans on the lit fraction (a full moon
+// glows a little stronger than a new one) plus a faint twinkle, and grows
+// slightly on hover-zoom to sell depth.
 function drawMoon(
   ctx: CanvasRenderingContext2D,
   mx: number,
   my: number,
   illum: number,
+  scale: number,
+  twinkle: number,
 ) {
-  const bright = 0.5 + 0.5 * illum;
+  const bright = (0.55 + 0.45 * illum) * twinkle;
+  const glowR = MOON_GLOW * scale;
+  const coreR = MOON_CORE * scale;
+
+  // Wide, very faint ambient bloom — the halo a bright point throws in a dark sky.
+  const halo = ctx.createRadialGradient(mx, my, 0, mx, my, MOON_HALO * scale);
+  halo.addColorStop(0, `rgba(${MOON}, ${0.06 * bright})`);
+  halo.addColorStop(1, `rgba(${MOON}, 0)`);
+  ctx.fillStyle = halo;
+  ctx.beginPath();
+  ctx.arc(mx, my, MOON_HALO * scale, 0, TAU);
+  ctx.fill();
 
   // Soft corona bleeding into the black
-  const glow = ctx.createRadialGradient(mx, my, 0, mx, my, MOON_GLOW);
-  glow.addColorStop(0, `rgba(${MOON}, ${0.22 * bright})`);
-  glow.addColorStop(0.5, `rgba(${MOON}, ${0.05 * bright})`);
+  const glow = ctx.createRadialGradient(mx, my, 0, mx, my, glowR);
+  glow.addColorStop(0, `rgba(${MOON}, ${0.34 * bright})`);
+  glow.addColorStop(0.45, `rgba(${MOON}, ${0.11 * bright})`);
   glow.addColorStop(1, `rgba(${MOON}, 0)`);
   ctx.fillStyle = glow;
   ctx.beginPath();
-  ctx.arc(mx, my, MOON_GLOW, 0, TAU);
+  ctx.arc(mx, my, glowR, 0, TAU);
   ctx.fill();
 
   // Bright little core
-  const core = ctx.createRadialGradient(mx, my, 0, mx, my, MOON_CORE * 2);
-  core.addColorStop(0, `rgba(248, 250, 255, ${0.95 * bright})`);
-  core.addColorStop(0.5, `rgba(${MOON}, ${0.7 * bright})`);
+  const core = ctx.createRadialGradient(mx, my, 0, mx, my, coreR * 2);
+  core.addColorStop(0, `rgba(248, 250, 255, ${Math.min(1, 0.97 * bright)})`);
+  core.addColorStop(0.5, `rgba(${MOON}, ${0.72 * bright})`);
   core.addColorStop(1, `rgba(${MOON}, 0)`);
   ctx.fillStyle = core;
   ctx.beginPath();
-  ctx.arc(mx, my, MOON_CORE * 2, 0, TAU);
+  ctx.arc(mx, my, coreR * 2, 0, TAU);
   ctx.fill();
 }
 
@@ -304,6 +357,23 @@ function drawGlobe(
   ctx.beginPath();
   ctx.arc(cx, cy, R * 1.06, 0, TAU);
   ctx.fill();
+
+  // Moonlight wash: a broad, faint highlight over the moon-facing side of the
+  // sphere, clipped to the disc. Sits under the per-glyph lift below — this is
+  // what actually sells "the moon is lighting this," not just brighter pixels.
+  const wx = cx + moonCastX * R * 0.5;
+  const wy = cy + moonCastY * R * 0.5;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, TAU);
+  ctx.clip();
+  const wash = ctx.createRadialGradient(wx, wy, 0, wx, wy, R * 1.05);
+  wash.addColorStop(0, `rgba(${MOON}, 0.07)`);
+  wash.addColorStop(0.6, `rgba(${MOON}, 0.02)`);
+  wash.addColorStop(1, `rgba(${MOON}, 0)`);
+  ctx.fillStyle = wash;
+  ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
+  ctx.restore();
 
   // Landmass glyphs
   ctx.font = "10px var(--font-jetbrains), ui-monospace, monospace";
@@ -412,9 +482,15 @@ export default function TravelMap() {
         const v = view.current;
         const rv = resolveView(v, g);
         const sweep = SWEEP_STRENGTH > 0 ? (v.t / SWEEP_PERIOD) % 1 : -1;
-        const m = moonPlacement(g, moon.phaseAngle);
+        // How far the camera has panned off rest, and the current hover-zoom —
+        // both feed the moon's parallax so it moves with the scene instead of
+        // sitting frozen while the globe wobbles and pushes in underneath it.
+        const panLon = rv.lon - CENTER_LON;
+        const panLat = rv.lat - CENTER_LAT;
+        const m = moonPlacement(g, moon.phaseAngle, panLon, panLat, v.zoom);
+        const twinkle = 1 + MOON_TWINKLE_AMP * Math.sin((v.t / MOON_TWINKLE_PERIOD) * TAU);
         ctx.clearRect(0, 0, g.w, g.h);
-        drawMoon(ctx, m.mx, m.my, moon.illum);
+        drawMoon(ctx, m.mx, m.my, moon.illum, m.scale, twinkle);
         drawGlobe(
           ctx, rv.cx, rv.cy, rv.R, rv.lon, rv.lat, land, v.t, sweep,
           v.activeName, m.castX, m.castY,
