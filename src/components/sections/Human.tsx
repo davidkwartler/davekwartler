@@ -41,19 +41,21 @@ function ParallaxPhoto({
         className={`aspect-[4/5] w-full rounded-xl object-cover ring-1 ring-white/10 ${photo.imgClass ?? ""}`}
       />
       <figcaption className="text-center text-sm text-gray-500">
-        <span className="block font-semibold text-gray-300">
-          {photo.label}
-        </span>
+        {/* Hidden easter egg: the Travel label links to /travel. Styled like a
+            plain caption label so it only reveals itself on hover. */}
         {photo.href ? (
           <Link
             href={photo.href}
-            className="underline-offset-4 transition-colors hover:text-gray-300 hover:underline"
+            className="block font-semibold text-gray-300 underline-offset-4 transition-colors hover:underline"
           >
-            {photo.caption}
+            {photo.label}
           </Link>
         ) : (
-          photo.caption
+          <span className="block font-semibold text-gray-300">
+            {photo.label}
+          </span>
         )}
+        {photo.caption}
       </figcaption>
     </motion.figure>
   );
