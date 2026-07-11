@@ -14,6 +14,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Keep in-page navigation targets visible below the fixed 64px header. */
+  scroll-padding-top: 5rem;
   /* Motion's useScroll measures section targets against the scroll container
      (the html element) and warns unless it's positioned */
   position: relative;
@@ -75,4 +77,25 @@ body {
   color: var(--foreground);
   /* var(--font-sans) doesn't exist at runtime under @theme inline; use the next/font variable directly */
   font-family: var(--font-schibsted), sans-serif;
+}
+
+/* Visible only while focused; lets keyboard users bypass repeated navigation. */
+.skip-link {
+  position: fixed;
+  z-index: 70;
+  top: 0.75rem;
+  left: 50%;
+  transform: translate(-50%, -200%);
+  border-radius: 9999px;
+  background: white;
+  padding: 0.625rem 1rem;
+  color: #171717;
+  font-weight: 600;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translate(-50%, 0);
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
 }

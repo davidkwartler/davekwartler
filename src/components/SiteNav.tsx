@@ -33,11 +33,15 @@ export function SiteNav() {
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 border-b border-white/10 bg-neutral-950/60 backdrop-blur-md ${
+    <>
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <header
+        className={`fixed inset-x-0 top-0 border-b border-white/10 bg-neutral-950/60 backdrop-blur-md ${
         isMenuOpen ? "z-[60]" : "z-40"
-      }`}
-    >
+        }`}
+      >
       <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/#home"
@@ -103,6 +107,7 @@ export function SiteNav() {
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-white transition-colors"
+            aria-label="LinkedIn profile"
           >
             <LinkedInIcon className="w-5 h-5" />
           </a>
@@ -111,6 +116,7 @@ export function SiteNav() {
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-white transition-colors"
+            aria-label="GitHub profile"
           >
             <GitHubIcon className="w-5 h-5" />
           </a>
@@ -173,6 +179,7 @@ export function SiteNav() {
           </div>
         </div>
       )}
-    </header>
+      </header>
+    </>
   );
 }

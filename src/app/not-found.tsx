@@ -12,7 +12,7 @@ export default function NotFound() {
   return (
     <>
       <SiteNav />
-      <main className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden bg-neutral-950 px-4 pt-16 text-center sm:px-6">
+      <main id="main-content" className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden bg-neutral-950 px-4 pt-16 text-center sm:px-6">
         <div className="absolute inset-0 -z-10">
           <GalaxyBackground timeScale={0.6} dim={0.8} starCount={110} />
         </div>
