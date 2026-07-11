@@ -32,11 +32,12 @@ const GLOBE_FRACTION = 0.49; // globe radius as a fraction of the canvas size
 // Hover zoom: a slight push-in that keeps the hovered city pinned in place
 // while the globe grows around it, so you can read where it sits.
 const HOVER_ZOOM = 1.12;
-const ZOOM_DURATION = 0.34; // seconds for the push-in (and pull-out) to complete
+const ZOOM_IN_DURATION = 0.4; // seconds for the push-in
+const ZOOM_OUT_DURATION = 0.6; // slightly slower, graceful pull-out
 
 // Cubic ease-in-out: velocity ramps up from rest and eases back to rest, so the
-// push-in accelerates and settles instead of snapping the way the old
-// exponential smoothing (fastest at the very start) did.
+// zoom accelerates and settles instead of snapping the way the old exponential
+// smoothing (fastest at the very start) did.
 const easeInOut = (p: number) =>
   p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
 
@@ -347,12 +348,12 @@ export default function TravelMap() {
         const v = view.current;
         v.t += dt;
         // Hover zoom tweens even while the globe is frozen on an open card.
-        // Progress advances linearly toward the goal, then eases into `zoom`.
-        const step = dt / ZOOM_DURATION;
+        // Progress advances toward the goal, then eases into `zoom`. Push in
+        // quickly; pull out slowly for a graceful zoom-out on mouse-away.
         if (v.zoomProg < v.zoomGoal)
-          v.zoomProg = Math.min(v.zoomGoal, v.zoomProg + step);
+          v.zoomProg = Math.min(v.zoomGoal, v.zoomProg + dt / ZOOM_IN_DURATION);
         else if (v.zoomProg > v.zoomGoal)
-          v.zoomProg = Math.max(v.zoomGoal, v.zoomProg - step);
+          v.zoomProg = Math.max(v.zoomGoal, v.zoomProg - dt / ZOOM_OUT_DURATION);
         v.zoom = 1 + (HOVER_ZOOM - 1) * easeInOut(v.zoomProg);
         if (v.zoomGoal === 0 && v.zoomProg === 0) v.zoomCity = null;
         const frozen = v.dragging || v.activeName !== null;
