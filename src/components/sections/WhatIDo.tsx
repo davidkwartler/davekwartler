@@ -9,7 +9,7 @@ const cards = whatIDo.cards;
 
 export default function WhatIDo() {
   return (
-    <section id="work" className="-scroll-mt-2 px-4 py-28 sm:px-6 lg:px-8">
+    <section id="work" className="px-4 py-28 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <Reveal>
           <SectionHeading label={whatIDo.label} heading={whatIDo.heading} />

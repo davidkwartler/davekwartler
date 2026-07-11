@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <SiteNav />
-      <main className="bg-neutral-950">
+      <main id="main-content" tabIndex={-1} className="bg-neutral-950">
         <Hero />
         <WhatIDo />
         <Career />
