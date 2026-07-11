@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { glyphSeed, useCanvasLoop } from "@/lib/use-canvas-loop";
+import { useCanvasLoop } from "@/lib/use-canvas-loop";
 import { landAt } from "@/data/land-mask";
 import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 
@@ -78,11 +78,12 @@ const DRAG_THRESHOLD = 5; // px of movement before a press counts as a drag
 // Moon: a faint binary-glyph disc parked in the background that casts light on
 // the globe. Its bearing around the globe and its lit fraction both come from
 // today's position in the lunar cycle — believable, not astronomically exact.
-const MOON = "205, 214, 232"; // cool moonlight silver
-const MOON_ORBIT = 0.66; // distance from globe center, as a fraction of min(vw,vh)
-const MOON_RADIUS = 0.085; // moon radius, as a fraction of min(vw,vh)
-const MOON_MARGIN = 28; // keep the disc this far off the viewport edge / controls
-const MOON_CAST = 0.5; // how strongly moonlight lifts the globe's near side
+const MOON = "214, 224, 240"; // cool moonlight silver-white
+const MOON_ORBIT = 0.74; // distance from globe center (fraction of min(vw,vh)) — far sky
+const MOON_CORE = 3.2; // core radius in px — a small bright point, just past a star
+const MOON_GLOW = 30; // soft corona radius in px
+const MOON_MARGIN = 22; // keep the moon this far off the viewport edge / controls
+const MOON_CAST = 0.16; // soft horizon glow the moon throws on the near limb
 const SYNODIC = 29.530588853; // days in a lunar cycle
 
 // Where the moon is in its cycle for a given date: age (days since new moon),
@@ -178,65 +179,52 @@ type Geom = {
 // the oversized globe bleeds off the edge.
 function moonPlacement(g: Geom, phaseAngle: number) {
   const base = Math.min(g.vw, g.vh);
-  const rm = base * MOON_RADIUS;
   const ux = Math.cos(phaseAngle);
   const uy = Math.sin(phaseAngle);
-  const mInset = rm + MOON_MARGIN;
-  const mx = clamp(g.cx + ux * base * MOON_ORBIT, g.cx - g.vw / 2 + mInset, g.cx + g.vw / 2 - mInset);
-  const my = clamp(g.cy - uy * base * MOON_ORBIT, g.cy - g.vh / 2 + mInset, g.cy + g.vh / 2 - mInset);
+  // Keep the moon in clean sky: side margins plus larger top/bottom insets so
+  // it never collides with the nav/eyebrow up top or the controls down bottom.
+  const insetX = MOON_GLOW + MOON_MARGIN;
+  const insetTop = MOON_GLOW + 96;
+  const insetBottom = MOON_GLOW + 52;
+  const mx = clamp(g.cx + ux * base * MOON_ORBIT, g.cx - g.vw / 2 + insetX, g.cx + g.vw / 2 - insetX);
+  const my = clamp(g.cy - uy * base * MOON_ORBIT, g.cy - g.vh / 2 + insetTop, g.cy + g.vh / 2 - insetBottom);
   // Unit vector from globe center toward the moon, for the cast light.
   const dx = mx - g.cx;
   const dy = my - g.cy;
   const len = Math.hypot(dx, dy) || 1;
-  return { mx, my, rm, castX: dx / len, castY: dy / len };
+  return { mx, my, castX: dx / len, castY: dy / len };
 }
 
+// A small, bright point in the far sky — a touch bigger than a star, clearly a
+// moon. No disc/texture. Its brightness leans on the lit fraction so a full moon
+// glows a little stronger than a new one.
 function drawMoon(
   ctx: CanvasRenderingContext2D,
   mx: number,
   my: number,
-  rm: number,
-  phaseAngle: number,
-  t: number,
+  illum: number,
 ) {
-  // Soft outer glow
-  const glow = ctx.createRadialGradient(mx, my, 0, mx, my, rm * 2.4);
-  glow.addColorStop(0, `rgba(${MOON}, 0.12)`);
+  const bright = 0.5 + 0.5 * illum;
+
+  // Soft corona bleeding into the black
+  const glow = ctx.createRadialGradient(mx, my, 0, mx, my, MOON_GLOW);
+  glow.addColorStop(0, `rgba(${MOON}, ${0.22 * bright})`);
+  glow.addColorStop(0.5, `rgba(${MOON}, ${0.05 * bright})`);
   glow.addColorStop(1, `rgba(${MOON}, 0)`);
   ctx.fillStyle = glow;
   ctx.beginPath();
-  ctx.arc(mx, my, rm * 2.4, 0, TAU);
+  ctx.arc(mx, my, MOON_GLOW, 0, TAU);
   ctx.fill();
 
-  // Faint disc base so the moon reads even at new-moon (near-zero illumination)
-  const disc = ctx.createRadialGradient(mx, my, 0, mx, my, rm);
-  disc.addColorStop(0, `rgba(${MOON}, 0.06)`);
-  disc.addColorStop(1, `rgba(${MOON}, 0.015)`);
-  ctx.fillStyle = disc;
+  // Bright little core
+  const core = ctx.createRadialGradient(mx, my, 0, mx, my, MOON_CORE * 2);
+  core.addColorStop(0, `rgba(248, 250, 255, ${0.95 * bright})`);
+  core.addColorStop(0.5, `rgba(${MOON}, ${0.7 * bright})`);
+  core.addColorStop(1, `rgba(${MOON}, 0)`);
+  ctx.fillStyle = core;
   ctx.beginPath();
-  ctx.arc(mx, my, rm, 0, TAU);
+  ctx.arc(mx, my, MOON_CORE * 2, 0, TAU);
   ctx.fill();
-
-  // Binary glyphs; the lit fraction (right of the terminator ellipse) is bright,
-  // the rest stays dim so the whole disc is always faintly visible.
-  ctx.font = "9px var(--font-jetbrains), ui-monospace, monospace";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  const step = 9;
-  const cosP = Math.cos(phaseAngle);
-  for (let gy = -rm; gy <= rm; gy += step) {
-    for (let gx = -rm; gx <= rm; gx += step) {
-      const nx = gx / rm;
-      const ny = gy / rm;
-      if (nx * nx + ny * ny > 1) continue;
-      const lit = nx > cosP * Math.sqrt(Math.max(0, 1 - ny * ny));
-      const seed = glyphSeed(Math.round((gx + rm) / step), Math.round((gy + rm) / step));
-      const flip = Math.floor(t / (3 + (seed % 5) * 0.8));
-      const char = (seed + flip) % 2 === 0 ? "0" : "1";
-      ctx.fillStyle = `rgba(${MOON}, ${lit ? 0.5 : 0.09})`;
-      ctx.fillText(char, mx + gx, my + gy);
-    }
-  }
 }
 
 function currentCenter(v: View) {
@@ -343,8 +331,8 @@ function drawGlobe(
     const gdy = pr.y - cy;
     const glen = Math.hypot(gdx, gdy) || 1;
     const lightDot = (gdx / glen) * moonCastX + (gdy / glen) * moonCastY;
-    // Weight so the lit side glows toward the limb too, not just mid-disc.
-    if (lightDot > 0) alpha += lightDot * MOON_CAST * (0.45 + 0.55 * pr.cosc);
+    // Soft horizon glow: strongest on the moon-side limb (glyphs pointing at it).
+    if (lightDot > 0) alpha += lightDot * lightDot * MOON_CAST;
     const flipTick = Math.floor(t / (3 + (p.seed % 5) * 0.8));
     const char = (p.seed + flipTick) % 2 === 0 ? "0" : "1";
     ctx.fillStyle = `rgba(${BLUE}, ${Math.min(alpha, 0.95)})`;
@@ -429,7 +417,7 @@ export default function TravelMap() {
         const sweep = SWEEP_STRENGTH > 0 ? (v.t / SWEEP_PERIOD) % 1 : -1;
         const m = moonPlacement(g, moon.phaseAngle);
         ctx.clearRect(0, 0, g.w, g.h);
-        drawMoon(ctx, m.mx, m.my, m.rm, moon.phaseAngle, v.t);
+        drawMoon(ctx, m.mx, m.my, moon.illum);
         drawGlobe(
           ctx, rv.cx, rv.cy, rv.R, rv.lon, rv.lat, land, v.t, sweep,
           v.activeName, m.castX, m.castY,
