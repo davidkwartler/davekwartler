@@ -18,6 +18,19 @@ timeline rework — click/keyboard switching, elevated detail card, phased-outli
 rail, blue selected glow, progress-gated white glow, pause-aware binary stream.
 All live.
 
+Batch shipped 2026-07-10 (branch travel-globe → main): Travel map v2 — the flat
+/travel map became an orthographic binary-glyph globe. Electric-blue 0/1
+continents (Fibonacci point field re-projecting the existing land mask), orange
+triangle pins that hide on the back hemisphere, night-vision palette. Very slow
+idle wobble constrained to the Atlantic face (never shows the empty Pacific
+back); grab-and-drag within that envelope; hover/tap a city → globe freezes and
+a field-notes card opens. Hover push-in (1.12x) anchored on the city, ease-in-out,
+0.4s in / 0.6s out. Immersive single-screen page (globe bleeds the edges, "Where
+I've been" eyebrow up top, back-link pinned bottom by the pause button). Hidden
+/travel link moved from the Paris caption to the "Travel" label. Card clamps to
+the viewport for edge pins. All live. Still open: v3 moon (next), field notes for
+the 15 pending pins.
+
 Batch shipped 2026-07-10 (branch hero-load-flash → main): fixed the page-load
 flash — hero name/tagline/intro were Motion components with initial opacity:0,
 so the static HTML shipped them invisible and they only appeared after the JS
