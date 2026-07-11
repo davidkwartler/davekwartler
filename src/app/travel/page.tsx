@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PauseMotionButton from "@/components/PauseMotionButton";
+import StarField from "@/components/StarField";
 import TravelMap from "@/components/TravelMap";
 import { SiteNav } from "@/components/SiteNav";
 import { travelPage } from "@/data/travel";
@@ -23,6 +24,7 @@ export default function Travel() {
           {travelPage.label}
         </h1>
 
+        <StarField count={5} />
         <TravelMap />
 
         <p className="fixed inset-x-0 bottom-3 z-40 flex h-7 items-center justify-center text-sm">
