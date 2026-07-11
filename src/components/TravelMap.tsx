@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { useCanvasLoop } from "@/lib/use-canvas-loop";
+import { GLOBE_VIEW_FRACTION, HOVER_ZOOM } from "@/lib/globe-config";
 import { landAt } from "@/data/land-mask";
 import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 
@@ -21,17 +22,9 @@ import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 const DEG = Math.PI / 180;
 const TAU = Math.PI * 2;
 
-// Framing — the globe is oversized so it bleeds past the viewport edges and
-// the destinations read large. The square canvas is sized off the smaller
-// viewport axis; GLOBE_VIEW_FRACTION > 1 pushes the sphere past that axis.
-const GLOBE_VIEW_FRACTION = 1.22;
-const CANVAS_MIN = 340;
-const CANVAS_MAX = 1200;
-const GLOBE_FRACTION = 0.49; // globe radius as a fraction of the canvas size
-
-// Hover zoom: a slight push-in that keeps the hovered city pinned in place
-// while the globe grows around it, so you can read where it sits.
-const HOVER_ZOOM = 1.12;
+// Framing (GLOBE_VIEW_FRACTION) and hover zoom (HOVER_ZOOM) live in
+// globe-config, shared with StarField so it can place stars outside the
+// globe's footprint.
 const ZOOM_IN_DURATION = 0.4; // seconds for the push-in
 const ZOOM_OUT_DURATION = 0.6; // slightly slower, graceful pull-out
 
@@ -143,7 +136,15 @@ type View = {
   zoomCity: string | null; // the city the zoom anchors to
 };
 
-type Geom = { w: number; h: number; cx: number; cy: number; R: number };
+type Geom = {
+  w: number;
+  h: number;
+  cx: number;
+  cy: number;
+  R: number;
+  vw: number; // viewport width (canvas is bigger and bleeds)
+  vh: number;
+};
 
 function currentCenter(v: View) {
   const wobLon = LON_AMP * Math.sin((v.phase / LON_PERIOD) * TAU);
@@ -194,8 +195,6 @@ function drawTriangle(
 
 function drawGlobe(
   ctx: CanvasRenderingContext2D,
-  w: number,
-  h: number,
   cx: number,
   cy: number,
   R: number,
@@ -206,8 +205,6 @@ function drawGlobe(
   sweepPos: number,
   activeName: string | null,
 ) {
-  ctx.clearRect(0, 0, w, h);
-
   // Faint sphere: a dim ocean fill and an atmosphere rim so the globe reads
   // even across empty water.
   const ocean = ctx.createRadialGradient(cx, cy - R * 0.2, R * 0.1, cx, cy, R);
@@ -306,7 +303,7 @@ export default function TravelMap() {
     zoomGoal: 0,
     zoomCity: null,
   });
-  const geom = useRef({ w: 0, h: 0, cx: 0, cy: 0, R: 0 });
+  const geom = useRef<Geom>({ w: 0, h: 0, cx: 0, cy: 0, R: 0, vw: 0, vh: 0 });
   const drawRef = useRef<() => void>(() => {});
   const pinnedRef = useRef(false);
   const drag = useRef({ downX: 0, downY: 0, lastX: 0, lastY: 0, moved: false, id: -1 });
@@ -325,22 +322,35 @@ export default function TravelMap() {
         const v = view.current;
         const rv = resolveView(v, g);
         const sweep = SWEEP_STRENGTH > 0 ? (v.t / SWEEP_PERIOD) % 1 : -1;
-        drawGlobe(ctx, g.w, g.h, rv.cx, rv.cy, rv.R, rv.lon, rv.lat, land, v.t, sweep, v.activeName);
+        ctx.clearRect(0, 0, g.w, g.h);
+        drawGlobe(
+          ctx, rv.cx, rv.cy, rv.R, rv.lon, rv.lat, land, v.t, sweep,
+          v.activeName,
+        );
       };
       drawRef.current = draw;
 
       const resize = () => {
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const base = Math.min(window.innerWidth, window.innerHeight);
-        const cw = clamp(base * GLOBE_VIEW_FRACTION, CANVAS_MIN, CANVAS_MAX);
-        canvas.style.width = `${cw}px`;
-        canvas.style.height = `${cw}px`;
-        canvas.width = Math.round(cw * dpr);
-        canvas.height = Math.round(cw * dpr);
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        // The canvas spans the whole viewport (not a min-axis square) so the
+        // globe bleeds off the real screen edges instead of getting clipped at
+        // an inner canvas boundary — which is what cut the sides off on wide
+        // screens, especially once the hover zoom grew the sphere. Cap the
+        // backing resolution so huge displays don't allocate a giant buffer.
+        let dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const longest = Math.max(vw, vh);
+        if (longest * dpr > 4096) dpr = Math.max(1, 4096 / longest);
+        canvas.style.width = `${vw}px`;
+        canvas.style.height = `${vh}px`;
+        canvas.width = Math.round(vw * dpr);
+        canvas.height = Math.round(vh * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        const R = cw * GLOBE_FRACTION;
-        geom.current = { w: cw, h: cw, cx: cw / 2, cy: cw / 2, R };
-        setSize({ w: cw, h: cw });
+        // Globe radius scales with the smaller viewport axis, so it fills space
+        // seamlessly at any resolution (no upper cap).
+        const R = 0.5 * GLOBE_VIEW_FRACTION * Math.min(vw, vh);
+        geom.current = { w: vw, h: vh, cx: vw / 2, cy: vh / 2, R, vw, vh };
+        setSize({ w: vw, h: vh });
         draw();
       };
 

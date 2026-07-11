@@ -18,6 +18,18 @@ timeline rework — click/keyboard switching, elevated detail card, phased-outli
 rail, blue selected glow, progress-gated white glow, pause-aware binary stream.
 All live.
 
+Batch shipped 2026-07-11 (branch travel-moon → main): globe stopped clipping
+on wide/laptop screens (canvas now spans the full viewport instead of a
+min-axis square, so it bleeds real screen edges at any resolution). Tried a
+lunar-phase moon feature (glowing point + cast light on the globe), iterated
+on it, then killed it entirely — wasn't landing. Added a faint background
+star field instead (StarField.tsx): 80 stars (half the homepage galaxy's
+count), rejection-sampled outside the globe's circular footprint since the
+globe's ocean fill is mostly transparent between glyphs (z-index alone isn't
+enough to hide a star there). Fixed via a Fable-agent-diagnosed stacking-
+context bug — travel/page.tsx's <main> needed `isolate` so its own opaque
+background didn't paint over the star canvas. All live.
+
 Batch shipped 2026-07-10 (branch travel-globe → main): Travel map v2 — the flat
 /travel map became an orthographic binary-glyph globe. Electric-blue 0/1
 continents (Fibonacci point field re-projecting the existing land mask), orange
@@ -28,8 +40,8 @@ a field-notes card opens. Hover push-in (1.12x) anchored on the city, ease-in-ou
 0.4s in / 0.6s out. Immersive single-screen page (globe bleeds the edges, "Where
 I've been" eyebrow up top, back-link pinned bottom by the pause button). Hidden
 /travel link moved from the Paris caption to the "Travel" label. Card clamps to
-the viewport for edge pins. All live. Still open: v3 moon (next), field notes for
-the 15 pending pins.
+the viewport for edge pins. All live. Still open: field notes for the 15
+pending pins.
 
 Batch shipped 2026-07-10 (branch hero-load-flash → main): fixed the page-load
 flash — hero name/tagline/intro were Motion components with initial opacity:0,
@@ -239,12 +251,6 @@ click-cards, clean console, clean build/lint/tsc.
 - **(M) OAuth consent screen easter egg**: first-visit parody consent dialog
   ("davidkwartler.com would like to access: your scroll position, your good
   opinion, your vibes"). On-brand for identity work
-- **(M) Travel globe — moon**: add a subtle moon in the background of the
-  /travel globe that casts a faint light on the earth. Position it around the
-  earth (its angle on the 360° orbit) from the calendar date so it roughly
-  tracks the real lunar cycle — doesn't need to be astronomically exact, just a
-  believable phase/position that shifts day to day. The cast light would bias
-  the globe's limb lighting toward the moon's side (David's idea, 2026-07-10)
 - **(M) /now page**: currently building, reading, listening to
 - **(L) Travel map v2 — globe**: rotatable globe instead of the flat map,
   blue landmass glyphs, orange triangle pins, and strip the page text down to
