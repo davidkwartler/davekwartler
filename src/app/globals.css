@@ -91,7 +91,12 @@ body {
   padding: 0.625rem 1rem;
   color: #171717;
   font-weight: 600;
-  transition: transform 150ms ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skip-link {
+    transition: transform 150ms ease;
+  }
 }
 
 .skip-link:focus {
