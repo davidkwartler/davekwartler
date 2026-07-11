@@ -5,10 +5,16 @@ import { useCanvasLoop } from "@/lib/use-canvas-loop";
 import { GLOBE_VIEW_FRACTION, HOVER_ZOOM } from "@/lib/globe-config";
 
 /**
- * StarField - a handful of faint, twinkling stars scattered around (never
- * behind) the travel globe. Same visual language as GalaxyBackground's star
- * layer (soft glow, subtle twinkle, white/violet tint) but standalone: no
- * nebula, no binary field.
+ * StarField - a night sky of faint, twinkling stars around the travel globe.
+ * Same visual language as GalaxyBackground's star layer (soft glow, subtle
+ * twinkle, white/violet tint) but standalone: no nebula, no binary field.
+ *
+ * The globe's ocean fill is mostly transparent (a ~5% tint between the land
+ * glyphs), so a star merely painted *behind* it in z-order would still peek
+ * through those gaps. Positions are rejection-sampled outside the globe's
+ * footprint instead — including its hover-zoom growth and atmosphere bleed —
+ * so no star ever ends up in a spot the globe could show it through. `-z-10`
+ * on top of that is belt-and-suspenders.
  */
 
 type Star = {
@@ -21,12 +27,18 @@ type Star = {
 };
 
 const TAU = Math.PI * 2;
+// Keep stars clear of the fixed, translucent SiteNav (h-16) up top so none
+// end up muted under its blur.
+const NAV_HEIGHT = 64;
 const VIOLET = [196, 181, 253] as const;
 const WHITE = [255, 255, 255] as const;
-const PLACEMENT_TRIES = 60;
+const PLACEMENT_TRIES = 100;
+
+// Half the homepage hero galaxy's default star count (160).
+const DEFAULT_COUNT = 80;
 
 // The globe's own atmosphere bleeds to R*1.06 (see TravelMap) and can grow by
-// HOVER_ZOOM on a city hover, so keep stars out past that, not just past R.
+// HOVER_ZOOM on a city hover, so exclude past that, not just past R.
 function exclusionRadius(w: number, h: number) {
   return 0.5 * GLOBE_VIEW_FRACTION * HOVER_ZOOM * 1.06 * Math.min(w, h);
 }
@@ -40,15 +52,14 @@ function placeStar(w: number, h: number, exclR: number) {
   for (let i = 0; i < PLACEMENT_TRIES; i++) {
     const x = Math.random() * w;
     const y = Math.random() * h;
-    if (Math.hypot(x - cx, y - cy) > exclR) return { x, y };
+    if (y > NAV_HEIGHT && Math.hypot(x - cx, y - cy) > exclR) return { x, y };
   }
   const corner = Math.floor(Math.random() * 4);
-  const jx = 0.06 + Math.random() * 0.08;
-  const jy = 0.06 + Math.random() * 0.08;
-  return {
-    x: (corner % 2 === 0 ? jx : 1 - jx) * w,
-    y: (corner < 2 ? jy : 1 - jy) * h,
-  };
+  const jx = 0.05 + Math.random() * 0.07;
+  const jy = 0.05 + Math.random() * 0.07;
+  const x = (corner % 2 === 0 ? jx : 1 - jx) * w;
+  const y = Math.max((corner < 2 ? jy : 1 - jy) * h, NAV_HEIGHT + 8);
+  return { x, y };
 }
 
 function makeStars(count: number, w: number, h: number): Star[] {
@@ -58,7 +69,7 @@ function makeStars(count: number, w: number, h: number): Star[] {
     return {
       x,
       y,
-      r: 0.8 + Math.random() * 0.6,
+      r: 0.6 + Math.random() * 0.6,
       phase: Math.random() * TAU,
       speed: 0.25 + Math.random() * 0.7,
       tint: Math.random() < 0.3 ? VIOLET : WHITE,
@@ -66,7 +77,7 @@ function makeStars(count: number, w: number, h: number): Star[] {
   });
 }
 
-export default function StarField({ count = 8 }: { count?: number }) {
+export default function StarField({ count = DEFAULT_COUNT }: { count?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useCanvasLoop(
@@ -124,7 +135,7 @@ export default function StarField({ count = 8 }: { count?: number }) {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none absolute inset-0 h-full w-full"
+      className="pointer-events-none absolute inset-0 -z-10 h-full w-full"
     />
   );
 }

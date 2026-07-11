@@ -19,7 +19,7 @@ export default function Travel() {
       {/* Single immersive screen: the globe fills it and bleeds past the edges,
           with the eyebrow floating up top and the back-link pinned to the
           bottom, level with the pause button. */}
-      <main className="relative h-svh overflow-hidden bg-neutral-950">
+      <main className="relative isolate h-svh overflow-hidden bg-neutral-950">
         <h1 className="absolute inset-x-0 top-24 z-10 text-center text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
           {travelPage.label}
         </h1>
