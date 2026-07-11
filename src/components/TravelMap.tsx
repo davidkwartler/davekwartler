@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { useCanvasLoop } from "@/lib/use-canvas-loop";
+import { GLOBE_VIEW_FRACTION, HOVER_ZOOM } from "@/lib/globe-config";
 import { landAt } from "@/data/land-mask";
 import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 
@@ -21,14 +22,9 @@ import { travelCities, travelPage, type TravelCity } from "@/data/travel";
 const DEG = Math.PI / 180;
 const TAU = Math.PI * 2;
 
-// Framing — the globe is oversized so it bleeds past the viewport edges and
-// the destinations read large. Globe diameter as a multiple of the smaller
-// viewport axis; > 1 pushes the sphere past that axis so it bleeds.
-const GLOBE_VIEW_FRACTION = 1.22;
-
-// Hover zoom: a slight push-in that keeps the hovered city pinned in place
-// while the globe grows around it, so you can read where it sits.
-const HOVER_ZOOM = 1.12;
+// Framing (GLOBE_VIEW_FRACTION) and hover zoom (HOVER_ZOOM) live in
+// globe-config, shared with StarField so it can place stars outside the
+// globe's footprint.
 const ZOOM_IN_DURATION = 0.4; // seconds for the push-in
 const ZOOM_OUT_DURATION = 0.6; // slightly slower, graceful pull-out
 

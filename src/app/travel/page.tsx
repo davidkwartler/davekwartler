@@ -24,7 +24,7 @@ export default function Travel() {
           {travelPage.label}
         </h1>
 
-        <StarField count={5} />
+        <StarField />
         <TravelMap />
 
         <p className="fixed inset-x-0 bottom-3 z-40 flex h-7 items-center justify-center text-sm">

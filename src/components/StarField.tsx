@@ -2,12 +2,13 @@
 
 import { useRef } from "react";
 import { useCanvasLoop } from "@/lib/use-canvas-loop";
+import { GLOBE_VIEW_FRACTION, HOVER_ZOOM } from "@/lib/globe-config";
 
 /**
- * StarField - a sparse handful of faint, twinkling stars. Same visual
- * language as GalaxyBackground's star layer (soft glow, subtle twinkle,
- * white/violet tint) but standalone: no nebula, no binary field. For pages
- * that want a hint of night sky without the full galaxy treatment.
+ * StarField - a handful of faint, twinkling stars scattered around (never
+ * behind) the travel globe. Same visual language as GalaxyBackground's star
+ * layer (soft glow, subtle twinkle, white/violet tint) but standalone: no
+ * nebula, no binary field.
  */
 
 type Star = {
@@ -22,25 +23,56 @@ type Star = {
 const TAU = Math.PI * 2;
 const VIOLET = [196, 181, 253] as const;
 const WHITE = [255, 255, 255] as const;
+const PLACEMENT_TRIES = 60;
 
-function makeStars(count: number): Star[] {
-  return Array.from({ length: count }, () => ({
-    x: Math.random(),
-    y: Math.random(),
-    r: 0.8 + Math.random() * 0.6,
-    phase: Math.random() * TAU,
-    speed: 0.25 + Math.random() * 0.7,
-    tint: Math.random() < 0.3 ? VIOLET : WHITE,
-  }));
+// The globe's own atmosphere bleeds to R*1.06 (see TravelMap) and can grow by
+// HOVER_ZOOM on a city hover, so keep stars out past that, not just past R.
+function exclusionRadius(w: number, h: number) {
+  return 0.5 * GLOBE_VIEW_FRACTION * HOVER_ZOOM * 1.06 * Math.min(w, h);
 }
 
-export default function StarField({ count = 5 }: { count?: number }) {
+// Reject candidates that land inside the globe's footprint; on a cramped
+// square-ish viewport where that eats the whole canvas, fall back to a
+// corner, which is always clear.
+function placeStar(w: number, h: number, exclR: number) {
+  const cx = w / 2;
+  const cy = h / 2;
+  for (let i = 0; i < PLACEMENT_TRIES; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    if (Math.hypot(x - cx, y - cy) > exclR) return { x, y };
+  }
+  const corner = Math.floor(Math.random() * 4);
+  const jx = 0.06 + Math.random() * 0.08;
+  const jy = 0.06 + Math.random() * 0.08;
+  return {
+    x: (corner % 2 === 0 ? jx : 1 - jx) * w,
+    y: (corner < 2 ? jy : 1 - jy) * h,
+  };
+}
+
+function makeStars(count: number, w: number, h: number): Star[] {
+  const exclR = exclusionRadius(w, h);
+  return Array.from({ length: count }, () => {
+    const { x, y } = placeStar(w, h, exclR);
+    return {
+      x,
+      y,
+      r: 0.8 + Math.random() * 0.6,
+      phase: Math.random() * TAU,
+      speed: 0.25 + Math.random() * 0.7,
+      tint: Math.random() < 0.3 ? VIOLET : WHITE,
+    };
+  });
+}
+
+export default function StarField({ count = 8 }: { count?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useCanvasLoop(
     canvasRef,
     (canvas, ctx) => {
-      const stars = makeStars(count);
+      let stars: Star[] = [];
       let w = 0;
       let h = 0;
       let t = 0;
@@ -48,22 +80,20 @@ export default function StarField({ count = 5 }: { count?: number }) {
       const draw = () => {
         ctx.clearRect(0, 0, w, h);
         for (const s of stars) {
-          const x = s.x * w;
-          const y = s.y * h;
           const tw = 0.2 + 0.3 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
           const [cr, cg, cb] = s.tint;
 
-          const glow = ctx.createRadialGradient(x, y, 0, x, y, s.r * 4);
+          const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
           glow.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${tw * 0.28})`);
           glow.addColorStop(1, `rgba(${cr}, ${cg}, ${cb}, 0)`);
           ctx.fillStyle = glow;
           ctx.beginPath();
-          ctx.arc(x, y, s.r * 4, 0, TAU);
+          ctx.arc(s.x, s.y, s.r * 4, 0, TAU);
           ctx.fill();
 
           ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${tw})`;
           ctx.beginPath();
-          ctx.arc(x, y, s.r, 0, TAU);
+          ctx.arc(s.x, s.y, s.r, 0, TAU);
           ctx.fill();
         }
       };
@@ -75,6 +105,9 @@ export default function StarField({ count = 5 }: { count?: number }) {
         canvas.width = Math.round(w * dpr);
         canvas.height = Math.round(h * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        // Regenerate on every resize: the globe's footprint (and therefore
+        // the safe placement zone) changes with the viewport's aspect ratio.
+        stars = makeStars(count, w, h);
         draw();
       };
 
