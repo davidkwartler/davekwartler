@@ -18,6 +18,18 @@ timeline rework — click/keyboard switching, elevated detail card, phased-outli
 rail, blue selected glow, progress-gated white glow, pause-aware binary stream.
 All live.
 
+Batch shipped 2026-07-11 (branch travel-moon → main): globe stopped clipping
+on wide/laptop screens (canvas now spans the full viewport instead of a
+min-axis square, so it bleeds real screen edges at any resolution). Tried a
+lunar-phase moon feature (glowing point + cast light on the globe), iterated
+on it, then killed it entirely — wasn't landing. Added a faint background
+star field instead (StarField.tsx): 80 stars (half the homepage galaxy's
+count), rejection-sampled outside the globe's circular footprint since the
+globe's ocean fill is mostly transparent between glyphs (z-index alone isn't
+enough to hide a star there). Fixed via a Fable-agent-diagnosed stacking-
+context bug — travel/page.tsx's <main> needed `isolate` so its own opaque
+background didn't paint over the star canvas. All live.
+
 Batch shipped 2026-07-10 (branch travel-globe → main): Travel map v2 — the flat
 /travel map became an orthographic binary-glyph globe. Electric-blue 0/1
 continents (Fibonacci point field re-projecting the existing land mask), orange
