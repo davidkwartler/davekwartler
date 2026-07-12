@@ -227,6 +227,11 @@ export const travelCities: TravelCity[] = [
     lon: -90.07,
     highlights: [
       {
+        title: "National WWII Museum",
+        kind: "museum",
+        description: "Believe the hype, block off a full day",
+      },
+      {
         title: "French Quarter",
         kind: "activity",
         description: "Brass bands leaking out of every doorway",
@@ -260,7 +265,7 @@ export const travelCities: TravelCity[] = [
       {
         title: "Renaissance Center",
         kind: "activity",
-        description: "Motor City from the 72nd floor",
+        description: "Motor City waterfront staple",
       },
     ],
   },
@@ -292,19 +297,6 @@ export const travelCities: TravelCity[] = [
         title: "Bellagio Fountains",
         kind: "activity",
         description: "Free, and still the best show on the Strip",
-      },
-    ],
-  },
-  {
-    name: "Los Angeles",
-    region: "California",
-    lat: 34.05,
-    lon: -118.24,
-    highlights: [
-      {
-        title: "Petersen Automotive Museum",
-        kind: "museum",
-        description: "Do the vault tour, thank me later",
       },
     ],
   },
@@ -389,6 +381,11 @@ export const travelCities: TravelCity[] = [
         title: "Space Center Houston",
         kind: "museum",
         description: "You get to touch a moon rock",
+      },
+      {
+        title: "Houston Raceway Park",
+        kind: "activity",
+        description: "Ran it before the bulldozers did, RIP",
       },
     ],
   },
