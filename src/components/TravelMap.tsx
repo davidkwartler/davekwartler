@@ -289,6 +289,7 @@ function drawGlobe(
 export default function TravelMap() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<Active | null>(null);
   const [pinned, setPinned] = useState(false);
   const [size, setSize] = useState({ w: 0, h: 0 });
@@ -483,7 +484,11 @@ export default function TravelMap() {
     drawRef.current();
   };
 
-  const onPointerLeave = () => {
+  const onPointerLeave = (e: React.PointerEvent) => {
+    // The card is pointer-events-auto (it has to be, to scroll when it
+    // overflows), so hovering onto it fires a canvas pointer-leave. Moving
+    // into the card shouldn't dismiss the card the pointer is heading for.
+    if (cardRef.current?.contains(e.relatedTarget as Node)) return;
     if (!view.current.dragging && !pinnedRef.current) {
       setHover(null);
       drawRef.current();
@@ -515,8 +520,13 @@ export default function TravelMap() {
   const vh = typeof window !== "undefined" ? window.innerHeight : size.h;
   const pinX = active ? (vw - size.w) / 2 + active.x : 0;
   const pinY = active ? (vh - size.h) / 2 + active.y : 0;
+  // Header (padding + name row + region + list margin) is ~84px; each
+  // highlight is 1-2 wrapped lines of text-sm (20px line) plus the 8px gap,
+  // so ~56px covers the worst case (measured: Dallas's five mostly-wrapping
+  // highlights run 356px total) without wildly overestimating and pushing
+  // the card further from its pin than the clamp needs.
   const cardHEstimate = active?.city.highlights?.length
-    ? 90 + active.city.highlights.length * 64
+    ? 84 + active.city.highlights.length * 56
     : 130;
   const cardH = Math.min(cardHEstimate, vh - CARD_M * 2);
   const cardStyle = active
@@ -552,6 +562,7 @@ export default function TravelMap() {
 
         {active && (
           <div
+            ref={cardRef}
             className="pointer-events-auto fixed z-50 w-[264px] overflow-y-auto rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
             style={cardStyle}
           >
@@ -587,7 +598,7 @@ export default function TravelMap() {
         {travelCities.map((c) => (
           <li key={c.name}>
             {c.name}, {c.region}
-            {c.highlights?.length &&
+            {c.highlights && c.highlights.length > 0 &&
               `: ${c.highlights
                 .map((h) => (h.description ? `${h.title}: ${h.description}` : h.title))
                 .join("; ")}`}
