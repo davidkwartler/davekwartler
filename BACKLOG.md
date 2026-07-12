@@ -208,16 +208,3 @@ voice). Heavy rate limits.
   browsing, nothing to exfiltrate. It only talks.
 - On-brand touch: the chat could open with a consent-screen joke ("David AI
   requests access to: this conversation").
-
-## Reference: travel city notes provided so far
-
-| City | Food | Art | Music |
-|---|---|---|---|
-| Washington DC | HipCityVeg | Hirshhorn (best art museum) | Porter Robinson at Glow fest |
-| London | Mallow | Tate Modern | Hamilton |
-| Paris | Breathe, or Le Potager de Charlotte | Le Défilé Renault carwalk | Daft Punk on vinyl |
-| Brussels | Vegan chocolate anywhere | Magritte Museum | — |
-| Amsterdam | — | Moco Museum | — |
-
-(These shipped as real field notes on 2026-07-11; table kept as the source
-record. New Orleans and Austin notes were added directly in travel data.)
