@@ -229,12 +229,12 @@ export const travelCities: TravelCity[] = [
       {
         title: "National WWII Museum",
         kind: "museum",
-        description: "Believe the hype, block off a full day",
+        description: "Great for history buffs",
       },
       {
         title: "French Quarter",
         kind: "activity",
-        description: "Brass bands leaking out of every doorway",
+        description: "Lively neighborhood, don't miss Bourbon St",
       },
     ],
   },
@@ -247,12 +247,12 @@ export const travelCities: TravelCity[] = [
       {
         title: "World of Coca-Cola",
         kind: "museum",
-        description: "The international tasting room is a dare",
+        description: "Taste the magic",
       },
       {
         title: "Mercedes-Benz Stadium",
         kind: "activity",
-        description: "The halo board is absurd in person",
+        description: "Let's go Dirty Birds! Home of the Atlanta Falcons",
       },
     ],
   },
@@ -311,19 +311,19 @@ export const travelCities: TravelCity[] = [
       {
         title: "Blanton Museum of Art",
         kind: "museum",
-        description: "Ellsworth Kelly's Austin chapel is the headliner",
+        description: "Best art museum in the city",
       },
       {
         title: "Concourse Project",
         kind: "music",
-        description: "The best sound system in Texas",
+        description: "My happy place",
       },
       {
         title: "Waterloo Records",
         kind: "music",
-        description: "Where my record budget goes to die",
+        description: "Where my vinyl budget is spent",
       },
-      { title: "Town Lake Trail", kind: "activity", description: "My default reset button" },
+      { title: "Town Lake Trail", kind: "activity", description: "10-mile bike trail through downtown" },
       { title: "Q2 Stadium", kind: "activity", description: "Austin FC under the lights" },
     ],
   },
@@ -334,7 +334,7 @@ export const travelCities: TravelCity[] = [
     lon: -96.8,
     featured: true,
     highlights: [
-      { title: "Rodeo Goat", kind: "food", description: "Great vegan burger" },
+      { title: "Rodeo Goat", kind: "food", description: "My favorite vegan burger in Texas" },
       {
         title: "Meadows Museum",
         kind: "museum",
@@ -345,7 +345,7 @@ export const travelCities: TravelCity[] = [
         kind: "museum",
         description: "A deeply moving space dedicated to human rights",
       },
-      { title: "Silo Dallas", kind: "music", description: "Warehouse techno done right" },
+      { title: "Silo Dallas", kind: "music", description: "Electronic music in a warehouse setting" },
       {
         title: "Trinity River Audubon Center",
         kind: "activity",
@@ -380,12 +380,7 @@ export const travelCities: TravelCity[] = [
       {
         title: "Space Center Houston",
         kind: "museum",
-        description: "You get to touch a moon rock",
-      },
-      {
-        title: "Houston Raceway Park",
-        kind: "activity",
-        description: "Ran it before the bulldozers did, RIP",
+        description: "You can touch a moon rock and walk in a space shuttle",
       },
     ],
   },
