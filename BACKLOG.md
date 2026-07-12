@@ -6,14 +6,6 @@ component's worth), L (multi-file or iteration-heavy), XL (its own project).
 
 ## Active
 
-- **(S) Reveal robustness** — the below-fold `Reveal` sections still ship at
-  `opacity:0` and wait for JS to fade in (same class of issue the
-  hero-load-flash fix solved for the hero). Not a visible bug today: they're
-  below `min-h-svh` so the JS bundle lands before you scroll to them.
-  Belt-and-suspenders fix (for slow-3G fast-scrollers / no-JS): convert
-  `Reveal` from Motion `whileInView` to a small IntersectionObserver +
-  CSS-class pattern. Separate change, real test surface — not worth folding
-  into anything else
 - **(XL) David Kwartler AI ("chat with David")** — full spec below
 - **(S) Travel field note refinement** — every pin has real field notes now
   (no more "Field notes coming soon."), but the notes still need a
@@ -37,7 +29,21 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
-### 2026-07-12 — Landing offsets + contact spacing (branch landing-offsets)
+### 2026-07-12 — Landing offsets, contact spacing, /travel OG, Reveal robustness (branch landing-offsets)
+
+- Reveal robustness: `Reveal` converted from Motion `whileInView` to an
+  IntersectionObserver + CSS-class pattern. Content now ships visible in
+  the static HTML (no-JS / pre-hydration safe); after hydration only
+  elements still below the viewport are hidden, and IO reveals them with
+  the same 20px/0.45s/EASE rise. Fail-visible guard: if IO's initial
+  callback never arrives within 1s, everything un-hides (verified live —
+  the Browser pane's IO happened to be broken, and the guard did its job).
+  Animated path unverifiable in the pane that day (environment bug);
+  eyeball on a real browser before shipping
+- /travel got its own explicit OG/twitter metadata (reusing the homepage
+  og.jpg card, correct URL) so link previews stop falling back to
+  snapshotting the blank-without-JS canvas page — root cause of the grey
+  RCS preview card
 
 - Section landing offsets fixed: Career and Who I am got `-scroll-mt-20`
   (cancels the global 5rem scroll-padding, heading lands ~80px higher);

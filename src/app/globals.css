@@ -50,6 +50,33 @@ html {
   }
 }
 
+/* Reveal: below-fold sections ship visible in the static HTML; hydration
+   adds .reveal-pending only to elements still under the viewport, and an
+   IntersectionObserver swaps it for .reveal-shown. Matches the old Motion
+   whileInView look: 20px rise, 0.45s, shared EASE, staggered via an inline
+   transition-delay. */
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.reveal-shown {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.45s cubic-bezier(0.21, 0.47, 0.32, 0.98),
+    transform 0.45s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-pending,
+  .reveal-shown {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Career timeline: 0/1 stream flowing left→right along the progress fill */
 @keyframes career-binary-flow {
   from {
