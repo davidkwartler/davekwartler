@@ -224,22 +224,19 @@ icon, real field notes in David's voice for every highlight (no more
 placeholders), Blanton added to Austin, WWII Museum to New Orleans, LA pin
 removed (not visited yet), README rewritten in full.
 
+Batch 2026-07-12 (branch landing-offsets): section landing offsets fixed —
+Career and Who I am got `-scroll-mt-20` (cancels the global 5rem
+scroll-padding, heading lands ~80px higher); Contact got `-scroll-mt-20`
+plus `py-36` → `pt-36 pb-16`, so the anchor landing clamps to the page
+bottom and the footer is fully visible on arrival. Verified numerically in
+preview (Browser-pane screenshots go black when scrolled — capture quirk,
+DOM confirmed fine).
+
+- ✅ Google Search Console re-indexing — done by David (2026-07-12)
+
 ## Do now
 
-- **(S) Down-arrow / section landing offsets** (David, 2026-07-11): the skip
-  arrow lands great on What I do, but Career ("where I've been" in the
-  scroll order) and Who I am land too far down the page. Contact is fine.
-  Audit scroll-target offsets per section
-- **(S) Contact section bottom spacing** (David, 2026-07-11): reduce the gap
-  between "Back to top" and the footer so the footer is fully visible on
-  David's screen when arriving at Contact via down arrow or nav
-- **(S) Google Search Console — finish re-indexing**: redirects now shipped
-  (real 308s via vercel.json). David re-indexed the homepage 2026-07-03.
-  Remaining: submit sitemap.xml in the Sitemaps panel (one root URL is
-  correct — fragment section URLs aren't sitemap-legal), and Request
-  indexing on /work and /about so Google picks up the new redirects. Watch
-  Indexing → Pages: /work + /about should move to "Page with redirect"
-  (that's the success state); /resume → "Not found (404)" is fine
+(empty)
 
 ## Do later
 

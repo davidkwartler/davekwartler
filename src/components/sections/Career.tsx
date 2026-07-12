@@ -59,7 +59,7 @@ export default function Career() {
   };
 
   return (
-    <section id="career" className="px-4 py-28 sm:px-6 lg:px-8">
+    <section id="career" className="-scroll-mt-20 px-4 py-28 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <Reveal>
           <SectionHeading
