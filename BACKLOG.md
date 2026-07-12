@@ -216,6 +216,14 @@ click-cards, clean console, clean build/lint/tsc.
   /travel. Iteration knobs for David: land glyph brightness, glow sizes,
   page copy
 
+Batch shipped 2026-07-11 (branch travel-fixes → main): travel card bug fixes
+(sr-only zero guard, hover-onto-card no longer dismisses, pin-anchored card
+sizing so cards never scroll unless they truly can't fit), kind icons
+(food/museum/music/activity) with a fixed display order, signpost day-trip
+icon, real field notes in David's voice for every highlight (no more
+placeholders), Blanton added to Austin, WWII Museum to New Orleans, LA pin
+removed (not visited yet), README rewritten in full.
+
 ## Do now
 
 - **(S) Down-arrow / section landing offsets** (David, 2026-07-11): the skip

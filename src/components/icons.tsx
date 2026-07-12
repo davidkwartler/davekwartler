@@ -52,14 +52,14 @@ export function ActivityIcon({ className }: { className?: string }) {
   );
 }
 
-// A little detour arrow marking a highlight that was a day trip from the
+// A little signpost marking a highlight that was a day trip from the
 // pinned city rather than in it.
 export function DayTripIcon({ className }: { className?: string }) {
   return (
     <svg {...strokeProps(className)}>
       <title>day trip</title>
-      <path d="M4 20v-9a4 4 0 0 1 4-4h11" />
-      <path d="m14 2 5 5-5 5" />
+      <path d="M12 3v3m0 9v6" />
+      <path d="M5 6h11l3 3-3 3H5z" />
     </svg>
   );
 }
