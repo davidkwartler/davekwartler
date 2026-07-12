@@ -216,8 +216,23 @@ click-cards, clean console, clean build/lint/tsc.
   /travel. Iteration knobs for David: land glyph brightness, glow sizes,
   page copy
 
+Batch shipped 2026-07-11 (branch travel-fixes → main): travel card bug fixes
+(sr-only zero guard, hover-onto-card no longer dismisses, pin-anchored card
+sizing so cards never scroll unless they truly can't fit), kind icons
+(food/museum/music/activity) with a fixed display order, signpost day-trip
+icon, real field notes in David's voice for every highlight (no more
+placeholders), Blanton added to Austin, WWII Museum to New Orleans, LA pin
+removed (not visited yet), README rewritten in full.
+
 ## Do now
 
+- **(S) Down-arrow / section landing offsets** (David, 2026-07-11): the skip
+  arrow lands great on What I do, but Career ("where I've been" in the
+  scroll order) and Who I am land too far down the page. Contact is fine.
+  Audit scroll-target offsets per section
+- **(S) Contact section bottom spacing** (David, 2026-07-11): reduce the gap
+  between "Back to top" and the footer so the footer is fully visible on
+  David's screen when arriving at Contact via down arrow or nav
 - **(S) Google Search Console — finish re-indexing**: redirects now shipped
   (real 308s via vercel.json). David re-indexed the homepage 2026-07-03.
   Remaining: submit sitemap.xml in the Sitemaps panel (one root URL is

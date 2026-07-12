@@ -4,7 +4,20 @@ import { useRef, useState, useEffect } from "react";
 import { useCanvasLoop } from "@/lib/use-canvas-loop";
 import { GLOBE_VIEW_FRACTION, HOVER_ZOOM } from "@/lib/globe-config";
 import { landAt } from "@/data/land-mask";
-import { travelCities, travelPage, type TravelCity } from "@/data/travel";
+import {
+  travelCities,
+  travelPage,
+  sortedHighlights,
+  type TravelCity,
+  type HighlightKind,
+} from "@/data/travel";
+import {
+  FoodIcon,
+  MuseumIcon,
+  MusicIcon,
+  ActivityIcon,
+  DayTripIcon,
+} from "@/components/icons";
 
 /**
  * TravelMap - the hidden /travel easter egg, v2: a binary-glyph globe.
@@ -77,6 +90,13 @@ const clamp = (v: number, lo: number, hi: number) =>
   Math.min(hi, Math.max(lo, v));
 
 const CITY_BY_NAME = new Map(travelCities.map((c) => [c.name, c] as const));
+
+const KIND_ICON: Record<HighlightKind, typeof FoodIcon> = {
+  food: FoodIcon,
+  museum: MuseumIcon,
+  music: MusicIcon,
+  activity: ActivityIcon,
+};
 
 // Evenly spread points over the sphere, keep the ones that land on land.
 function buildLandPoints(): LandPoint[] {
@@ -289,6 +309,7 @@ function drawGlobe(
 export default function TravelMap() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<Active | null>(null);
   const [pinned, setPinned] = useState(false);
   const [size, setSize] = useState({ w: 0, h: 0 });
@@ -483,7 +504,11 @@ export default function TravelMap() {
     drawRef.current();
   };
 
-  const onPointerLeave = () => {
+  const onPointerLeave = (e: React.PointerEvent) => {
+    // The card is pointer-events-auto (it has to be, to scroll when it
+    // overflows), so hovering onto it fires a canvas pointer-leave. Moving
+    // into the card shouldn't dismiss the card the pointer is heading for.
+    if (cardRef.current?.contains(e.relatedTarget as Node)) return;
     if (!view.current.dragging && !pinnedRef.current) {
       setHover(null);
       drawRef.current();
@@ -515,19 +540,22 @@ export default function TravelMap() {
   const vh = typeof window !== "undefined" ? window.innerHeight : size.h;
   const pinX = active ? (vw - size.w) / 2 + active.x : 0;
   const pinY = active ? (vh - size.h) / 2 + active.y : 0;
-  const cardHEstimate = active?.city.highlights?.length
-    ? 90 + active.city.highlights.length * 64
-    : 130;
-  const cardH = Math.min(cardHEstimate, vh - CARD_M * 2);
+  // Rather than guessing the card's height to position it, anchor the edge
+  // nearest the pin (top edge below the pin, or bottom edge above it via
+  // `bottom`) and let the card grow toward the free side of the viewport,
+  // capped by maxHeight. It only ever scrolls when the content genuinely
+  // can't fit between the pin and the screen edge.
+  const below = pinY < vh / 2;
+  const cardTop = below ? Math.max(pinY + 22, CARD_M) : undefined;
+  const cardBottom = below ? undefined : Math.max(vh - (pinY - 22), CARD_M);
   const cardStyle = active
     ? {
         left: clamp(pinX - CARD_W / 2, CARD_M, Math.max(CARD_M, vw - CARD_M - CARD_W)),
-        top: clamp(
-          pinY < vh / 2 ? pinY + 22 : pinY - 22 - cardH,
-          CARD_M,
-          Math.max(CARD_M, vh - CARD_M - cardH),
-        ),
-        maxHeight: cardH,
+        top: cardTop,
+        bottom: cardBottom,
+        maxHeight: below
+          ? vh - CARD_M - (cardTop as number)
+          : vh - CARD_M - (cardBottom as number),
       }
     : undefined;
 
@@ -552,6 +580,7 @@ export default function TravelMap() {
 
         {active && (
           <div
+            ref={cardRef}
             className="pointer-events-auto fixed z-50 w-[264px] overflow-y-auto rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
             style={cardStyle}
           >
@@ -566,14 +595,23 @@ export default function TravelMap() {
             <p className="text-xs text-gray-500">{active.city.region}</p>
             {active.city.highlights?.length ? (
               <ul className="mt-3 space-y-2 text-sm">
-                {active.city.highlights.map((h) => (
-                  <li key={h.title}>
-                    <span className="text-gray-200">{h.title}</span>
-                    {h.description && (
-                      <span className="text-gray-500">{": " + h.description}</span>
-                    )}
-                  </li>
-                ))}
+                {sortedHighlights(active.city.highlights).map((h) => {
+                  const Icon = KIND_ICON[h.kind];
+                  return (
+                    <li key={h.title} className="flex gap-2">
+                      <Icon className="mt-[3px] h-3.5 w-3.5 shrink-0 text-gray-600" />
+                      <span>
+                        <span className="text-gray-200">{h.title}</span>
+                        {h.dayTrip && (
+                          <DayTripIcon className="mb-0.5 ml-1.5 inline h-3 w-3 text-gray-600" />
+                        )}
+                        {h.description && (
+                          <span className="text-gray-500">{": " + h.description}</span>
+                        )}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
               <p className="mt-3 text-sm text-gray-500">{travelPage.pendingNote}</p>
@@ -587,9 +625,12 @@ export default function TravelMap() {
         {travelCities.map((c) => (
           <li key={c.name}>
             {c.name}, {c.region}
-            {c.highlights?.length &&
-              `: ${c.highlights
-                .map((h) => (h.description ? `${h.title}: ${h.description}` : h.title))
+            {c.highlights && c.highlights.length > 0 &&
+              `: ${sortedHighlights(c.highlights)
+                .map((h) => {
+                  const title = h.dayTrip ? `${h.title} (day trip)` : h.title;
+                  return h.description ? `${title}: ${h.description}` : title;
+                })
                 .join("; ")}`}
           </li>
         ))}

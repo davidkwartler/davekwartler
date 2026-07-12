@@ -1,3 +1,69 @@
+// Highlight-kind glyphs for the travel field-notes cards. Simple 24px
+// stroke outlines (lucide-style) so they read as quiet markers, not emoji.
+function strokeProps(className?: string) {
+  return {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
+    className,
+  } as const;
+}
+
+export function FoodIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path d="M4 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2" />
+      <path d="M7 2v20" />
+      <path d="M21 15V2a5 5 0 0 0-5 5v6a2 2 0 0 0 2 2h3Zm0 0v7" />
+    </svg>
+  );
+}
+
+export function MuseumIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path d="M3 22h18" />
+      <path d="M5 18v-7M9.5 18v-7M14.5 18v-7M19 18v-7" />
+      <path d="m12 2 9 5H3l9-5Z" />
+    </svg>
+  );
+}
+
+export function MusicIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="16" r="3" />
+    </svg>
+  );
+}
+
+export function ActivityIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3 6.3-2.1Z" />
+    </svg>
+  );
+}
+
+// A little signpost marking a highlight that was a day trip from the
+// pinned city rather than in it.
+export function DayTripIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <title>day trip</title>
+      <path d="M12 3v3m0 9v6" />
+      <path d="M5 6h11l3 3-3 3H5z" />
+    </svg>
+  );
+}
+
 export function GitHubIcon({ className }: { className?: string }) {
   return (
     <svg
