@@ -15,10 +15,9 @@ component's worth), L (multi-file or iteration-heavy), XL (its own project).
   CSS-class pattern. Separate change, real test surface — not worth folding
   into anything else
 - **(XL) David Kwartler AI ("chat with David")** — full spec below
-- **(blocked on David) Travel pin field notes** — 15 pins still show "Field
-  notes coming soon.": New York, Chicago, Boston, Quebec, Ottawa, Nova
-  Scotia, New Hampshire, Las Vegas, Seattle, Nashville, Italy, and Texas
-  (Austin partial, Dallas, San Antonio). Add notes as David provides them
+- **(S) Travel field note refinement** — every pin has real field notes now
+  (no more "Field notes coming soon."), but the notes still need a
+  refinement pass with David
 
 ## Ruled out (privacy boundary, 2026-07-01)
 

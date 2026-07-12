@@ -10,6 +10,30 @@ import { travelPage } from "@/data/travel";
 export const metadata = {
   title: "Travel - David Kwartler",
   robots: { index: false },
+  // Explicit OG block (reusing the homepage card) so link previews don't
+  // fall back to snapshotting the page, which is a blank canvas without JS.
+  openGraph: {
+    title: "Travel - David Kwartler",
+    description: "Where I've been.",
+    url: "https://www.davidkwartler.com/travel",
+    siteName: "David Kwartler",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "David Kwartler: Senior Product Manager",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "Travel - David Kwartler",
+    description: "Where I've been.",
+    images: ["/og.jpg"],
+  },
 };
 
 export default function Travel() {
