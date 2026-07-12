@@ -13,7 +13,7 @@ import { EASE } from "@/lib/motion";
 const entries = careerEntries;
 
 // "DK MCP" in ASCII, repeated so the stream always overflows the full bar
-// width — the clip just reveals more of an already-flowing stream, so it
+// width: the clip just reveals more of an already-flowing stream, so it
 // never has to "catch up" when a phase is reselected.
 const BINARY_STREAM =
   "01000100 01001011 01001101 01000011 01010000 ".repeat(6);
@@ -98,7 +98,7 @@ export default function Career() {
                     onKeyDown={(e) => onStopKeyDown(e, i)}
                     className="group relative flex flex-col items-center px-2 py-7 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40"
                   >
-                    {/* progressive white glow — fills the whole reached cell,
+                    {/* progressive white glow: fills the whole reached cell,
                         brighter toward the active one */}
                     <span
                       aria-hidden
@@ -109,7 +109,7 @@ export default function Career() {
                           "radial-gradient(130% 120% at 50% 45%, rgba(255,255,255,0.12), transparent 72%)",
                       }}
                     />
-                    {/* active-phase glow — blue, crossfades in on the picked cell */}
+                    {/* active-phase glow: blue, crossfades in on the picked cell */}
                     <span
                       aria-hidden
                       className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${
@@ -121,14 +121,14 @@ export default function Career() {
                       }}
                     />
                     <span className="relative rounded-full bg-neutral-950">
-                      {/* soft blue halo — crossfades in on the active stop */}
+                      {/* soft blue halo: crossfades in on the active stop */}
                       <span
                         aria-hidden
                         className={`pointer-events-none absolute -inset-2 rounded-full bg-[#60a5fa]/30 blur-md transition-opacity duration-500 ${
                           isActive ? "opacity-100" : "opacity-0"
                         }`}
                       />
-                      {/* crisp rim, also a crossfade — nothing slides */}
+                      {/* crisp rim, also a crossfade: nothing slides */}
                       <span
                         aria-hidden
                         className={`pointer-events-none absolute -inset-[3px] rounded-full ring-2 transition-all duration-500 ${
@@ -172,7 +172,7 @@ export default function Career() {
                 );
               })}
             </div>
-            {/* progress region — a flowing 0/1 stream over a bright underline,
+            {/* progress region: a flowing 0/1 stream over a bright underline,
                 both filling left→right to the active phase */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6">
               {/* base track */}

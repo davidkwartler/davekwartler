@@ -26,7 +26,7 @@ export type CanvasLoop = {
  * an initial + window-resize `resize()` call, and a requestAnimationFrame
  * loop with clamped dt that only runs while the canvas is onscreen
  * (IntersectionObserver), the user hasn't paused motion (galaxy-pause
- * store), and reduced motion isn't requested — otherwise the initial
+ * store), and reduced motion isn't requested. Otherwise the initial
  * resize() draw stands as a static frame.
  *
  * `setup` runs once per effect lifecycle and owns all drawing state in its

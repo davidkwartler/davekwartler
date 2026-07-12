@@ -12,7 +12,7 @@ import { GLOBE_VIEW_FRACTION, HOVER_ZOOM } from "@/lib/globe-config";
  * The globe's ocean fill is mostly transparent (a ~5% tint between the land
  * glyphs), so a star merely painted *behind* it in z-order would still peek
  * through those gaps. Positions are rejection-sampled outside the globe's
- * footprint instead — including its hover-zoom growth and atmosphere bleed —
+ * footprint instead (including its hover-zoom growth and atmosphere bleed)
  * so no star ever ends up in a spot the globe could show it through. `-z-10`
  * on top of that is belt-and-suspenders.
  */

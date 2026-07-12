@@ -6,7 +6,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { travelPage } from "@/data/travel";
 
 // Easter egg: reached by clicking the Travel photo caption in Who I am.
-// Kept off the SEO surface — noindex, no sitemap entry, no nav link.
+// Kept off the SEO surface: noindex, no sitemap entry, no nav link.
 export const metadata = {
   title: "Travel - David Kwartler",
   robots: { index: false },

@@ -49,7 +49,7 @@ export const metadata: Metadata = {
         url: "/og.jpg",
         width: 1200,
         height: 630,
-        alt: "David Kwartler — Senior Product Manager",
+        alt: "David Kwartler: Senior Product Manager",
       },
     ],
   },

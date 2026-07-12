@@ -39,10 +39,10 @@ const easeInOut = (p: number) =>
 const CENTER_LON = -45;
 const CENTER_LAT = 32;
 
-// Constrained wobble — a slow idle oscillation that never swings to the empty
+// Constrained wobble: a slow idle oscillation that never swings to the empty
 // back. Drag adds a manual offset (capped) that eases back to the wobble center.
 const LON_AMP = 20; // wobble reach in longitude degrees
-const LON_PERIOD = 82; // seconds per wobble cycle — deliberately very slow
+const LON_PERIOD = 82; // seconds per wobble cycle: deliberately very slow
 const LAT_AMP = 5;
 const LAT_PERIOD = 104;
 const MANUAL_LON_MAX = 42; // how far a drag can push longitude past the wobble
@@ -59,6 +59,7 @@ const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 // Night-vision palette
 const BLUE = "56, 189, 248"; // electric blue landmass
 const ORANGE = "255, 120, 24"; // bright electric orange pins
+const HOME_BLUE = "59, 130, 246"; // home-base pin, distinct from the landmass blue
 
 // Phosphor scan band drifting across the globe. Set STRENGTH to 0 to kill it.
 const SWEEP_STRENGTH = 0.26;
@@ -132,7 +133,7 @@ type View = {
   activeName: string | null;
   zoom: number; // current hover-zoom factor (derived from zoomProg each frame)
   zoomProg: number; // 0..1 tween progress, mapped through easeInOut into zoom
-  zoomGoal: number; // 0 (out) or 1 (in) — zoomProg advances toward this
+  zoomGoal: number; // 0 (out) or 1 (in): zoomProg advances toward this
   zoomCity: string | null; // the city the zoom anchors to
 };
 
@@ -249,31 +250,32 @@ function drawGlobe(
     ctx.fillText(char, pr.x, pr.y);
   }
 
-  // City pins — orange triangles, hidden on the back hemisphere
+  // City pins: orange triangles, hidden on the back hemisphere
   ctx.globalCompositeOperation = "lighter";
   for (const city of travelCities) {
     const pr = project(city.lon, city.lat, centerLon, centerLat, cx, cy, R);
     if (pr.cosc <= 0.06) continue;
-    const hasNotes = !!city.notes;
+    const featured = !!city.featured;
     const isActive = city.name === activeName;
+    const color = city.home ? HOME_BLUE : ORANGE;
     const pulse = 0.7 + 0.3 * Math.sin(t * 1.5 + city.lon * 0.05);
     const facing = 0.55 + 0.45 * pr.cosc;
-    const size = (hasNotes ? 8 : 6) * (isActive ? 1.4 : 1);
-    const base = (hasNotes ? 0.95 : 0.6) * facing;
+    const size = (featured ? 8 : 6) * (isActive ? 1.4 : 1);
+    const base = (featured ? 0.95 : 0.6) * facing;
     const alpha = isActive ? 1 : base * (0.72 + 0.28 * pulse);
 
-    if (hasNotes || isActive) {
+    if (featured || isActive) {
       const gR = size * (isActive ? 3.4 : 2.4) * pulse;
       const glow = ctx.createRadialGradient(pr.x, pr.y, 0, pr.x, pr.y, gR);
-      glow.addColorStop(0, `rgba(${ORANGE}, ${0.5 * alpha})`);
-      glow.addColorStop(1, `rgba(${ORANGE}, 0)`);
+      glow.addColorStop(0, `rgba(${color}, ${0.5 * alpha})`);
+      glow.addColorStop(1, `rgba(${color}, 0)`);
       ctx.fillStyle = glow;
       ctx.beginPath();
       ctx.arc(pr.x, pr.y, gR, 0, TAU);
       ctx.fill();
     }
 
-    drawTriangle(ctx, pr.x, pr.y, size, `rgba(${ORANGE}, ${alpha})`);
+    drawTriangle(ctx, pr.x, pr.y, size, `rgba(${color}, ${alpha})`);
     if (isActive) {
       ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
       ctx.beginPath();
@@ -335,7 +337,7 @@ export default function TravelMap() {
         const vh = window.innerHeight;
         // The canvas spans the whole viewport (not a min-axis square) so the
         // globe bleeds off the real screen edges instead of getting clipped at
-        // an inner canvas boundary — which is what cut the sides off on wide
+        // an inner canvas boundary, which is what cut the sides off on wide
         // screens, especially once the hover zoom grew the sphere. Cap the
         // backing resolution so huge displays don't allocate a giant buffer.
         let dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -513,7 +515,10 @@ export default function TravelMap() {
   const vh = typeof window !== "undefined" ? window.innerHeight : size.h;
   const pinX = active ? (vw - size.w) / 2 + active.x : 0;
   const pinY = active ? (vh - size.h) / 2 + active.y : 0;
-  const cardH = active?.city.notes ? 210 : 130;
+  const cardHEstimate = active?.city.highlights?.length
+    ? 90 + active.city.highlights.length * 64
+    : 130;
+  const cardH = Math.min(cardHEstimate, vh - CARD_M * 2);
   const cardStyle = active
     ? {
         left: clamp(pinX - CARD_W / 2, CARD_M, Math.max(CARD_M, vw - CARD_M - CARD_W)),
@@ -522,6 +527,7 @@ export default function TravelMap() {
           CARD_M,
           Math.max(CARD_M, vh - CARD_M - cardH),
         ),
+        maxHeight: cardH,
       }
     : undefined;
 
@@ -546,30 +552,29 @@ export default function TravelMap() {
 
         {active && (
           <div
-            className="pointer-events-none fixed z-50 w-[264px] rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
+            className="pointer-events-auto fixed z-50 w-[264px] overflow-y-auto rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
             style={cardStyle}
           >
-            <p className="font-semibold text-white">{active.city.name}</p>
+            <div className="flex items-center gap-2">
+              <p className="font-semibold text-white">{active.city.name}</p>
+              {active.city.home && (
+                <span className="rounded-full border border-blue-400/40 bg-blue-500/15 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-blue-300">
+                  Home
+                </span>
+              )}
+            </div>
             <p className="text-xs text-gray-500">{active.city.region}</p>
-            {active.city.notes ? (
-              <dl className="mt-3 space-y-1.5 text-sm">
-                {(
-                  [
-                    ["Food", active.city.notes.food],
-                    ["Art", active.city.notes.art],
-                    ["Music", active.city.notes.music],
-                  ] as const
-                )
-                  .filter(([, v]) => v)
-                  .map(([k, v]) => (
-                    <div key={k} className="flex gap-2">
-                      <dt className="w-12 shrink-0 text-xs uppercase tracking-wider text-gray-500 font-[family-name:var(--font-jetbrains)] leading-5">
-                        {k}
-                      </dt>
-                      <dd className="text-gray-300">{v}</dd>
-                    </div>
-                  ))}
-              </dl>
+            {active.city.highlights?.length ? (
+              <ul className="mt-3 space-y-2 text-sm">
+                {active.city.highlights.map((h) => (
+                  <li key={h.title}>
+                    <span className="text-gray-200">{h.title}</span>
+                    {h.description && (
+                      <span className="text-gray-500">{": " + h.description}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             ) : (
               <p className="mt-3 text-sm text-gray-500">{travelPage.pendingNote}</p>
             )}
@@ -582,13 +587,9 @@ export default function TravelMap() {
         {travelCities.map((c) => (
           <li key={c.name}>
             {c.name}, {c.region}
-            {c.notes &&
-              ` — ${[
-                c.notes.food && `food: ${c.notes.food}`,
-                c.notes.art && `art: ${c.notes.art}`,
-                c.notes.music && `music: ${c.notes.music}`,
-              ]
-                .filter(Boolean)
+            {c.highlights?.length &&
+              `: ${c.highlights
+                .map((h) => (h.description ? `${h.title}: ${h.description}` : h.title))
                 .join("; ")}`}
           </li>
         ))}
