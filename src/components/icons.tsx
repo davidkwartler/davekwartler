@@ -52,6 +52,18 @@ export function ActivityIcon({ className }: { className?: string }) {
   );
 }
 
+// A little detour arrow marking a highlight that was a day trip from the
+// pinned city rather than in it.
+export function DayTripIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <title>day trip</title>
+      <path d="M4 20v-9a4 4 0 0 1 4-4h11" />
+      <path d="m14 2 5 5-5 5" />
+    </svg>
+  );
+}
+
 export function GitHubIcon({ className }: { className?: string }) {
   return (
     <svg

@@ -317,6 +317,11 @@ export const travelCities: TravelCity[] = [
     home: true,
     highlights: [
       {
+        title: "Blanton Museum of Art",
+        kind: "museum",
+        description: "Ellsworth Kelly's Austin chapel is the headliner",
+      },
+      {
         title: "Concourse Project",
         kind: "music",
         description: "The best sound system in Texas",

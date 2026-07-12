@@ -11,7 +11,13 @@ import {
   type TravelCity,
   type HighlightKind,
 } from "@/data/travel";
-import { FoodIcon, MuseumIcon, MusicIcon, ActivityIcon } from "@/components/icons";
+import {
+  FoodIcon,
+  MuseumIcon,
+  MusicIcon,
+  ActivityIcon,
+  DayTripIcon,
+} from "@/components/icons";
 
 /**
  * TravelMap - the hidden /travel easter egg, v2: a binary-glyph globe.
@@ -534,25 +540,22 @@ export default function TravelMap() {
   const vh = typeof window !== "undefined" ? window.innerHeight : size.h;
   const pinX = active ? (vw - size.w) / 2 + active.x : 0;
   const pinY = active ? (vh - size.h) / 2 + active.y : 0;
-  // Header (padding + name row + region + list margin) is ~84px; each
-  // highlight is 2-3 wrapped lines of text-sm (20px line) plus the kind icon
-  // indent and the 8px gap, so ~68px covers the worst case (measured:
-  // Nashville's four wrapping highlights run 348px total) without wildly
-  // overestimating and pushing the card further from its pin than the clamp
-  // needs.
-  const cardHEstimate = active?.city.highlights?.length
-    ? 84 + active.city.highlights.length * 68
-    : 130;
-  const cardH = Math.min(cardHEstimate, vh - CARD_M * 2);
+  // Rather than guessing the card's height to position it, anchor the edge
+  // nearest the pin (top edge below the pin, or bottom edge above it via
+  // `bottom`) and let the card grow toward the free side of the viewport,
+  // capped by maxHeight. It only ever scrolls when the content genuinely
+  // can't fit between the pin and the screen edge.
+  const below = pinY < vh / 2;
+  const cardTop = below ? Math.max(pinY + 22, CARD_M) : undefined;
+  const cardBottom = below ? undefined : Math.max(vh - (pinY - 22), CARD_M);
   const cardStyle = active
     ? {
         left: clamp(pinX - CARD_W / 2, CARD_M, Math.max(CARD_M, vw - CARD_M - CARD_W)),
-        top: clamp(
-          pinY < vh / 2 ? pinY + 22 : pinY - 22 - cardH,
-          CARD_M,
-          Math.max(CARD_M, vh - CARD_M - cardH),
-        ),
-        maxHeight: cardH,
+        top: cardTop,
+        bottom: cardBottom,
+        maxHeight: below
+          ? vh - CARD_M - (cardTop as number)
+          : vh - CARD_M - (cardBottom as number),
       }
     : undefined;
 
@@ -600,9 +603,7 @@ export default function TravelMap() {
                       <span>
                         <span className="text-gray-200">{h.title}</span>
                         {h.dayTrip && (
-                          <span className="text-[10px] uppercase tracking-wider text-gray-600">
-                            {" day trip"}
-                          </span>
+                          <DayTripIcon className="mb-0.5 ml-1.5 inline h-3 w-3 text-gray-600" />
                         )}
                         {h.description && (
                           <span className="text-gray-500">{": " + h.description}</span>

@@ -218,6 +218,13 @@ click-cards, clean console, clean build/lint/tsc.
 
 ## Do now
 
+- **(S) Down-arrow / section landing offsets** (David, 2026-07-11): the skip
+  arrow lands great on What I do, but Career ("where I've been" in the
+  scroll order) and Who I am land too far down the page. Contact is fine.
+  Audit scroll-target offsets per section
+- **(S) Contact section bottom spacing** (David, 2026-07-11): reduce the gap
+  between "Back to top" and the footer so the footer is fully visible on
+  David's screen when arriving at Contact via down arrow or nav
 - **(S) Google Search Console — finish re-indexing**: redirects now shipped
   (real 308s via vercel.json). David re-indexed the homepage 2026-07-03.
   Remaining: submit sitemap.xml in the Sitemaps panel (one root URL is
