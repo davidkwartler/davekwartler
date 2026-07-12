@@ -535,13 +535,13 @@ export default function TravelMap() {
   const pinX = active ? (vw - size.w) / 2 + active.x : 0;
   const pinY = active ? (vh - size.h) / 2 + active.y : 0;
   // Header (padding + name row + region + list margin) is ~84px; each
-  // highlight is 1-2 wrapped lines of text-sm (20px line) plus the kind icon
-  // indent and the 8px gap, so ~60px covers the worst case (measured:
-  // Dallas's five mostly-wrapping highlights run 376px total) without wildly
+  // highlight is 2-3 wrapped lines of text-sm (20px line) plus the kind icon
+  // indent and the 8px gap, so ~68px covers the worst case (measured:
+  // Nashville's four wrapping highlights run 348px total) without wildly
   // overestimating and pushing the card further from its pin than the clamp
   // needs.
   const cardHEstimate = active?.city.highlights?.length
-    ? 84 + active.city.highlights.length * 60
+    ? 84 + active.city.highlights.length * 68
     : 130;
   const cardH = Math.min(cardHEstimate, vh - CARD_M * 2);
   const cardStyle = active
@@ -599,6 +599,11 @@ export default function TravelMap() {
                       <Icon className="mt-[3px] h-3.5 w-3.5 shrink-0 text-gray-600" />
                       <span>
                         <span className="text-gray-200">{h.title}</span>
+                        {h.dayTrip && (
+                          <span className="text-[10px] uppercase tracking-wider text-gray-600">
+                            {" day trip"}
+                          </span>
+                        )}
                         {h.description && (
                           <span className="text-gray-500">{": " + h.description}</span>
                         )}
@@ -621,7 +626,10 @@ export default function TravelMap() {
             {c.name}, {c.region}
             {c.highlights && c.highlights.length > 0 &&
               `: ${sortedHighlights(c.highlights)
-                .map((h) => (h.description ? `${h.title}: ${h.description}` : h.title))
+                .map((h) => {
+                  const title = h.dayTrip ? `${h.title} (day trip)` : h.title;
+                  return h.description ? `${title}: ${h.description}` : title;
+                })
                 .join("; ")}`}
           </li>
         ))}
