@@ -64,6 +64,26 @@ export function DayTripIcon({ className }: { className?: string }) {
   );
 }
 
+// Sentinel's mark on the What I do card: a shield with a check.
+export function ShieldIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path d="M12 21c-4.5-1.8-7-5-7-9.5V5.6l7-2.6 7 2.6v5.9c0 4.5-2.5 7.7-7 9.5Z" />
+      <path d="m9 11.5 2.2 2.2 4-4.2" />
+    </svg>
+  );
+}
+
+// Marks a link that leaves the site.
+export function ArrowUpRightIcon({ className }: { className?: string }) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path d="M7 17 17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
+  );
+}
+
 export function GitHubIcon({ className }: { className?: string }) {
   return (
     <svg

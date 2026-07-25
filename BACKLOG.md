@@ -7,14 +7,6 @@ component's worth), L (multi-file or iteration-heavy), XL (its own project).
 ## Active
 
 - **(XL) David Kwartler AI ("chat with David")** — full spec below
-- **(S–M) Link to Sentinel** — nothing on the site points at
-  [Sentinel](https://sentinel.davidkwartler.com), the session-hijack detection
-  demo ([repo](https://github.com/davidkwartler/sentinel)). It is the most
-  substantial thing to show and it is currently undiscoverable from here.
-  There is no projects section today — the sections are Hero, WhatIDo, Career,
-  Human, Contact — so the first decision is whether this is a line inside
-  WhatIDo (S) or a new projects section that could hold future work (M). One
-  sentence on what it does, plus links to the live demo and the repo.
 
 ## Ruled out (privacy boundary, 2026-07-01)
 
@@ -33,6 +25,19 @@ widget, Writing section (MDX), further hero animation experiments.
 ---
 
 ## Changelog
+
+### 2026-07-25 — Sentinel link (branch sentinel-link)
+
+- The "PM who builds" card in What I do now carries a bordered pill in its
+  bottom-right corner: shield glyph, "Sentinel", external-link arrow, linking
+  to the live demo. A GitHub mark beside it links to the repo (32px tap
+  target via `-m-2 p-2`, the visible mark stays 16px)
+- No description sentence. David's call after a 3-option mockup: the card
+  body already frames it, and the chip is meant to be an affordance rather
+  than a footnote. Scoped as S, a projects section stays available later
+- Supporting changes: GlowCard's content wrapper became a full-height flex
+  column so a card can bottom-anchor its last row; ShieldIcon and
+  ArrowUpRightIcon added to icons.tsx in the existing 1.8-stroke idiom
 
 ### 2026-07-24 — Hero hydration fix (branch fix-hero-hydration)
 
