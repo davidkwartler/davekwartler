@@ -3,6 +3,7 @@ import PauseMotionButton from "@/components/PauseMotionButton";
 import StarField from "@/components/StarField";
 import TravelMap from "@/components/TravelMap";
 import { SiteNav } from "@/components/SiteNav";
+import TravelLabel from "@/components/TravelLabel";
 import { travelPage } from "@/data/travel";
 
 // Easter egg: reached by clicking the Travel photo caption in Who I am.
@@ -44,9 +45,7 @@ export default function Travel() {
           with the eyebrow floating up top and the back-link pinned to the
           bottom, level with the pause button. */}
       <main id="main-content" tabIndex={-1} className="relative isolate h-svh overflow-hidden bg-neutral-950">
-        <h1 className="absolute inset-x-0 top-24 z-10 text-center text-sm font-semibold uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]">
-          {travelPage.label}
-        </h1>
+        <TravelLabel>{travelPage.label}</TravelLabel>
 
         <StarField />
         <TravelMap />

@@ -515,6 +515,34 @@ export default function TravelMap() {
     }
   };
 
+  // Easter egg: the "Where I've been" eyebrow dispatches this to pull up a
+  // random city card. Picks only from the currently visible hemisphere so the
+  // card always has an on-screen pin to anchor to, and skips the city that's
+  // already open so repeat clicks always land somewhere new.
+  useEffect(() => {
+    const onRandom = () => {
+      const g = geom.current;
+      const v = view.current;
+      const rv = resolveView(v, g);
+      const visible = travelCities
+        .map((city) => ({
+          city,
+          pr: project(city.lon, city.lat, rv.lon, rv.lat, rv.cx, rv.cy, rv.R),
+        }))
+        .filter(({ city, pr }) => pr.cosc > 0.06 && city.name !== v.activeName);
+      if (!visible.length) return;
+      const pick = visible[Math.floor(Math.random() * visible.length)];
+      v.activeName = pick.city.name;
+      v.zoomGoal = 1;
+      v.zoomCity = pick.city.name;
+      setActive({ city: pick.city, x: pick.pr.x, y: pick.pr.y });
+      setPinned(true);
+      drawRef.current();
+    };
+    window.addEventListener("travel:random", onRandom);
+    return () => window.removeEventListener("travel:random", onRandom);
+  }, []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
