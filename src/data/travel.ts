@@ -46,6 +46,16 @@ export const travelCities: TravelCity[] = [
         kind: "music",
         description: "Porter Robinson live, a bucket-list set",
       },
+      {
+        title: "Georgetown Waterfront Park",
+        kind: "activity",
+        description: "Views of the Rosslyn skyline and the Kennedy Center",
+      },
+      {
+        title: "Adams Morgan & Dupont Circle",
+        kind: "activity",
+        description: "My favorite neighborhoods to wander",
+      },
     ],
   },
   {
@@ -58,14 +68,19 @@ export const travelCities: TravelCity[] = [
       {
         title: "Mallow",
         kind: "food",
-        description: "Vegan fine dining good enough to convert the table",
+        description: "Vegan fine dining",
       },
       {
         title: "Tate Modern",
         kind: "museum",
-        description: "The Turbine Hall resets your sense of scale",
+        description: "Modern art giant in a former power station",
       },
-      { title: "Hamilton", kind: "music", description: "West End cast, no notes" },
+      { title: "Hamilton", kind: "music", description: "West End cast was incredible" },
+      {
+        title: "The Gherkin",
+        kind: "activity",
+        description: "Must-see in the financial district for architecture buffs",
+      },
     ],
   },
   {
@@ -75,14 +90,24 @@ export const travelCities: TravelCity[] = [
     lon: 2.35,
     highlights: [
       {
-        title: "Breathe, or Le Potager de Charlotte",
+        title: "Breathe",
         kind: "food",
-        description: "Proof vegan French food isn't an oxymoron",
+        description: "Best vegan meal in Paris",
+      },
+      {
+        title: "Le Potager de Charlotte",
+        kind: "food",
+        description: "Incredibly creative vegan dishes",
+      },
+      {
+        title: "Musée de l'Orangerie",
+        kind: "museum",
+        description: "Skip the Louvre and go here instead",
       },
       {
         title: "Le Défilé Renault carwalk",
         kind: "activity",
-        description: "Concept cars on a catwalk, my kind of runway",
+        description: "Concept cars on a catwalk",
       },
     ],
   },
@@ -93,7 +118,17 @@ export const travelCities: TravelCity[] = [
     lon: 4.35,
     highlights: [
       { title: "Vegan chocolate", kind: "food", description: "Anywhere it's sold" },
+      {
+        title: "Kitsune Burgers",
+        kind: "food",
+        description: "Delicious vegan dinner with falafel smash burger",
+      },
       { title: "Magritte Museum", kind: "museum", description: "Surrealism in its hometown" },
+      {
+        title: "Autoworld",
+        kind: "museum",
+        description: "Time travel to the origin of automotive",
+      },
     ],
   },
   {
@@ -104,11 +139,30 @@ export const travelCities: TravelCity[] = [
     featured: true,
     highlights: [
       {
+        title: "Kitchen Impossible",
+        kind: "food",
+        description: "Casual vegan ramen spot",
+      },
+      {
+        title: "Rainbowls",
+        kind: "food",
+        description: "Epic acai bowl and coffee",
+      },
+      {
         title: "Moco Museum",
         kind: "museum",
-        description: "Banksy in a canal house, somehow it works",
+        description: "Banksy and other modern icons in a canal house",
       },
-      { title: "Canal boat tour", kind: "activity", description: "Touristy, worth it anyway" },
+      {
+        title: "Canal boat rental",
+        kind: "activity",
+        description: "The best way to see the city, so relaxing",
+      },
+      {
+        title: "Vondelpark",
+        kind: "activity",
+        description: "Bike ride with the locals",
+      },
     ],
   },
   {
@@ -120,13 +174,23 @@ export const travelCities: TravelCity[] = [
       {
         title: "Life Alive",
         kind: "food",
-        description: "The grain bowls I measure all other bowls against",
+        description: "My go-to grain bowls when visiting",
       },
       { title: "Veggie Galaxy", kind: "food", description: "Vegan diner with a mean milkshake" },
       {
         title: "Larz Anderson Museum",
         kind: "museum",
         description: "America's oldest car collection, in a carriage house",
+      },
+      {
+        title: "Linkin Park",
+        kind: "music",
+        description: "From Zero tour at TD Garden",
+      },
+      {
+        title: "Charles River",
+        kind: "activity",
+        description: "Kayaking from Norumbega Park",
       },
     ],
   },
@@ -141,17 +205,17 @@ export const travelCities: TravelCity[] = [
       {
         title: "Lake Winnipesaukee",
         kind: "activity",
-        description: "New Hampshire's largest lake",
+        description: "Every summer spent on the lake with family",
       },
       {
         title: "Gunstock Mountain Resort",
         kind: "activity",
-        description: "Ski runs with Winnipesaukee views",
+        description: "Snowboard runs every Christmas",
       },
       {
         title: "New England Dragway",
         kind: "activity",
-        description: "Quarter-mile therapy",
+        description: "Quarter-mile therapy in a Corvette",
       },
     ],
   },
@@ -162,12 +226,30 @@ export const travelCities: TravelCity[] = [
     lon: -74.01,
     featured: true,
     highlights: [
-      { title: "MoMA", kind: "museum", description: "Starry Night, then three hours vanish" },
-      { title: "9/11 Museum", kind: "museum", description: "Heavy, and it should be" },
+      {
+        title: "Chloe's",
+        kind: "food",
+        description: "Get the vegan chocolate chip cookie",
+      },
+      {
+        title: "MoMA",
+        kind: "museum",
+        description: "Standing in front of The Persistence of Memory was a surrealist dream come true",
+      },
+      {
+        title: "9/11 Museum",
+        kind: "museum",
+        description: "Moving and powerful, give it the time it deserves",
+      },
       {
         title: "Little Island",
         kind: "activity",
-        description: "A park floating on tulip stilts over the Hudson",
+        description: "Unique elevated park built over the Hudson",
+      },
+      {
+        title: "Top of the Rock",
+        kind: "activity",
+        description: "Best view in NYC, right in the middle of the skyline with Billionaires' Row in sight",
       },
     ],
   },
@@ -181,13 +263,18 @@ export const travelCities: TravelCity[] = [
       {
         title: "Frank Lloyd Wright Home & Studio",
         kind: "museum",
-        description: "Where the Prairie style figured itself out",
+        description: "Birthplace of the Prairie style, the tour was a highlight of my trip",
       },
-      { title: "System of a Down", kind: "music", description: "At Soldier Field" },
+      { title: "System of a Down", kind: "music", description: "Epic show at Soldier Field" },
       {
         title: "Riverwalk",
         kind: "activity",
-        description: "The skyline is better from water level",
+        description: "The skyline is better from water level, don't skip the architecture river tour",
+      },
+      {
+        title: "Wrigley Field",
+        kind: "activity",
+        description: "Don't miss a Cubs game, they have vegan hot dogs",
       },
     ],
   },
@@ -200,23 +287,23 @@ export const travelCities: TravelCity[] = [
       {
         title: "Frist Art Museum",
         kind: "museum",
-        description: "An art museum inside an art deco post office",
+        description: "Art museum in a former art deco post office",
       },
       {
         title: "Country Music Hall of Fame",
         kind: "museum",
-        description: "Not a country guy, left impressed",
+        description: "Worth it even if country isn't your genre",
       },
       {
         title: "Corvette Museum",
         kind: "museum",
         dayTrip: true,
-        description: "The sinkhole exhibit is peak America",
+        description: "Worth the pilgrimage for any Corvette fan, and stop by the GM plant next door",
       },
       {
         title: "Ryman Auditorium",
         kind: "music",
-        description: "The Mother Church earns the acoustics hype",
+        description: "Historic venue with famously perfect acoustics",
       },
     ],
   },
@@ -252,7 +339,7 @@ export const travelCities: TravelCity[] = [
       {
         title: "Mercedes-Benz Stadium",
         kind: "activity",
-        description: "Let's go Dirty Birds! Home of the Atlanta Falcons",
+        description: "Home of the Atlanta Falcons, let's go Dirty Birds!",
       },
     ],
   },
@@ -278,12 +365,22 @@ export const travelCities: TravelCity[] = [
       {
         title: "Chihuly Garden",
         kind: "museum",
-        description: "Glass sculpture that upstages the Space Needle next door",
+        description: "Giant glass sculptures with the Space Needle as a backdrop",
+      },
+      {
+        title: "Museum of Flight",
+        kind: "museum",
+        description: "Step inside the Concorde and learn aviation history",
       },
       {
         title: "Alki Beach",
         kind: "activity",
         description: "Waterfront vibe with skyline views",
+      },
+      {
+        title: "Elliott Bay Trail",
+        kind: "activity",
+        description: "Perfect morning bike ride or stroll, with parks and art",
       },
     ],
   },
@@ -294,9 +391,19 @@ export const travelCities: TravelCity[] = [
     lon: -115.14,
     highlights: [
       {
+        title: "Gordon Ramsay Burger",
+        kind: "food",
+        description: "Surprisingly good vegan options",
+      },
+      {
         title: "Bellagio Fountains",
         kind: "activity",
         description: "Free, and still the best show on the Strip",
+      },
+      {
+        title: "Casinos",
+        kind: "activity",
+        description: "Any of them! Blackjack is my game",
       },
     ],
   },
@@ -309,14 +416,19 @@ export const travelCities: TravelCity[] = [
     home: true,
     highlights: [
       {
+        title: "Nori",
+        kind: "food",
+        description: "Insanely good vegan sushi, my special-occasion go-to",
+      },
+      {
         title: "Blanton Museum of Art",
         kind: "museum",
         description: "Best art museum in the city",
       },
       {
-        title: "Concourse Project",
+        title: "The Concourse Project",
         kind: "music",
-        description: "My happy place",
+        description: "My happy place, Austin's home for EDM",
       },
       {
         title: "Waterloo Records",
@@ -324,7 +436,7 @@ export const travelCities: TravelCity[] = [
         description: "Where my vinyl budget is spent",
       },
       { title: "Town Lake Trail", kind: "activity", description: "10-mile bike trail through downtown" },
-      { title: "Q2 Stadium", kind: "activity", description: "Austin FC under the lights" },
+      { title: "Q2 Stadium", kind: "activity", description: "Austin FC under the verde lights" },
     ],
   },
   {
@@ -338,7 +450,7 @@ export const travelCities: TravelCity[] = [
       {
         title: "Meadows Museum",
         kind: "museum",
-        description: "Comprehensive Spanish art collection outside of Spain",
+        description: "The best Spanish art collection outside Spain",
       },
       {
         title: "Dallas Holocaust Museum",
@@ -351,6 +463,11 @@ export const travelCities: TravelCity[] = [
         kind: "activity",
         description: "Wetlands and boardwalk trails just outside the city",
       },
+      {
+        title: "Klyde Warren Park",
+        kind: "activity",
+        description: "Peaceful park built over the freeway",
+      },
     ],
   },
   {
@@ -362,12 +479,17 @@ export const travelCities: TravelCity[] = [
       {
         title: "McNay Art Museum",
         kind: "museum",
-        description: "Modern art museum set inside a historic mansion",
+        description: "Modern art in a historic mansion",
       },
       {
         title: "Ruby City",
         kind: "museum",
-        description: "Contemporary art in a crimson architectural landmark",
+        description: "Crimson architectural landmark",
+      },
+      {
+        title: "Pearl",
+        kind: "activity",
+        description: "Shopping and farmers market",
       },
     ],
   },
@@ -398,12 +520,12 @@ export const travelCities: TravelCity[] = [
       {
         title: "Citadel of Quebec",
         kind: "museum",
-        description: "A star fort that's still an active garrison",
+        description: "Historic fort that's still an active garrison",
       },
       {
         title: "Valcartier Village",
         kind: "activity",
-        description: "Snow slides, zero dignity, great day",
+        description: "Massive snow tubing park",
       },
     ],
   },
@@ -416,12 +538,12 @@ export const travelCities: TravelCity[] = [
       {
         title: "National Gallery of Canada",
         kind: "museum",
-        description: "The giant spider out front is just the greeter",
+        description: "Canada's national collection, with the giant spider sculpture out front",
       },
       {
         title: "Parliament Hill",
         kind: "activity",
-        description: "Gothic revival showing off",
+        description: "Gothic revival architecture overlooking the river, tour the Canadian Parliament if you can",
       },
     ],
   },
@@ -431,7 +553,11 @@ export const travelCities: TravelCity[] = [
     lat: 44.65,
     lon: -63.57,
     highlights: [
-      { title: "Cape Breton Island", kind: "activity", description: "Cliffside wonder" },
+      {
+        title: "Cape Breton Island",
+        kind: "activity",
+        description: "Family reunions with cliffside wonder",
+      },
       {
         title: "Prince Edward Island",
         kind: "activity",
@@ -458,8 +584,16 @@ export const travelCities: TravelCity[] = [
         dayTrip: true,
         description: "The pilgrimage every car person owes themselves",
       },
-      { title: "Murano", kind: "activity", description: "Glass factories" },
-      { title: "Burano", kind: "activity", description: "Colorful houses" },
+      {
+        title: "Murano",
+        kind: "activity",
+        description: "Countless glass-blowing factories",
+      },
+      {
+        title: "Burano",
+        kind: "activity",
+        description: "Stunning island of colorful homes",
+      },
     ],
   },
   {
@@ -473,7 +607,11 @@ export const travelCities: TravelCity[] = [
         kind: "food",
         description: "Vegan chocolate hazelnut gelato",
       },
-      { title: "Galleria dell'Accademia", kind: "museum", description: "David statue" },
+      {
+        title: "Galleria dell'Accademia",
+        kind: "museum",
+        description: "David statue is a must-see",
+      },
       {
         title: "Lucca",
         kind: "music",

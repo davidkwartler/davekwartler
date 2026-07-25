@@ -10,6 +10,11 @@ component's worth), L (multi-file or iteration-heavy), XL (its own project).
 - **(S) Travel field note refinement** — every pin has real field notes now
   (no more "Field notes coming soon."), but the notes still need a
   refinement pass with David
+- **(S) Hero hydration mismatch** — homepage hero's Motion background div
+  computes `opacity: NaN` server-side vs `1` on the client, logging a React
+  hydration-mismatch error in dev (spotted 2026-07-24 during the travel-notes
+  session). Pre-existing, cosmetic-only so far; find where the opacity math
+  divides by an unmeasured value and guard it
 
 ## Ruled out (privacy boundary, 2026-07-01)
 
