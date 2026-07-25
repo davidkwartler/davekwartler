@@ -584,6 +584,31 @@ export default function TravelMap() {
             className="pointer-events-auto fixed z-50 w-[264px] overflow-y-auto rounded-xl border border-white/15 bg-neutral-950/90 p-4 text-left shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur-md"
             style={cardStyle}
           >
+            {pinned && (
+              <button
+                type="button"
+                aria-label="Close city card"
+                onClick={() => {
+                  view.current.activeName = null;
+                  view.current.zoomGoal = 0;
+                  setActive(null);
+                  setPinned(false);
+                }}
+                className="absolute right-2.5 top-2.5 rounded p-1 text-gray-600 transition-colors hover:text-gray-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-gray-500"
+              >
+                <svg
+                  viewBox="0 0 12 12"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M2 2l8 8M10 2l-8 8" />
+                </svg>
+              </button>
+            )}
             <div className="flex items-center gap-2">
               <p className="font-semibold text-white">{active.city.name}</p>
               {active.city.home && (
