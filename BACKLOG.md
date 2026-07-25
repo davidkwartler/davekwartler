@@ -7,6 +7,14 @@ component's worth), L (multi-file or iteration-heavy), XL (its own project).
 ## Active
 
 - **(XL) David Kwartler AI ("chat with David")** — full spec below
+- **(S–M) Link to Sentinel** — nothing on the site points at
+  [Sentinel](https://sentinel.davidkwartler.com), the session-hijack detection
+  demo ([repo](https://github.com/davidkwartler/sentinel)). It is the most
+  substantial thing to show and it is currently undiscoverable from here.
+  There is no projects section today — the sections are Hero, WhatIDo, Career,
+  Human, Contact — so the first decision is whether this is a line inside
+  WhatIDo (S) or a new projects section that could hold future work (M). One
+  sentence on what it does, plus links to the live demo and the repo.
 
 ## Ruled out (privacy boundary, 2026-07-01)
 
