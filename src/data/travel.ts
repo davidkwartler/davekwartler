@@ -28,7 +28,6 @@ export type TravelCity = {
 export const travelPage = {
   label: "Where I've been",
   backLink: "Back to the site",
-  pendingNote: "Field notes coming soon.",
 };
 
 export const travelCities: TravelCity[] = [
@@ -196,7 +195,7 @@ export const travelCities: TravelCity[] = [
   },
   {
     name: "New Hampshire",
-    region: "New Hampshire",
+    region: "Lakes Region",
     lat: 43.79,
     lon: -71.58,
     featured: true,
