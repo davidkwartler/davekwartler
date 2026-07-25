@@ -613,9 +613,7 @@ export default function TravelMap() {
                   );
                 })}
               </ul>
-            ) : (
-              <p className="mt-3 text-sm text-gray-500">{travelPage.pendingNote}</p>
-            )}
+            ) : null}
           </div>
         )}
       </div>
