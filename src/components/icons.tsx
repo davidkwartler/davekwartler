@@ -65,12 +65,18 @@ export function DayTripIcon({ className }: { className?: string }) {
 }
 
 // Sentinel's own mark, copied from that project so the link carries the real
-// logo: Remix Icon's faceted shield (Apache 2.0, Remix-Design/RemixIcon) in
-// Sentinel's brand violet. Solid fill, no keyline (Sentinel drops the keyline
-// below ~20px because the stroke muddies the shape).
+// logo: Remix Icon's faceted shield (Apache 2.0, Remix-Design/RemixIcon).
+// Solid fill, no keyline (Sentinel drops the keyline below ~20px because the
+// stroke muddies the shape). Takes its color from the caller so the brand
+// violet can be dialed back on a monochrome page.
 export function ShieldIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="#7C3AED" aria-hidden className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+      className={className}
+    >
       <path
         d="M3.78307 2.82598L12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598Z"
         strokeLinejoin="round"
