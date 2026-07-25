@@ -22,7 +22,9 @@ export default function Hero() {
   // Galaxy fades away as the hero scrolls out
   const { scrollY } = useScroll();
   const bgOpacity = useTransform(scrollY, (v) => {
-    if (typeof window === "undefined") return 1;
+    // innerHeight can be 0 before the viewport is measured (0/0 = NaN, which
+    // hydrates differently from the server's 1); treat that as fully visible.
+    if (typeof window === "undefined" || window.innerHeight === 0) return 1;
     return Math.max(0, 1 - v / (window.innerHeight * 0.75));
   });
 
