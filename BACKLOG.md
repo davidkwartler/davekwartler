@@ -31,6 +31,21 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-07-24 — Travel interactions batch (branch travel-followups)
+
+- Pinned cards (opened by click) get a subtle X top-right to dismiss;
+  hover cards stay chromeless
+- Arrow keys tour the visible pins west-to-east, wrapping; either arrow
+  starts the tour with no card open
+- Easter egg: clicking the "Where I've been" eyebrow (plain-text
+  affordance) pulls up a random featured city, shuffle-deck so all nine
+  appear before any repeat
+- Easter egg: clicking the home pin sweeps blue great-circle flight arcs
+  from Austin to every featured city
+- NH card region relabeled "Lakes Region"; dead pendingNote removed;
+  fixed a pre-existing onPointerLeave crash when the pointer exits the
+  window
+
 ### 2026-07-24 — Travel field note refinement (branch travel-notes-refinement)
 
 - Full refinement pass with David over all 24 cities: AI-written one-liners
