@@ -7,9 +7,6 @@ component's worth), L (multi-file or iteration-heavy), XL (its own project).
 ## Active
 
 - **(XL) David Kwartler AI ("chat with David")** — full spec below
-- **(S) Travel field note refinement** — every pin has real field notes now
-  (no more "Field notes coming soon."), but the notes still need a
-  refinement pass with David
 - **(S) Hero hydration mismatch** — homepage hero's Motion background div
   computes `opacity: NaN` server-side vs `1` on the client, logging a React
   hydration-mismatch error in dev (spotted 2026-07-24 during the travel-notes
@@ -33,6 +30,20 @@ widget, Writing section (MDX), further hero animation experiments.
 ---
 
 ## Changelog
+
+### 2026-07-24 — Travel field note refinement (branch travel-notes-refinement)
+
+- Full refinement pass with David over all 24 cities: AI-written one-liners
+  replaced with factual, chill observations in his voice (new tone rule:
+  no quippy zingers, no cliché landmarks)
+- Thin cities deepened: Amsterdam (+3), Seattle (+2), DC (+2), NYC (+2),
+  Boston (+2), Chicago (+1), Vegas (+2), Dallas (+1, now 6), Austin (+1,
+  now 6), San Antonio (+1), Brussels (+2), Paris (+2), London (+1)
+- "Concourse Project" retitled to The Concourse Project; Meadows Museum
+  grammar fix; Breathe / Le Potager de Charlotte split into separate
+  entries
+- Hero hydration-mismatch bug spotted during verification and logged as a
+  new Active item
 
 ### 2026-07-12 — Landing offsets, contact spacing, /travel OG, Reveal robustness (branch landing-offsets)
 
