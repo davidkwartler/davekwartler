@@ -6,7 +6,6 @@ import { GLOBE_VIEW_FRACTION, HOVER_ZOOM } from "@/lib/globe-config";
 import { landAt } from "@/data/land-mask";
 import {
   travelCities,
-  travelPage,
   sortedHighlights,
   type TravelCity,
   type HighlightKind,
@@ -155,6 +154,7 @@ type View = {
   zoomProg: number; // 0..1 tween progress, mapped through easeInOut into zoom
   zoomGoal: number; // 0 (out) or 1 (in): zoomProg advances toward this
   zoomCity: string | null; // the city the zoom anchors to
+  arcsT0: number | null; // v.t when the home-pin flight arcs were triggered
 };
 
 type Geom = {
@@ -196,6 +196,72 @@ function resolveView(v: View, g: Geom) {
     }
   }
   return { lon, lat, cx, cy, R };
+}
+
+// Flight-arc easter egg: clicking the home pin sweeps great-circle arcs from
+// Austin out to every featured city, then fades them. Timing in seconds of v.t.
+const ARC_STAGGER = 0.12; // delay between successive arcs starting
+const ARC_SWEEP = 1.0; // how long one arc takes to draw tip-to-tip
+const ARC_LIFE = 3.5; // total lifetime including fade
+const ARC_FADE = 1.0; // fade-out duration at the end of life
+const ARC_LIFT = 0.12; // max altitude above the surface, as a fraction of R
+const ARC_SAMPLES = 32;
+
+function toVec(lon: number, lat: number): [number, number, number] {
+  const p = lat * DEG;
+  const l = lon * DEG;
+  return [Math.cos(p) * Math.cos(l), Math.cos(p) * Math.sin(l), Math.sin(p)];
+}
+
+function drawArcs(
+  ctx: CanvasRenderingContext2D,
+  rv: { lon: number; lat: number; cx: number; cy: number; R: number },
+  home: TravelCity,
+  targets: TravelCity[],
+  elapsed: number,
+) {
+  const a = toVec(home.lon, home.lat);
+  const fade = clamp((ARC_LIFE - elapsed) / ARC_FADE, 0, 1);
+  ctx.lineWidth = 1;
+  ctx.lineCap = "round";
+  for (let i = 0; i < targets.length; i++) {
+    const prog = clamp((elapsed - i * ARC_STAGGER) / ARC_SWEEP, 0, 1);
+    if (prog === 0) continue;
+    const b = toVec(targets[i].lon, targets[i].lat);
+    const dot = clamp(a[0] * b[0] + a[1] * b[1] + a[2] * b[2], -1, 1);
+    const omega = Math.acos(dot);
+    const sinO = Math.sin(omega);
+    if (sinO < 1e-6) continue;
+    ctx.strokeStyle = `rgba(96, 165, 250, ${0.45 * fade})`;
+    ctx.beginPath();
+    let drawing = false;
+    for (let s = 0; s <= ARC_SAMPLES; s++) {
+      const t = (s / ARC_SAMPLES) * prog;
+      const ka = Math.sin((1 - t) * omega) / sinO;
+      const kb = Math.sin(t * omega) / sinO;
+      const v: [number, number, number] = [
+        ka * a[0] + kb * b[0],
+        ka * a[1] + kb * b[1],
+        ka * a[2] + kb * b[2],
+      ];
+      const lon = Math.atan2(v[1], v[0]) / DEG;
+      const lat = Math.asin(clamp(v[2], -1, 1)) / DEG;
+      const pr = project(lon, lat, rv.lon, rv.lat, rv.cx, rv.cy, rv.R);
+      if (pr.cosc <= 0) {
+        drawing = false;
+        continue;
+      }
+      // Fake altitude by pushing the point away from the globe's screen
+      // center; peaks mid-arc so both endpoints stay pinned to their cities.
+      const lift = 1 + ARC_LIFT * Math.sin(Math.PI * t);
+      const x = rv.cx + (pr.x - rv.cx) * lift;
+      const y = rv.cy + (pr.y - rv.cy) * lift;
+      if (drawing) ctx.lineTo(x, y);
+      else ctx.moveTo(x, y);
+      drawing = true;
+    }
+    ctx.stroke();
+  }
 }
 
 function drawTriangle(
@@ -325,6 +391,7 @@ export default function TravelMap() {
     zoomProg: 0,
     zoomGoal: 0,
     zoomCity: null,
+    arcsT0: null,
   });
   const geom = useRef<Geom>({ w: 0, h: 0, cx: 0, cy: 0, R: 0, vw: 0, vh: 0 });
   const drawRef = useRef<() => void>(() => {});
@@ -350,6 +417,18 @@ export default function TravelMap() {
           ctx, rv.cx, rv.cy, rv.R, rv.lon, rv.lat, land, v.t, sweep,
           v.activeName,
         );
+        if (v.arcsT0 !== null) {
+          const elapsed = v.t - v.arcsT0;
+          if (elapsed > ARC_LIFE) {
+            v.arcsT0 = null;
+          } else {
+            const home = travelCities.find((c) => c.home);
+            if (home) {
+              const targets = travelCities.filter((c) => c.featured && !c.home);
+              drawArcs(ctx, rv, home, targets, elapsed);
+            }
+          }
+        }
       };
       drawRef.current = draw;
 
@@ -494,6 +573,8 @@ export default function TravelMap() {
         v.activeName = hit.city.name;
         v.zoomGoal = 1;
         v.zoomCity = hit.city.name;
+        // Easter egg: tapping home launches flight arcs to the featured pins.
+        if (hit.city.home) v.arcsT0 = v.t;
         setActive(hit);
         setPinned(true);
       } else {
@@ -508,39 +589,65 @@ export default function TravelMap() {
     // The card is pointer-events-auto (it has to be, to scroll when it
     // overflows), so hovering onto it fires a canvas pointer-leave. Moving
     // into the card shouldn't dismiss the card the pointer is heading for.
-    if (cardRef.current?.contains(e.relatedTarget as Node)) return;
+    // relatedTarget can be null or `window` when the pointer exits the page,
+    // and contains() throws on non-Nodes.
+    if (e.relatedTarget instanceof Node && cardRef.current?.contains(e.relatedTarget)) return;
     if (!view.current.dragging && !pinnedRef.current) {
       setHover(null);
       drawRef.current();
     }
   };
 
+  // Opens a city's card pinned, anchored to its current projected pin. Bails
+  // (returns false) if the city is on the back hemisphere with nothing to
+  // anchor to.
+  const pinCity = (city: TravelCity): boolean => {
+    const v = view.current;
+    const rv = resolveView(v, geom.current);
+    const pr = project(city.lon, city.lat, rv.lon, rv.lat, rv.cx, rv.cy, rv.R);
+    if (pr.cosc <= 0.06) return false;
+    v.activeName = city.name;
+    v.zoomGoal = 1;
+    v.zoomCity = city.name;
+    setActive({ city, x: pr.x, y: pr.y });
+    setPinned(true);
+    drawRef.current();
+    return true;
+  };
+
   // Easter egg: the "Where I've been" eyebrow dispatches this to pull up a
-  // random city card. Picks only from the currently visible hemisphere so the
-  // card always has an on-screen pin to anchor to, and skips the city that's
-  // already open so repeat clicks always land somewhere new.
+  // random featured city's card. A shuffled deck guarantees every featured
+  // city comes up once before any repeats; invisible cities go back on top of
+  // the deck for next time rather than being skipped forever.
+  const deckRef = useRef<string[]>([]);
   useEffect(() => {
     const onRandom = () => {
-      const g = geom.current;
-      const v = view.current;
-      const rv = resolveView(v, g);
-      const visible = travelCities
-        .map((city) => ({
-          city,
-          pr: project(city.lon, city.lat, rv.lon, rv.lat, rv.cx, rv.cy, rv.R),
-        }))
-        .filter(({ city, pr }) => pr.cosc > 0.06 && city.name !== v.activeName);
-      if (!visible.length) return;
-      const pick = visible[Math.floor(Math.random() * visible.length)];
-      v.activeName = pick.city.name;
-      v.zoomGoal = 1;
-      v.zoomCity = pick.city.name;
-      setActive({ city: pick.city, x: pick.pr.x, y: pick.pr.y });
-      setPinned(true);
-      drawRef.current();
+      const featured = travelCities.filter((c) => c.featured);
+      const lastShown = view.current.activeName;
+      if (deckRef.current.length === 0) {
+        const names = featured.map((c) => c.name);
+        for (let i = names.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [names[i], names[j]] = [names[j], names[i]];
+        }
+        // Don't let a fresh deck immediately repeat the card that's open.
+        if (names[0] === lastShown && names.length > 1) {
+          [names[0], names[names.length - 1]] = [names[names.length - 1], names[0]];
+        }
+        deckRef.current = names;
+      }
+      const tried: string[] = [];
+      while (deckRef.current.length > 0) {
+        const name = deckRef.current.shift()!;
+        const city = featured.find((c) => c.name === name);
+        if (city && pinCity(city)) break;
+        tried.push(name);
+      }
+      deckRef.current.unshift(...tried);
     };
     window.addEventListener("travel:random", onRandom);
     return () => window.removeEventListener("travel:random", onRandom);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -550,10 +657,36 @@ export default function TravelMap() {
         view.current.zoomGoal = 0;
         setActive(null);
         setPinned(false);
+        return;
+      }
+      // City tour: arrow keys step through the visible pins west-to-east,
+      // wrapping at the ends. With no card open, either arrow starts the tour.
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        const v = view.current;
+        const rv = resolveView(v, geom.current);
+        const visible = travelCities
+          .filter(
+            (c) =>
+              project(c.lon, c.lat, rv.lon, rv.lat, rv.cx, rv.cy, rv.R).cosc >
+              0.06,
+          )
+          .sort((a, b) => a.lon - b.lon);
+        if (!visible.length) return;
+        e.preventDefault();
+        const step = e.key === "ArrowRight" ? 1 : -1;
+        const cur = visible.findIndex((c) => c.name === v.activeName);
+        const next =
+          cur === -1
+            ? step === 1
+              ? 0
+              : visible.length - 1
+            : (cur + step + visible.length) % visible.length;
+        pinCity(visible[next]);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Card placement: the globe bleeds off the viewport, so anchor the card in
