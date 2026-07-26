@@ -26,6 +26,25 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-07-25 — Galaxy: stable sky, meteor clears the photo (branch galaxy-seed-meteor)
+
+- Star layout is now seeded and cached for 20 minutes (`src/lib/star-seed.ts`,
+  mulberry32 + a localStorage seed), so a refresh or a hop to /travel and back
+  keeps the same sky instead of rearranging it. The stored timestamp is not
+  refreshed on read, so the sky turns over 20 minutes after it first appeared,
+  not 20 minutes after the last page view. Hero and contact salt the shared
+  seed with their own props, so they differ but each stays put. Canvas-only,
+  never server-rendered, so no hydration risk
+- Shooting stars stay fully random on every load, by design
+- Meteors no longer vanish behind the headshot. `avoidSelector` gives
+  GalaxyBackground a no-fly zone measured from the live element at spawn time,
+  and spawns are rejection-sampled until the whole streak — head, path and
+  tail — clears it by 26px. Measured: 63% of unguarded spawns were crossing
+  the photo on desktop, 89% on a phone, which is why it looked broken. 500k
+  simulated spawns across three viewport shapes now give zero crossings.
+  Fallback for a squat viewport where nothing clears: fly it above the photo
+- Tail 90px to 120px; interval 150-270s to 90-120s
+
 ### 2026-07-25 — Favicon: star (branch favicon-star)
 
 - The DK monogram is replaced by the galaxy's own bright star: white core,

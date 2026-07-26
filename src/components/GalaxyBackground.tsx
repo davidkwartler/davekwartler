@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { glyphSeed, useCanvasLoop } from "@/lib/use-canvas-loop";
+import { galaxySeed, mulberry32 } from "@/lib/star-seed";
 
 /**
  * GalaxyBackground - purple galaxy canvas.
@@ -99,27 +100,70 @@ declare global {
 
 const TAU = Math.PI * 2;
 const GRID = 28; // px between binary glyphs
+const METEOR_TAIL = 120; // px of streak behind the head
+const METEOR_CLEARANCE = 26; // px of daylight left around the no-fly zone
 const VIOLET: RGB = [196, 181, 253];
 const WHITE: RGB = [255, 255, 255];
 const EGG_WORDS = ["DK", "MCP", "OIDC"];
 
-function makeStars(count: number): Star[] {
+// `rand` is the seeded generator, so a given seed always paints the same sky.
+function makeStars(count: number, rand: () => number): Star[] {
   return Array.from({ length: count }, () => {
-    const bright = Math.random() < 0.16;
-    const tint = Math.random() < 0.25 ? VIOLET : WHITE;
+    const bright = rand() < 0.16;
+    const tint = rand() < 0.25 ? VIOLET : WHITE;
     return {
-      x: Math.random(),
-      y: Math.random(),
-      r: bright ? 1.1 + Math.random() * 0.9 : 0.3 + Math.random() * 0.8,
-      phase: Math.random() * TAU,
-      speed: 0.3 + Math.random() * 1.2,
+      x: rand(),
+      y: rand(),
+      r: bright ? 1.1 + rand() * 0.9 : 0.3 + rand() * 0.8,
+      phase: rand() * TAU,
+      speed: 0.3 + rand() * 1.2,
       tint,
       bright,
     };
   });
 }
 
-function spawnMeteor(now: number): Meteor {
+// A region the meteor must not fly through, in canvas pixels. The hero's
+// canvas sits behind the headshot, so a streak crossing it doesn't overlap,
+// it disappears mid-flight.
+type NoFlyZone = { x: number; y: number; r: number };
+
+function noFlyZone(
+  canvas: HTMLCanvasElement,
+  selector?: string
+): NoFlyZone | null {
+  if (!selector) return null;
+  const el = document.querySelector(selector);
+  if (!el) return null;
+  const a = el.getBoundingClientRect();
+  const c = canvas.getBoundingClientRect();
+  if (!a.width || !c.width) return null;
+  // Both rects are viewport-relative, so the difference holds at any scroll
+  return {
+    x: a.left - c.left + a.width / 2,
+    y: a.top - c.top + a.height / 2,
+    r: Math.max(a.width, a.height) / 2,
+  };
+}
+
+function distanceToSegment(
+  px: number,
+  py: number,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len2 = dx * dx + dy * dy;
+  const t = len2
+    ? Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / len2))
+    : 0;
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+}
+
+function randomMeteor(now: number): Meteor {
   const ltr = Math.random() < 0.5;
   const dist = 0.28 + Math.random() * 0.14; // fraction of viewport width
   return {
@@ -129,6 +173,49 @@ function spawnMeteor(now: number): Meteor {
     dy: 0.1 + Math.random() * 0.12,
     start: now,
     dur: 0.9 + Math.random() * 0.4,
+  };
+}
+
+/**
+ * Rejection-samples a meteor until its whole streak — head, flight path and
+ * trailing tail — clears the no-fly zone. Meteors stay random on every load;
+ * only the star layout is seeded.
+ */
+function spawnMeteor(
+  now: number,
+  w: number,
+  h: number,
+  zone: NoFlyZone | null
+): Meteor {
+  let candidate = randomMeteor(now);
+  if (!zone || !w || !h) return candidate;
+
+  for (let attempt = 0; attempt < 24; attempt++) {
+    const hx = candidate.x0 * w;
+    const hy = candidate.y0 * h;
+    const ex = (candidate.x0 + candidate.dx) * w;
+    const ey = (candidate.y0 + candidate.dy) * h;
+    // Extend backwards by the tail so the streak's far end clears too
+    const ang = Math.atan2(candidate.dy * h, candidate.dx * w);
+    const tx = hx - Math.cos(ang) * METEOR_TAIL;
+    const ty = hy - Math.sin(ang) * METEOR_TAIL;
+
+    if (
+      distanceToSegment(zone.x, zone.y, tx, ty, ex, ey) >
+      zone.r + METEOR_CLEARANCE
+    ) {
+      return candidate;
+    }
+    candidate = randomMeteor(now);
+  }
+
+  // Nothing cleared it (short viewport, photo near the middle): tuck the
+  // flight into the band above the zone rather than give up and cross it.
+  const ceiling = (zone.y - zone.r - METEOR_CLEARANCE) / h;
+  return {
+    ...candidate,
+    y0: Math.max(0.03, ceiling * 0.45),
+    dy: Math.max(0.02, Math.min(0.06, ceiling * 0.25)),
   };
 }
 
@@ -188,9 +275,8 @@ function drawMeteor(
   const hx = (m.x0 + m.dx * p) * w;
   const hy = (m.y0 + m.dy * p) * h;
   const ang = Math.atan2(m.dy * h, m.dx * w);
-  const tail = 90;
-  const tx = hx - Math.cos(ang) * tail;
-  const ty = hy - Math.sin(ang) * tail;
+  const tx = hx - Math.cos(ang) * METEOR_TAIL;
+  const ty = hy - Math.sin(ang) * METEOR_TAIL;
   const fade = Math.sin(p * Math.PI) * dim;
 
   ctx.globalCompositeOperation = "lighter";
@@ -337,6 +423,7 @@ export default function GalaxyBackground({
   accents,
   shootingStars = false,
   easterEggs = false,
+  avoidSelector,
 }: {
   timeScale?: number;
   dim?: number;
@@ -345,6 +432,8 @@ export default function GalaxyBackground({
   accents?: [RGB, RGB];
   shootingStars?: boolean;
   easterEggs?: boolean;
+  /** Element the shooting star must not pass behind, e.g. the hero headshot */
+  avoidSelector?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const accentsKey = accents ? accents.join(",") : "";
@@ -353,7 +442,10 @@ export default function GalaxyBackground({
     canvasRef,
     (canvas, ctx) => {
       const bands = accents ? [...BANDS, ...accentBands(accents)] : BANDS;
-      const stars = makeStars(starCount);
+      // Salt the shared session seed with what distinguishes this instance,
+      // so hero and contact get different skies that are each stable.
+      const salt = Math.imul(starCount, 2654435761) ^ (flip ? 0x9e3779b9 : 0);
+      const stars = makeStars(starCount, mulberry32(galaxySeed() ^ salt));
 
       let w = 0;
       let h = 0;
@@ -385,10 +477,13 @@ export default function GalaxyBackground({
         tReal += dt;
 
         if (shootingStars) {
-          if (!meteor && tReal >= nextMeteorAt) meteor = spawnMeteor(tReal);
+          if (!meteor && tReal >= nextMeteorAt) {
+            // Measured at spawn time, so it tracks layout and resizes
+            meteor = spawnMeteor(tReal, w, h, noFlyZone(canvas, avoidSelector));
+          }
           if (meteor && tReal > meteor.start + meteor.dur) {
             meteor = null;
-            nextMeteorAt = tReal + 150 + Math.random() * 120;
+            nextMeteorAt = tReal + 90 + Math.random() * 30;
           }
         }
         if (easterEggs) {
@@ -406,7 +501,12 @@ export default function GalaxyBackground({
       if (process.env.NODE_ENV === "development") {
         debugApi = {
           meteor: () => {
-            meteor = spawnMeteor(tReal - 0.5);
+            meteor = spawnMeteor(
+              tReal - 0.5,
+              w,
+              h,
+              noFlyZone(canvas, avoidSelector)
+            );
             draw();
           },
           egg: (word?: string) => {
@@ -428,7 +528,16 @@ export default function GalaxyBackground({
       };
     },
     // accentsKey stands in for the accents tuple (kept stable by parents)
-    [timeScale, dim, starCount, flip, shootingStars, easterEggs, accentsKey],
+    [
+      timeScale,
+      dim,
+      starCount,
+      flip,
+      shootingStars,
+      easterEggs,
+      accentsKey,
+      avoidSelector,
+    ],
   );
 
   return (
