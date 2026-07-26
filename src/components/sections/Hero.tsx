@@ -37,7 +37,12 @@ export default function Hero() {
         className="absolute inset-0 -z-10"
         style={{ opacity: prefersReducedMotion ? 1 : bgOpacity }}
       >
-        <GalaxyBackground accents={HERO_ACCENTS} shootingStars easterEggs />
+        <GalaxyBackground
+          accents={HERO_ACCENTS}
+          shootingStars
+          easterEggs
+          avoidSelector="#hero-headshot-img"
+        />
       </motion.div>
 
       <div className="text-center">
