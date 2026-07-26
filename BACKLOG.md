@@ -26,6 +26,30 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-07-25 — Favicon: star (branch favicon-star)
+
+- The DK monogram is replaced by the galaxy's own bright star: white core,
+  violet glow, four tapered spikes. Horizontal spikes are longer than the
+  vertical pair on purpose — a perfectly symmetric four-point sparkle reads
+  as the generic AI glyph, uneven spikes read as a point source through a
+  lens. Ink is concentrated near the core because that's all a 16px
+  downsample really samples
+- All four assets now come from one vector via `scripts/gen-favicon.mjs`, so
+  the tab, Android and iOS marks can't drift: public/favicon.svg,
+  public/icon-192.png, public/apple-icon.png, src/app/favicon.ico
+- src/app/favicon.ico had been a 32px PNG wearing a .ico extension; it's now
+  a real ICO carrying 16/32/48 PNG entries. public/favicon.svg had been a
+  64px PNG base64'd inside an SVG wrapper, so it was soft at every size
+  above 64. It's true vector now
+- Picked from four rounds of mockups at true raster sizes. Two dead ends
+  worth remembering: arms drawn as `<line>` with a gradient vanish below
+  48px, because a linearGradient in objectBoundingBox units collapses on a
+  zero-height bbox (use userSpaceOnUse); and thin even-weight arms don't
+  survive downsampling at all, tapered polygons do
+- Known soft spot: on a light tab strip the near-black tile reads heavier
+  than neighbouring favicons. Transparent background was considered and
+  rejected, it loses the light-in-space framing
+
 ### 2026-07-25 — Sentinel link (branch sentinel-link)
 
 - The "PM who builds" card in What I do now carries a bordered pill in its
