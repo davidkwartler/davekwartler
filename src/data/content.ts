@@ -18,26 +18,45 @@ export const hero = {
   also: "Also: Porsche, vinyl, and a cat named Rey.",
 };
 
+export type WhatIDoCard = {
+  index: string;
+  title: string;
+  body: string;
+  /** Optional side-project link, rendered as a pill in the card's bottom corner */
+  project?: {
+    name: string;
+    demo: string;
+    repo: string;
+  };
+};
+
+const whatIDoCards: WhatIDoCard[] = [
+  {
+    index: "01",
+    title: "Identity connectivity",
+    body: "I build the OAuth and OIDC systems that let travelers connect their Expedia accounts with loyalty programs, social platforms, and AI experiences. Done well, account linking is a growth engine.",
+  },
+  {
+    index: "02",
+    title: "AI agent authorization",
+    body: "I design how AI agents get permission to act for you: the consent and access models behind Expedia's MCP-based Gen AI integrations.",
+  },
+  {
+    index: "03",
+    title: "PM who builds",
+    body: "I prototype with AI and ship production changes myself, from UI design to API and OIDC changes. It's the fastest way to test an idea.",
+    project: {
+      name: "Sentinel",
+      demo: "https://sentinel.davidkwartler.com",
+      repo: "https://github.com/davidkwartler/sentinel",
+    },
+  },
+];
+
 export const whatIDo = {
   label: "What I do",
   heading: "Identity, consent, and AI agents.",
-  cards: [
-    {
-      index: "01",
-      title: "Identity connectivity",
-      body: "I build the OAuth and OIDC systems that let travelers connect their Expedia accounts with loyalty programs, social platforms, and AI experiences. Done well, account linking is a growth engine.",
-    },
-    {
-      index: "02",
-      title: "AI agent authorization",
-      body: "I design how AI agents get permission to act for you: the consent and access models behind Expedia's MCP-based Gen AI integrations.",
-    },
-    {
-      index: "03",
-      title: "PM who builds",
-      body: "I prototype with AI and ship production changes myself, from UI design to API and OIDC changes. It's the fastest way to test an idea.",
-    },
-  ],
+  cards: whatIDoCards,
 };
 
 export const careerSection = {

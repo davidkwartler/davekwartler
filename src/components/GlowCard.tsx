@@ -51,7 +51,8 @@ export function GlowCard({
               "radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.045), transparent 70%)",
           }}
         />
-        <div className="relative">{children}</div>
+        {/* Full-height column so cards can bottom-anchor their last row */}
+        <div className="relative flex h-full flex-col">{children}</div>
       </div>
     </div>
   );
