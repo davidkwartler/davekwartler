@@ -29,15 +29,21 @@ widget, Writing section (MDX), further hero animation experiments.
 ### 2026-07-25 — Sentinel link (branch sentinel-link)
 
 - The "PM who builds" card in What I do now carries a bordered pill in its
-  bottom-right corner: shield glyph, "Sentinel", external-link arrow, linking
-  to the live demo. A GitHub mark beside it links to the repo (32px tap
-  target via `-m-2 p-2`, the visible mark stays 16px)
+  bottom-right corner: Sentinel's shield, "Sentinel", external-link arrow,
+  linking to the live demo. A GitHub mark beside it links to the repo (32px
+  tap target via `-m-2 p-2`, the visible mark stays 16px)
 - No description sentence. David's call after a 3-option mockup: the card
   body already frames it, and the chip is meant to be an affordance rather
   than a footnote. Scoped as S, a projects section stays available later
+- The shield is Sentinel's real mark, the same Remix Icon faceted shield
+  path that project uses (Apache 2.0), not a lookalike. Colour landed after
+  two passes: full brand violet was the only saturated thing on a
+  monochrome page, so it now inherits the pill's grey at rest and pays out
+  #7C3AED on hover. Whole pill lights up as one unit. Trade-off accepted:
+  touch devices never see the violet, the shape carries the reference
 - Supporting changes: GlowCard's content wrapper became a full-height flex
-  column so a card can bottom-anchor its last row; ShieldIcon and
-  ArrowUpRightIcon added to icons.tsx in the existing 1.8-stroke idiom
+  column so a card can bottom-anchor its last row; ShieldIcon (fill,
+  currentColor) and ArrowUpRightIcon added to icons.tsx
 
 ### 2026-07-24 — Hero hydration fix (branch fix-hero-hydration)
 

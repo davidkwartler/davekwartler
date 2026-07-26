@@ -40,10 +40,10 @@ export default function WhatIDo() {
                       rel="noopener noreferrer"
                       className="group inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs text-gray-200 transition-colors hover:border-white/30 hover:text-white"
                     >
-                      {/* #7C3AED is Sentinel's brand violet. Held back at rest
-                          so it doesn't shout in an otherwise monochrome
-                          section, full strength on hover */}
-                      <ShieldIcon className="h-4 w-4 text-[#7C3AED]/55 transition-colors group-hover:text-[#7C3AED]" />
+                      {/* Inherits the pill's grey at rest so the section stays
+                          monochrome, then hover pays out Sentinel's brand
+                          violet (#7C3AED) */}
+                      <ShieldIcon className="h-4 w-4 transition-colors group-hover:text-[#7C3AED]" />
                       {card.project.name}
                       <ArrowUpRightIcon className="h-3 w-3 text-gray-500" />
                     </a>
