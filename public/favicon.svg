@@ -1,20 +1,39 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
+    <radialGradient id="haze">
+      <stop offset="0" stop-color="#E5E7EB" stop-opacity="0.18"/>
+      <stop offset="0.25" stop-color="#D9DCE1" stop-opacity="0.1296"/>
+      <stop offset="0.45" stop-color="#CFD3DA" stop-opacity="0.081"/>
+      <stop offset="0.65" stop-color="#C6CAD2" stop-opacity="0.043199999999999995"/>
+      <stop offset="0.83" stop-color="#BFC3CC" stop-opacity="0.0162"/>
+      <stop offset="1" stop-color="#BFC3CC" stop-opacity="0"/>
+    </radialGradient>
     <radialGradient id="glow">
-      <stop offset="0" stop-color="#DDD6FE" stop-opacity="0.85"/>
-      <stop offset="0.32" stop-color="#A78BFA" stop-opacity="0.425"/>
-      <stop offset="0.66" stop-color="#8B5CF6" stop-opacity="0.17"/>
-      <stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/>
+      <stop offset="0" stop-color="#D3C7FD" stop-opacity="0.96"/>
+      <stop offset="0.32" stop-color="#9B7EF8" stop-opacity="0.5568"/>
+      <stop offset="0.66" stop-color="#7C3AED" stop-opacity="0.2544"/>
+      <stop offset="1" stop-color="#6D28D9" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="core">
       <stop offset="0" stop-color="#FFFFFF"/>
       <stop offset="0.62" stop-color="#FFFFFF"/>
       <stop offset="1" stop-color="#EDE9FE" stop-opacity="0.9"/>
     </radialGradient>
+    <linearGradient id="flare" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#DDD6FE" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#DDD6FE" stop-opacity="0"/>
+    </linearGradient>
   </defs>
   <rect width="64" height="64" fill="#06040D"/>
+  <circle cx="32" cy="32" r="34" fill="url(#haze)"/>
   <circle cx="32" cy="32" r="29" fill="url(#glow)"/>
-  <path d="M32 13 L37.6 32 L32 51 L26.4 32 Z" fill="#FFFFFF" fill-opacity="0.92"/>
-  <path d="M3 32 L32 26.4 L61 32 L32 37.6 Z" fill="#FFFFFF" fill-opacity="0.92"/>
+  <rect x="0" y="31.4" width="64" height="1.2" fill="url(#flare)"/>
+  <g transform="rotate(45 32 32)" fill="#FFFFFF" fill-opacity="0.42">
+    <path d="M32 18.5 L34.1 32 L32 45.5 L29.9 32 Z"/>
+    <path d="M32 18.5 L34.1 32 L32 45.5 L29.9 32 Z" transform="rotate(90 32 32)"/>
+  </g>
+  <path d="M32 9 L37.7 32 L32 55 L26.3 32 Z" fill="#FFFFFF" fill-opacity="0.92"/>
+  <path d="M3 32 L32 27.1 L61 32 L32 36.9 Z" fill="#FFFFFF" fill-opacity="0.92"/>
   <circle cx="32" cy="32" r="7.2" fill="url(#core)"/>
 </svg>
