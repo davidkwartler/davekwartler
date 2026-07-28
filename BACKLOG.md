@@ -26,6 +26,32 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-07-27 — Favicon star: richer violet, second glow, more detail (branch galaxy-star-tune)
+
+- Asymmetry retuned. Verticals 19 to 23, horizontals held at 29. The waist,
+  previously one shared value, is now split: `H_WAIST` 4.9, `V_WAIST` 5.7, so
+  the horizontal pair reads as the longest without also reading as the
+  heaviest. Verticals are now marginally the thicker of the two
+- Secondary spikes on the diagonals (reach 13.5, 42% opacity) and a full-width
+  flare hairline through the centre. Both fall below a pixel at 16px, so they
+  enrich the 180/192 assets without muddying the tab
+- Violet is deeper, not wider: hue ramp moved off pale lavender to
+  `#D3C7FD → #9B7EF8 → #7C3AED → #6D28D9`, alpha 0.96, radius held at 29.
+  Earlier attempts pushed radius and alpha together and blew the mark out into
+  a lit circle. Depth is a hue change, reach is a radius change, and they were
+  worth separating
+- A faint grey glow (alpha 0.18, r 34) sits behind the violet for depth at
+  small sizes
+- Two glow lessons worth keeping. Painting the grey *under* a strong violet
+  hides it exactly where it's strongest, so it looked like no second glow
+  existed at all. Fixing that by punching a transparent hole in the middle of
+  the grey is worse: any mid-radius opacity peak renders as a hard grey
+  annulus, a smoke ring around the star. Both gradients now fall off
+  monotonically and terminate at 0 opacity, which is what keeps them
+  dissolving into the background instead of drawing an edge
+- Grey desaturates violet, so the two are not interchangeable brightness
+  knobs. Turning grey up to add glow visibly reads as *less* glow
+
 ### 2026-07-25 — Galaxy: stable sky, meteor clears the photo (branch galaxy-seed-meteor)
 
 - Star layout is now seeded and cached for 20 minutes (`src/lib/star-seed.ts`,
