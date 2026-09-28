@@ -26,6 +26,19 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-09-28 — Shows page, round 2 (branch claude/personal-site-dev-u407ar)
+
+- "My live music habit." Stats: shows (and this year), artists, festivals
+  (once per festival per year), venues (and nights at the most-visited)
+- Upcoming shows now ship in the data (David's call: they're public
+  events) and appear once their date has passed in Austin, evaluated in
+  the visitor's browser. The static HTML carries the build date's view;
+  hydration moves it to today. No scheduled rebuild needed
+- The last-show record turns slowly, scratches on hover, and obeys the
+  pause button (the old CSS hover spin ignored it)
+- Career: plain grey star on the rail between GM and Expedia, no glow.
+  Command menu: /travel and /shows grouped last as "Secret pages"
+
 ### 2026-09-28 — Redesign: changelog career, status hero, contact sheet, command menu, /shows (branch claude/personal-site-dev-u407ar)
 
 The pre-redesign site is kept on the `v1-legacy` branch (a tag push was
@@ -46,8 +59,7 @@ refused by the session's git proxy).
   (commit e033a86); the Porsche frame is ISO 12800
 - Command menu (Cmd/Ctrl+K): sections, pages, contact actions, pause
   animation. No hidden easter eggs, by request
-- /shows from the concert tracker (212 shows, 2024 to Sep 2026); the 23
-  upcoming rows in the export are deliberately left out
+- /shows from the concert tracker (212 shows, 2024 to Sep 2026)
 - /travel is no longer buried: linked from Who I am and the menu
 - Nav no longer highlights Home on pages without home sections
 

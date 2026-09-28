@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { shows, showsExportedOn, type Show } from "@/data/shows";
+import type { Show } from "@/data/shows";
+import { usePastShows } from "@/lib/shows";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MONTHS_LONG = [
@@ -17,24 +18,30 @@ function parts(date: string) {
   return { month: d.getUTCMonth(), day: d.getUTCDate(), weekday: WEEKDAYS[d.getUTCDay()] };
 }
 
-const years = [...new Set(shows.map((s) => s.date.slice(0, 4)))].sort().reverse();
-const exportYear = showsExportedOn.slice(0, 4);
-const exportMonth = Number(showsExportedOn.slice(5, 7)) - 1;
 
 // Year tabs, a shows-per-month column chart, and the full list grouped by
 // month. Each column links to its month in the list below.
-export default function ShowsBrowser() {
-  const [year, setYear] = useState(years[0]);
+export default function ShowsBrowser({ buildDate }: { buildDate: string }) {
+  const { today, past } = usePastShows(buildDate);
+  const years = useMemo(
+    () => [...new Set(past.map((s) => s.date.slice(0, 4)))].sort().reverse(),
+    [past],
+  );
+  const [picked, setYear] = useState<string | null>(null);
+  // Default to the newest year; fall back if a pick no longer exists
+  const year = picked && years.includes(picked) ? picked : years[0];
+  const currentYear = today.slice(0, 4);
+  const currentMonth = Number(today.slice(5, 7)) - 1;
 
   const { byMonth, counts, max } = useMemo(() => {
     const byMonth: Show[][] = Array.from({ length: 12 }, () => []);
-    for (const s of shows) if (s.date.startsWith(year)) byMonth[parts(s.date).month].push(s);
+    for (const s of past) if (s.date.startsWith(year)) byMonth[parts(s.date).month].push(s);
     const counts = byMonth.map((m) => m.length);
     return { byMonth, counts, max: Math.max(...counts, 1) };
-  }, [year]);
+  }, [past, year]);
 
   const total = counts.reduce((a, b) => a + b, 0);
-  const partial = year === exportYear;
+  const partial = year === currentYear;
   // Clean ticks: the chart's top rounds up to an even number
   const top = Math.ceil(max / 2) * 2;
 
@@ -101,7 +108,7 @@ export default function ShowsBrowser() {
             ))}
             <div className="absolute inset-y-0 left-7 right-0 grid grid-cols-12">
               {counts.map((n, m) => {
-                const future = partial && m > exportMonth;
+                const future = partial && m > currentMonth;
                 const label = `${MONTHS_LONG[m]} ${year}: ${n} show${n === 1 ? "" : "s"}`;
                 const Column = n ? "a" : "div";
                 return (

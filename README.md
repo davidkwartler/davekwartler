@@ -24,7 +24,7 @@ The home route (`/`) has five sections, plus two standalone pages:
 
 ### /shows
 
-Every show since 2024 (`data/shows.ts`, generated from David's concert tracker export: past shows only, since upcoming dates would say where he'll be). Last-show card, all-time stats, year tabs, a shows-per-month column chart, and the full list by month (`ShowsBrowser.tsx`). Linked from Who I am and the command menu; noindex, no sitemap entry.
+Every show since 2024 (`data/shows.ts`, generated from David's concert tracker export, including shows still ahead). The page lists a show once its date has passed in Austin time (`lib/shows.ts`, evaluated in the browser), so the rest of the year fills in without a redeploy. Last-show card, all-time stats, year tabs, a shows-per-month column chart, and the full list by month (`ShowsBrowser.tsx`). Linked from Who I am and the command menu; noindex, no sitemap entry.
 
 ### /travel
 
