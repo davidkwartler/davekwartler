@@ -60,6 +60,8 @@ assets/           Full-size image sources (not served); see gen-images.mjs
 scripts/          gen-landmask.mjs regenerates src/data/land-mask.ts;
                   gen-images.mjs derives the pre-sized headshot and logo
                   webps in public/; gen-favicon.mjs redraws every favicon
+                  gen-og.mjs renders the link-preview card public/og.jpg
+                  (run after a build; it borrows the built fonts)
 tests/            Playwright smoke tests (render, console, axe, key actions)
 ```
 
@@ -81,6 +83,7 @@ npm run lint
 npm run typecheck
 npm test           # Playwright smoke tests against out/ (build first)
 npm run gen:images # re-derive resized images after changing a source
+npm run gen:og     # re-render the link-preview card (build first)
 ```
 
 First-time test setup: `npx playwright install chromium`, or point
