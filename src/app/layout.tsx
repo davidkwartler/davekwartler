@@ -33,6 +33,12 @@ const jetbrainsMono = JetBrains_Mono({
 const siteDescription =
   "Personal website of David Kwartler, a Senior Product Manager at Expedia in Austin, TX, building account linking, consent, and permissions for Expedia's loyalty and AI partners.";
 
+// Link previews (LinkedIn, Slack, iMessage). The card image is rendered by
+// scripts/gen-og.mjs; keep its copy in step with these.
+const previewTitle = "David Kwartler: Product at Expedia";
+const previewDescription =
+  "I build account linking for Expedia's loyalty and AI partners, so travelers' member benefits follow them into cutting-edge agentic AI experiences.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.davidkwartler.com"),
   // Home gets the descriptive title; other pages set their own full title.
@@ -46,9 +52,8 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
   },
   openGraph: {
-    title: "David Kwartler",
-    description:
-      "Identity nerd, travel-tech PM, occasional race car driver.",
+    title: previewTitle,
+    description: previewDescription,
     url: "https://www.davidkwartler.com",
     siteName: "David Kwartler",
     type: "website",
@@ -58,15 +63,14 @@ export const metadata: Metadata = {
         url: "/og.jpg",
         width: 1200,
         height: 630,
-        alt: "David Kwartler: Senior Product Manager",
+        alt: "David Kwartler, Product at Expedia: account linking for Expedia's loyalty and AI partners",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "David Kwartler",
-    description:
-      "Identity nerd, travel-tech PM, occasional race car driver.",
+    title: previewTitle,
+    description: previewDescription,
     images: ["/og.jpg"],
   },
 };
