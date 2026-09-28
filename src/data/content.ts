@@ -164,7 +164,7 @@ export const human = {
 export const showsPage = {
   label: "Shows",
   heading: "The live music receipts.",
-  subline: "Every show I've been to since 2024, mostly in Austin, logged by hand the night of.",
+  subline: "Every show I've been to since 2024, mostly in Austin.",
   backLink: "Back to Who I am",
 };
 
