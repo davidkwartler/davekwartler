@@ -10,6 +10,7 @@ export const links = {
 export const palette = {
   pages: [
     { href: "/travel", label: "Where I've been", keywords: "travel globe map cities" },
+    { href: "/shows", label: "Shows", keywords: "concerts music live festivals" },
   ],
 };
 
@@ -86,7 +87,7 @@ const whatIDoCards: WhatIDoCard[] = [
     project: {
       name: "Sentinel",
       blurb:
-        "Side project: Sentinel catches hijacked sessions by spotting device-fingerprint mismatches, with Claude scoring each one.",
+        "Side project: Sentinel catches hijacked sessions by spotting device-fingerprint mismatches, with AI scoring each one.",
       demo: "https://sentinel.davidkwartler.com",
       repo: "https://github.com/davidkwartler/sentinel",
     },
@@ -156,7 +157,15 @@ export const human = {
   // Pages that used to hide behind a caption; now linked in plain sight
   elsewhere: [
     { href: "/travel", label: "Where I've been", note: "a globe of every city" },
+    { href: "/shows", label: "Shows", note: "every one since 2024" },
   ],
+};
+
+export const showsPage = {
+  label: "Shows",
+  heading: "The live music receipts.",
+  subline: "Every show I've been to since 2024, mostly in Austin, logged by hand the night of.",
+  backLink: "Back to Who I am",
 };
 
 export const contact = {

@@ -110,6 +110,45 @@ html {
   }
 }
 
+/* Shows page: the last-show record. Grooves, a sheen, a violet label; it
+   spins only while hovered, and never under reduced motion. */
+.vinyl {
+  position: relative;
+  background:
+    repeating-radial-gradient(circle, #111 0 1.2px, #1b1b1f 1.6px 2.4px),
+    #111;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.vinyl::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 20deg, transparent 0 12%, rgba(255, 255, 255, 0.12) 15%, transparent 20% 60%, rgba(255, 255, 255, 0.08) 64%, transparent 68%);
+}
+.vinyl::after {
+  content: "";
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0a0a0a 0 12%, #7c3aed 14% 100%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .vinyl {
+    animation: vinyl-spin 1.8s linear infinite paused;
+  }
+  .group:hover .vinyl {
+    animation-play-state: running;
+  }
+}
+@keyframes vinyl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Career changelog: the star on the current role breathes, slowly */
 @media (prefers-reduced-motion: no-preference) {
   .career-now {

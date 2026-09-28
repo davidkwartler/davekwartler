@@ -21,6 +21,7 @@ function trackErrors(page: Page) {
 const routes = [
   { path: "/", heading: "David Kwartler" },
   { path: "/travel", heading: null },
+  { path: "/shows", heading: "The live music receipts." },
   { path: "/does-not-exist", heading: "401" },
 ];
 
