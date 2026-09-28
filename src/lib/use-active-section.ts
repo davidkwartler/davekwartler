@@ -10,7 +10,9 @@ import { useEffect, useState } from "react";
  * `ids` must be referentially stable (a module-level array).
  */
 export function useActiveSection(ids: readonly string[]) {
-  const [active, setActive] = useState(ids[0]);
+  // Nothing active until measured: the static HTML of pages without these
+  // sections (travel, shows, 404) must not mark Home active
+  const [active, setActive] = useState("");
 
   useEffect(() => {
     let raf = 0;

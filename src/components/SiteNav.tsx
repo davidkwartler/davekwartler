@@ -8,6 +8,7 @@ import { openPalette, useModKey } from "@/components/CommandPalette";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { links, nav } from "@/data/content";
 import { useActiveSection } from "@/lib/use-active-section";
+import { scrollIfSameSection } from "@/lib/section-link";
 
 const sections = nav.sections;
 const sectionIds = sections.map((s) => s.id);
@@ -56,6 +57,10 @@ export function SiteNav() {
     return () => io.disconnect();
   }, []);
 
+  const transition = prefersReducedMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, stiffness: 320, damping: 30 };
+
   return (
     <>
       <a className="skip-link" href="#main-content">
@@ -68,23 +73,21 @@ export function SiteNav() {
         }`}
       >
         <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          {/* The avatar fades and scales in while the name slides over, both
+              as transforms, so the rest of the nav never reflows (layout
+              shift) while it lands */}
           <Link
             href="/#home"
-            className="flex items-center font-semibold text-white"
+            className="relative flex items-center font-semibold text-white"
           >
             <motion.span
-              className="h-9 shrink-0 overflow-hidden rounded-full"
+              className="absolute left-0 top-1/2 -mt-[18px] h-9 w-9 overflow-hidden rounded-full"
               initial={false}
               animate={{
-                width: showAvatar ? 36 : 0,
-                marginRight: showAvatar ? 12 : 0,
+                scale: showAvatar ? 1 : 0.4,
                 opacity: showAvatar ? 1 : 0,
               }}
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0 }
-                  : { type: "spring", stiffness: 320, damping: 30 }
-              }
+              transition={transition}
             >
               <Image
                 src="/dk-headshot-72.webp"
@@ -95,7 +98,13 @@ export function SiteNav() {
                 className="h-9 w-9 max-w-none rounded-full"
               />
             </motion.span>
-            {nav.name}
+            <motion.span
+              initial={false}
+              animate={{ x: showAvatar ? 48 : 0 }}
+              transition={transition}
+            >
+              {nav.name}
+            </motion.span>
           </Link>
 
           {/* Desktop: scrollspy links with sliding active pill */}
@@ -104,6 +113,9 @@ export function SiteNav() {
               <Link
                 key={s.id}
                 href={`/#${s.id}`}
+                onClick={(e) => {
+                  if (scrollIfSameSection(`/#${s.id}`)) e.preventDefault();
+                }}
                 className={`relative rounded-full px-3 py-1.5 text-sm transition-colors ${
                   active === s.id
                     ? "text-white"
@@ -201,7 +213,10 @@ export function SiteNav() {
                 <Link
                   key={s.id}
                   href={`/#${s.id}`}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => {
+                    setIsMenuOpen(false);
+                    if (scrollIfSameSection(`/#${s.id}`)) e.preventDefault();
+                  }}
                   className={`rounded-lg px-3 py-2 text-sm transition-colors ${
                     active === s.id
                       ? "text-white bg-white/10 font-semibold"

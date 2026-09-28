@@ -4,8 +4,8 @@ import GalaxyBackground from "@/components/GalaxyBackground";
 import { SiteNav } from "@/components/SiteNav";
 
 export const metadata = {
-  title: "404 - David Kwartler",
-  robots: { index: false },
+  // Next already marks the 404 noindex
+  title: "David Kwartler: Page not found",
 };
 
 export default function NotFound() {

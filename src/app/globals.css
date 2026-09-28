@@ -28,7 +28,7 @@ html {
 /* Hero entrance: CSS-driven (not JS/Motion-gated) so above-the-fold content
    fades in on a fixed schedule at first paint, instead of staying invisible
    until the JS bundle downloads and hydrates. Matches the hero's prior
-   Motion fade-in: shared EASE (0.21,0.47,0.32,0.98), 16px rise, 0.5s. The
+   Motion fade-in: ease (0.21,0.47,0.32,0.98), 16px rise, 0.5s. The
    `both` fill mode keeps content invisible through the stagger delay and
    settles it visible, so no base opacity is needed (and if animations are
    disabled entirely, content stays visible rather than blank). */
@@ -57,7 +57,7 @@ html {
 /* Reveal: below-fold sections ship visible in the static HTML; hydration
    adds .reveal-pending only to elements still under the viewport, and an
    IntersectionObserver swaps it for .reveal-shown. Matches the old Motion
-   whileInView look: 20px rise, 0.45s, shared EASE, staggered via an inline
+   whileInView look: 20px rise, 0.45s, the same ease, staggered via an inline
    transition-delay. */
 .reveal-pending {
   opacity: 0;
@@ -78,6 +78,26 @@ html {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+/* Skip arrow: fades in after the hero text, bounces while on the hero */
+@media (prefers-reduced-motion: no-preference) {
+  .skip-arrow {
+    animation: skip-arrow-in 0.5s ease-out 0.6s backwards;
+  }
+  .skip-arrow-bounce {
+    animation: skip-arrow-bounce 1.8s ease-in-out infinite;
+  }
+}
+@keyframes skip-arrow-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes skip-arrow-bounce {
+  50% {
+    transform: translateY(6px);
   }
 }
 

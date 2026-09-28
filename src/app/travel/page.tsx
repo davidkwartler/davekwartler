@@ -6,15 +6,17 @@ import { SiteNav } from "@/components/SiteNav";
 import TravelLabel from "@/components/TravelLabel";
 import { travelPage } from "@/data/travel";
 
-// Easter egg: reached by clicking the Travel photo caption in Who I am.
-// Kept off the SEO surface: noindex, no sitemap entry, no nav link.
+// Linked from Who I am (the Travel caption and a plain link) and the
+// command menu's secret pages. Kept off the SEO surface: noindex, no
+// sitemap entry.
 export const metadata = {
-  title: "Travel - David Kwartler",
+  title: "David Kwartler: Travel",
   robots: { index: false },
+  alternates: { canonical: "/travel" },
   // Explicit OG block (reusing the homepage card) so link previews don't
   // fall back to snapshotting the page, which is a blank canvas without JS.
   openGraph: {
-    title: "Travel - David Kwartler",
+    title: "David Kwartler: Travel",
     description: "Where I've been.",
     url: "https://www.davidkwartler.com/travel",
     siteName: "David Kwartler",
@@ -31,7 +33,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image" as const,
-    title: "Travel - David Kwartler",
+    title: "David Kwartler: Travel",
     description: "Where I've been.",
     images: ["/og.jpg"],
   },
@@ -53,7 +55,7 @@ export default function Travel() {
         <p className="fixed inset-x-0 bottom-3 z-40 flex h-7 items-center justify-center text-sm">
           <Link
             href="/#about"
-            className="text-gray-400 underline-offset-4 hover:text-white hover:underline"
+            className="inline-block py-1 text-gray-400 underline-offset-4 hover:text-white hover:underline"
           >
             ← {travelPage.backLink}
           </Link>

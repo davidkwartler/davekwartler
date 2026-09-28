@@ -11,17 +11,24 @@ import { todayInAustin } from "@/lib/austin-date";
 // Linked from Who I am and the command menu. Personal, so it stays off
 // the SEO surface like /travel: noindex, no sitemap entry.
 export const metadata = {
-  title: "Shows - David Kwartler",
+  title: "David Kwartler: Shows",
   description: showsPage.subline,
   robots: { index: false },
+  alternates: { canonical: "/shows" },
   openGraph: {
-    title: "Shows - David Kwartler",
+    title: "David Kwartler: Shows",
     description: showsPage.subline,
     url: "https://www.davidkwartler.com/shows",
     siteName: "David Kwartler",
     type: "website",
     locale: "en_US",
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "David Kwartler" }],
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "David Kwartler: Shows",
+    description: showsPage.subline,
+    images: ["/og.jpg"],
   },
 };
 
@@ -60,7 +67,7 @@ export default function Shows() {
             </div>
 
             <p className="mt-16 text-sm">
-              <Link href="/#about" className="text-gray-400 underline-offset-4 hover:text-white hover:underline">
+              <Link href="/#about" className="inline-block py-1 text-gray-400 underline-offset-4 hover:text-white hover:underline">
                 ← {showsPage.backLink}
               </Link>
             </p>

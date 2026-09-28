@@ -32,7 +32,7 @@ function glyphFont() {
 }
 
 /**
- * TravelMap - the hidden /travel easter egg, v2: a binary-glyph globe.
+ * TravelMap - the /travel globe, v2: a binary-glyph globe.
  *
  * The continents are drawn as electric-blue 0/1 glyphs sampled from the same
  * equirectangular land mask as v1, but projected onto an orthographic sphere.
@@ -664,6 +664,11 @@ export default function TravelMap() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Keys typed into a field or an open dialog (the command menu) aren't
+      // for the globe
+      if ((e.target as HTMLElement | null)?.closest?.("input, textarea, [contenteditable], [role=dialog]"))
+        return;
+      if (document.querySelector("[role=dialog][aria-modal=true]")) return;
       if (e.key === "Escape") {
         view.current.activeName = null;
         view.current.zoomGoal = 0;
@@ -739,7 +744,12 @@ export default function TravelMap() {
       ref={wrapRef}
       className="absolute inset-0 flex items-center justify-center"
     >
-      <div className="relative" style={{ width: size.w, height: size.h }}>
+      {/* Viewport-sized from the first paint (CSS units until measured) so
+          the static HTML doesn't lay the globe out at 0x0 and jump */}
+      <div
+        className="relative"
+        style={{ width: size.w || "100vw", height: size.h || "100vh" }}
+      >
         <canvas
           ref={canvasRef}
           onPointerDown={onPointerDown}

@@ -10,9 +10,7 @@
 import sharp from "sharp";
 
 const jobs = [
-  // Hero headshot: 176px CSS
-  { from: "public/dk-headshot.jpg", to: "public/dk-headshot-352.webp", size: 352 },
-  // Nav avatar: 36px CSS
+  // Nav avatar and the hero status pill: 36px CSS at most
   { from: "public/dk-headshot.jpg", to: "public/dk-headshot-72.webp", size: 72 },
   // Career timeline logos: 44px CSS
   ...["cvp-logo.png", "gw-logo.png", "gm-logo.jpeg", "expedia-logo.jpg"].map(
