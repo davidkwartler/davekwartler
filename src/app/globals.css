@@ -10,6 +10,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-schibsted);
   --font-mono: var(--font-jetbrains);
+  /* Stock gray-500 is ~4.1:1 on the #0a0a0a page, under WCAG AA's 4.5:1 for
+     body-size text. Same hue, nudged up to ~4.8:1 so every quiet label
+     passes without brightening the monochrome look. */
+  --color-gray-500: #767e8c;
 }
 
 html {

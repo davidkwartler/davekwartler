@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 /**
  * Reveal - fade/rise-in on scroll, once, settles fast.
@@ -11,6 +11,10 @@ import { useEffect, useRef, useState } from "react";
  * fully below the viewport are hidden and revealed by an
  * IntersectionObserver flipping a CSS class; anything already on screen is
  * left alone. Reduced-motion users never get the hide at all.
+ *
+ * The phase classes are toggled on the DOM node directly rather than through
+ * state: they're a post-hydration visual overlay, and React never renders a
+ * className that differs from the server's, so nothing re-renders for them.
  */
 export function Reveal({
   children,
@@ -22,9 +26,6 @@ export function Reveal({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState<"visible" | "pending" | "shown">(
-    "visible"
-  );
 
   useEffect(() => {
     const el = ref.current;
@@ -35,13 +36,13 @@ export function Reveal({
 
     if (typeof IntersectionObserver === "undefined") return;
 
-    setPhase("pending");
+    el.classList.add("reveal-pending");
     let gotInitialCallback = false;
     const io = new IntersectionObserver(
       ([entry]) => {
         gotInitialCallback = true;
         if (entry.isIntersecting) {
-          setPhase("shown");
+          el.classList.replace("reveal-pending", "reveal-shown");
           io.disconnect();
         }
       },
@@ -49,11 +50,11 @@ export function Reveal({
     );
     io.observe(el);
     // Fail visible: an observer always reports once right after observe();
-    // if that never arrives, IO is broken here — un-hide rather than leave
+    // if that never arrives, IO is broken here: un-hide rather than leave
     // the section blank.
     const guard = setTimeout(() => {
       if (!gotInitialCallback) {
-        setPhase("visible");
+        el.classList.remove("reveal-pending");
         io.disconnect();
       }
     }, 1000);
@@ -66,9 +67,7 @@ export function Reveal({
   return (
     <div
       ref={ref}
-      className={`${className ?? ""} ${
-        phase === "pending" ? "reveal-pending" : ""
-      } ${phase === "shown" ? "reveal-shown" : ""}`.trim()}
+      className={className}
       style={delay ? { transitionDelay: `${delay}s` } : undefined}
     >
       {children}

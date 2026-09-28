@@ -18,6 +18,19 @@ import {
   DayTripIcon,
 } from "@/components/icons";
 
+// Canvas can't read CSS custom properties, so a font string naming
+// var(--font-jetbrains) is rejected outright and the glyphs silently fall
+// back to 10px sans-serif. Resolve next/font's generated family name once.
+let cachedGlyphFont: string | null = null;
+function glyphFont() {
+  if (cachedGlyphFont) return cachedGlyphFont;
+  const family = getComputedStyle(document.body)
+    .getPropertyValue("--font-jetbrains")
+    .trim();
+  cachedGlyphFont = `10px ${family ? `${family}, ` : ""}ui-monospace, monospace`;
+  return cachedGlyphFont;
+}
+
 /**
  * TravelMap - the hidden /travel easter egg, v2: a binary-glyph globe.
  *
@@ -313,7 +326,7 @@ function drawGlobe(
   ctx.fill();
 
   // Landmass glyphs
-  ctx.font = "10px var(--font-jetbrains), ui-monospace, monospace";
+  ctx.font = glyphFont();
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   const left = cx - R;
@@ -647,7 +660,6 @@ export default function TravelMap() {
     };
     window.addEventListener("travel:random", onRandom);
     return () => window.removeEventListener("travel:random", onRandom);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -686,7 +698,6 @@ export default function TravelMap() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Card placement: the globe bleeds off the viewport, so anchor the card in
@@ -755,7 +766,7 @@ export default function TravelMap() {
                   setActive(null);
                   setPinned(false);
                 }}
-                className="absolute right-2.5 top-2.5 rounded p-1 text-gray-600 transition-colors hover:text-gray-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-gray-500"
+                className="absolute right-2.5 top-2.5 rounded p-1 text-gray-500 transition-colors hover:text-gray-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-gray-500"
               >
                 <svg
                   viewBox="0 0 12 12"

@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
-import { nav } from "@/data/content";
+import { links, nav } from "@/data/content";
 import { useActiveSection } from "@/lib/use-active-section";
 
 const sections = nav.sections;
@@ -16,6 +16,28 @@ export function SiteNav() {
   const active = useActiveSection(sectionIds);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Open menu: Escape closes it and hands focus back to the toggle, and a
+  // tap anywhere outside the header dismisses it.
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setIsMenuOpen(false);
+      menuButtonRef.current?.focus();
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (!headerRef.current?.contains(e.target as Node)) setIsMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
+  }, [isMenuOpen]);
 
   // Show the nav avatar once the hero headshot has scrolled out of view
   useEffect(() => {
@@ -38,6 +60,7 @@ export function SiteNav() {
         Skip to content
       </a>
       <header
+        ref={headerRef}
         className={`fixed inset-x-0 top-0 border-b border-white/10 bg-neutral-950/60 backdrop-blur-md ${
           isMenuOpen ? "z-[60]" : "z-40"
         }`}
@@ -62,7 +85,7 @@ export function SiteNav() {
               }
             >
               <Image
-                src="/dk-headshot.jpg"
+                src="/dk-headshot-72.webp"
                 alt=""
                 width={36}
                 height={36}
@@ -103,7 +126,7 @@ export function SiteNav() {
 
           <div className="hidden md:flex items-center gap-4">
             <a
-              href="https://www.linkedin.com/in/dkwartler/"
+              href={links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -112,7 +135,7 @@ export function SiteNav() {
               <LinkedInIcon className="w-5 h-5" />
             </a>
             <a
-              href="https://github.com/davidkwartler"
+              href={links.github}
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -124,16 +147,20 @@ export function SiteNav() {
 
           {/* Mobile hamburger */}
           <button
+            ref={menuButtonRef}
+            type="button"
             className="md:hidden p-2 text-gray-300 hover:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMenuOpen ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" aria-hidden fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" aria-hidden fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
@@ -142,7 +169,10 @@ export function SiteNav() {
 
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-white/10 bg-neutral-950/90 backdrop-blur-md px-4 pb-4 sm:px-6">
+          <div
+            id="mobile-menu"
+            className="md:hidden border-t border-white/10 bg-neutral-950/90 backdrop-blur-md px-4 pb-4 sm:px-6"
+          >
             <div className="flex flex-col space-y-1 pt-3">
               {sections.map((s) => (
                 <Link
@@ -159,7 +189,7 @@ export function SiteNav() {
                 </Link>
               ))}
               <a
-                href="https://www.linkedin.com/in/dkwartler/"
+                href={links.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white"
@@ -168,7 +198,7 @@ export function SiteNav() {
                 LinkedIn
               </a>
               <a
-                href="https://github.com/davidkwartler"
+                href={links.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white"

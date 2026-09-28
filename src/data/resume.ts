@@ -20,7 +20,7 @@ export type CareerEntry = {
 export const careerEntries: CareerEntry[] = [
   {
     id: "gw",
-    logo: "/gw-logo.png",
+    logo: "/gw-logo.webp",
     node: "GW University",
     years: "2015–19",
     title: "Bachelor of Business Administration",
@@ -33,7 +33,7 @@ export const careerEntries: CareerEntry[] = [
   },
   {
     id: "cvp",
-    logo: "/cvp-logo.png",
+    logo: "/cvp-logo.webp",
     node: "CVP",
     years: "2019–21",
     title: "Product Manager",
@@ -57,7 +57,7 @@ export const careerEntries: CareerEntry[] = [
   },
   {
     id: "gm",
-    logo: "/gm-logo.jpeg",
+    logo: "/gm-logo.webp",
     node: "General Motors",
     years: "2021–24",
     title: "Senior Product Manager",
@@ -83,7 +83,7 @@ export const careerEntries: CareerEntry[] = [
   },
   {
     id: "expedia",
-    logo: "/expedia-logo.jpg",
+    logo: "/expedia-logo.webp",
     node: "Expedia",
     years: "2024–now",
     title: "Senior Product Manager",

@@ -9,7 +9,7 @@ Personal portfolio site for David Kwartler: a single-page scroll narrative built
 - **Base look:** Linear.app-style monochrome. Black and white, minimalist, glow used as hierarchy rather than color splash.
 - **Motion quality:** rauno.me-style restraint. Physically plausible micro-interactions; every interactive element acknowledges hover, press, and focus.
 - **Personality:** applied sparingly onto the monochrome base through microcopy and small accent moments, not personal-data features.
-- **One scroll-scrubbed "Apple moment":** the hero headshot shrinks and travels into the sticky nav as you scroll, landing as the small round avatar.
+- **Headshot hand-off:** once the hero headshot scrolls out of view, a small round copy springs into the sticky nav beside the name.
 
 ## Page structure
 
@@ -51,7 +51,11 @@ src/
                   galaxy-pause.ts (global motion pause store), globe-config.ts,
                   motion.ts (shared easing), use-active-section.ts
 public/           Images, favicons, OG image
-scripts/          gen-landmask.mjs regenerates src/data/land-mask.ts
+assets/           Full-size image sources (not served); see gen-images.mjs
+scripts/          gen-landmask.mjs regenerates src/data/land-mask.ts;
+                  gen-images.mjs derives the pre-sized headshot and logo
+                  webps in public/; gen-favicon.mjs redraws every favicon
+tests/            Playwright smoke tests (render, console, axe, key actions)
 ```
 
 ## Conventions
@@ -66,10 +70,19 @@ scripts/          gen-landmask.mjs regenerates src/data/land-mask.ts
 
 ```bash
 npm install
-npm run dev     # local dev server
-npm run build   # static export to out/
+npm run dev        # local dev server
+npm run build      # static export to out/
 npm run lint
+npm run typecheck
+npm test           # Playwright smoke tests against out/ (build first)
+npm run gen:images # re-derive resized images after changing a source
 ```
+
+First-time test setup: `npx playwright install chromium`, or point
+`CHROMIUM_PATH` at an existing Chromium binary.
+
+GitHub Actions (`.github/workflows/ci.yml`) runs lint, typecheck, build, and
+the smoke tests on every pull request and push to main.
 
 ## Workflow
 

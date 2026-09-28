@@ -1,4 +1,6 @@
+import CurrentYear from "@/components/CurrentYear";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import { links } from "@/data/content";
 
 export default function Footer() {
   return (
@@ -6,7 +8,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <a
-            href="https://www.linkedin.com/in/dkwartler/"
+            href={links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
@@ -15,7 +17,7 @@ export default function Footer() {
             LinkedIn
           </a>
           <a
-            href="https://github.com/davidkwartler"
+            href={links.github}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
@@ -25,7 +27,7 @@ export default function Footer() {
           </a>
         </div>
         <p className="text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} David Kwartler. All rights reserved.
+          &copy; <CurrentYear /> David Kwartler. All rights reserved.
         </p>
       </div>
     </footer>

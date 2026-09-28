@@ -163,7 +163,7 @@ export default function Career() {
                     </span>
                     <span
                       className={`relative text-xs tabular-nums transition-colors ${
-                        isActive ? "text-gray-300" : "text-gray-600"
+                        isActive ? "text-gray-300" : "text-gray-500"
                       }`}
                     >
                       {entry.years}

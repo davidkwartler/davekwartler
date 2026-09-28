@@ -8,7 +8,8 @@ import {
   useTransform,
 } from "motion/react";
 import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
-import { hero } from "@/data/content";
+import { LinkedInIcon } from "@/components/icons";
+import { hero, links } from "@/data/content";
 
 // Subtle warm hints for the hero galaxy: orange and pink
 const HERO_ACCENTS: [RGB, RGB] = [
@@ -76,7 +77,7 @@ export default function Hero() {
           />
           <Image
             id="hero-headshot-img"
-            src="/dk-headshot.jpg"
+            src="/dk-headshot-352.webp"
             alt="David Kwartler"
             width={176}
             height={176}
@@ -104,6 +105,26 @@ export default function Hero() {
           <br />
           {hero.also}
         </p>
+        <div
+          style={{ animationDelay: "0.35s" }}
+          className="hero-rise mt-8 flex flex-wrap items-center justify-center gap-3"
+        >
+          <a
+            href="#contact"
+            className="rounded-full bg-white/90 px-6 py-2.5 text-sm font-medium text-neutral-900 transition-all duration-300 hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_32px_rgba(255,255,255,0.22)] active:scale-[0.98]"
+          >
+            {hero.contactCta}
+          </a>
+          <a
+            href={links.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-neutral-950/40 px-6 py-2.5 text-sm font-medium text-gray-200 backdrop-blur-sm transition-all duration-300 hover:border-white/35 hover:text-white active:scale-[0.98]"
+          >
+            <LinkedInIcon className="h-4 w-4" />
+            {hero.linkedinCta}
+          </a>
+        </div>
       </div>
 
     </section>
