@@ -19,7 +19,7 @@ export default function WhatIDo() {
         <Reveal>
           <SectionHeading label={whatIDo.label} heading={whatIDo.heading} />
         </Reveal>
-        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
           {cards.map((card, i) => (
             <Reveal key={card.index} delay={i * 0.07} className="h-full">
               <GlowCard className="h-full">

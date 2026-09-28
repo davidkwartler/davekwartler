@@ -5,6 +5,7 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import CommandPalette from "@/components/CommandPalette";
 import { links } from "@/data/content";
 import "./globals.css";
 
@@ -30,12 +31,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const siteDescription =
-  "Personal website of David Kwartler, a Senior Product Manager in Austin, TX working on identity connectivity, consent, and AI agent authorization.";
+  "Personal website of David Kwartler, a Senior Product Manager at Expedia in Austin, TX, building account linking, consent, and permissions for Expedia's loyalty and AI partners.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.davidkwartler.com"),
   // Home gets the descriptive title; other pages set their own full title.
-  title: "David Kwartler: Product Manager for Identity and AI Agent Authorization",
+  title: "David Kwartler: Product Manager for Membership and AI Partnerships",
   description: siteDescription,
   icons: {
     icon: [
@@ -116,6 +117,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         {children}
+        <CommandPalette />
         <Analytics />
       </body>
     </html>

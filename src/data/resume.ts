@@ -1,11 +1,17 @@
-// Career history rendered by the Career timeline. Site copy lives in content.ts.
+// Career history rendered by the Career changelog. Site copy lives in content.ts.
 
 export type CareerEntry = {
   id: string;
   logo: string;
-  node: string; // short label under the timeline stop
-  years: string; // compact range next to the stop
+  years: string; // compact range in the row's date column
   title: string;
+  /** Compact title and org for the collapsed row */
+  rowTitle: string;
+  rowOrg: string;
+  /** One line shown on the collapsed row */
+  line: string;
+  /** The single number the collapsed row leads with */
+  stat: string;
   org: string;
   orgUrl?: string;
   location: string;
@@ -16,14 +22,17 @@ export type CareerEntry = {
   certification?: string;
 };
 
-// Timeline order: oldest first. Career.tsx opens on the last entry.
+// Oldest first; the changelog renders newest first and opens the latest.
 export const careerEntries: CareerEntry[] = [
   {
     id: "gw",
+    rowTitle: "BBA",
+    rowOrg: "GW University",
     logo: "/gw-logo.webp",
-    node: "GW University",
     years: "2015–19",
     title: "Bachelor of Business Administration",
+    line: "Finance major, environmental sustainability minor.",
+    stat: "BBA",
     org: "The George Washington University School of Business",
     location: "Washington, DC",
     dates: "2015 – 2019",
@@ -33,10 +42,13 @@ export const careerEntries: CareerEntry[] = [
   },
   {
     id: "cvp",
+    rowTitle: "Product Manager",
+    rowOrg: "CVP",
     logo: "/cvp-logo.webp",
-    node: "CVP",
     years: "2019–21",
     title: "Product Manager",
+    line: "10+ consulting engagements on large modernization projects.",
+    stat: "$2M from a POC",
     org: "CVP",
     orgUrl: "https://www.cvpcorp.com",
     location: "Washington, DC",
@@ -57,10 +69,13 @@ export const careerEntries: CareerEntry[] = [
   },
   {
     id: "gm",
+    rowTitle: "Senior PM",
+    rowOrg: "General Motors",
     logo: "/gm-logo.webp",
-    node: "General Motors",
     years: "2021–24",
     title: "Senior Product Manager",
+    line: "Customer identity across mobile apps, web, and the car.",
+    stat: "+28% enrollments",
     org: "General Motors",
     orgUrl: "https://www.gm.com",
     location: "Austin, TX",
@@ -83,32 +98,35 @@ export const careerEntries: CareerEntry[] = [
   },
   {
     id: "expedia",
+    rowTitle: "Senior PM",
+    rowOrg: "Expedia Group",
     logo: "/expedia-logo.webp",
-    node: "Expedia",
     years: "2024–now",
     title: "Senior Product Manager",
+    line: "Account linking for Expedia's loyalty and AI partners.",
+    stat: "20+ partners",
     org: "Expedia Group",
     orgUrl: "https://www.expediagroup.com",
     location: "Austin, TX",
     dates: "08/2024 – Present",
     summary:
-      "I lead identity connectivity for Expedia's enterprise partnerships: the account linking, consent, and authorization systems that power loyalty, social, and Gen AI integrations. My work enables personalized search, member pricing, and saved trips across industry-first Gen AI surfaces, safely and transparently.",
+      "I work on Expedia's partnerships from the identity and membership side. I build the account linking that connects Expedia members to our loyalty and AI partners, and the permissions that keep those connections safe.",
     bullets: [
-      "I lead authorization strategy for Expedia's MCP-based Gen AI integrations like ChatGPT and Claude, building the identity and consent layer that enables personalized search, member pricing, and saved trips across industry-first agentic surfaces.",
-      "I architected the centralized OAuth 2.0 consent system powering a nine-figure enterprise partnership portfolio across AI, loyalty programs, and social platforms, enabling secure scope-based identity connectivity and data exchange with 20+ global partners.",
-      "I championed AI building within Expedia by shipping 50+ production code changes for account linking, from building UI designs in Figma Make to pushing frontend, API, and OIDC changes via Claude Code and Codex.",
-      "I pioneered identity platform multi-tenancy, ensuring user data isolation and unlocking multi-million-dollar value via personalization and loyalty integrations for Expedia's B2B marketplace.",
-      "I achieved a 1% booking conversion uplift by aligning loyalty, fraud, privacy, and cybersecurity teams to A/B test an extended session length strategy.",
-      "I eliminated an external vendor dependency for authentication through system rearchitecture, delivering multi-million-dollar annual savings.",
-      "I launched social login and a NAVER Pay integration in South Korea, capturing millions in incremental value by improving conversion in a key growth market.",
+      "I lead account linking for Expedia with AI partners like OpenAI, Anthropic, Google, Meta, and Amazon, so travelers can shop and book with their member prices and saved trips inside AI assistants.",
+      "I bring Expedia membership into partner experiences: member prices, rewards, and the messaging that gives travelers a reason to link their account or book with Expedia.",
+      "I design the consent and authorization model for AI partners: scoped permissions, clear consent, and access travelers can revoke.",
+      "I architected the OAuth 2.0 account linking and consent system behind our partnership portfolio, connecting 20+ global AI, loyalty, and social partners.",
+      "I use AI tools to ship features and experiments to production myself: 50+ changes across UI, APIs, and OIDC, built with Claude Code and ChatGPT Codex.",
+      "I lifted booking conversion 1% by aligning loyalty, fraud, privacy, and security teams on an A/B test of longer sign-in sessions.",
+      "I removed an external authentication vendor through a rearchitecture, saving millions of dollars a year.",
     ],
     skills: [
+      "Account Linking",
+      "Partnerships",
       "AI Agent Authorization",
       "Model Context Protocol (MCP)",
-      "LLM Data Privacy & Governance",
       "OAuth 2.0",
-      "AI-Assisted Development",
-      "Leadership & Mentoring",
+      "Building with AI",
     ],
   },
 ];

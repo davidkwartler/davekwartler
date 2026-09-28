@@ -17,14 +17,16 @@ export function useActiveSection(ids: readonly string[]) {
     const update = () => {
       raf = 0;
       const marker = window.scrollY + window.innerHeight * 0.35;
-      let current = ids[0];
+      // Pages without these sections (travel, shows, 404) highlight nothing
+      let current = document.getElementById(ids[0]) ? ids[0] : "";
       for (const id of ids) {
         const el = document.getElementById(id);
         if (el && el.offsetTop <= marker) current = id;
       }
       if (
+        current &&
         window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 2
+          document.documentElement.scrollHeight - 2
       ) {
         current = ids[ids.length - 1];
       }

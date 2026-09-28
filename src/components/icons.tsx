@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 // Highlight-kind glyphs for the travel field-notes cards. Simple 24px
 // stroke outlines (lucide-style) so they read as quiet markers, not emoji.
 function strokeProps(className?: string) {
@@ -134,6 +136,29 @@ export function CheckIcon({ className }: { className?: string }) {
   return (
     <svg {...strokeProps(className)}>
       <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+// The galaxy's bright star (same geometry as the favicon, no backdrop):
+// white core, violet glow, horizontal spikes longer than the vertical.
+export function StarMark({ className }: { className?: string }) {
+  // Unique per instance: the hero and the career "now" marker share a page
+  const glowId = useId();
+  return (
+    <svg viewBox="0 0 64 64" aria-hidden className={className}>
+      <defs>
+        <radialGradient id={glowId}>
+          <stop offset="0" stopColor="#D3C7FD" stopOpacity="0.96" />
+          <stop offset="0.32" stopColor="#9B7EF8" stopOpacity="0.56" />
+          <stop offset="0.66" stopColor="#7C3AED" stopOpacity="0.25" />
+          <stop offset="1" stopColor="#6D28D9" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx="32" cy="32" r="29" fill={`url(#${glowId})`} />
+      <path d="M32 9 L37.7 32 L32 55 L26.3 32 Z" fill="#fff" fillOpacity="0.92" />
+      <path d="M3 32 L32 27.1 L61 32 L32 36.9 Z" fill="#fff" fillOpacity="0.92" />
+      <circle cx="32" cy="32" r="7.2" fill="#fff" />
     </svg>
   );
 }
