@@ -110,8 +110,8 @@ html {
   }
 }
 
-/* Shows page: the last-show record. Grooves, a sheen, a violet label; it
-   spins only while hovered, and never under reduced motion. */
+/* Shows page: the last-show record. Grooves, a sheen, a violet label.
+   The spin and the hover scratch live in Vinyl.tsx. */
 .vinyl {
   position: relative;
   background:
@@ -134,38 +134,6 @@ html {
   inset: 34%;
   border-radius: 50%;
   background: radial-gradient(circle, #0a0a0a 0 12%, #7c3aed 14% 100%);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .vinyl {
-    animation: vinyl-spin 1.8s linear infinite paused;
-  }
-  .group:hover .vinyl {
-    animation-play-state: running;
-  }
-}
-@keyframes vinyl-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Career changelog: the star on the current role breathes, slowly */
-@media (prefers-reduced-motion: no-preference) {
-  .career-now {
-    animation: career-now 3.2s ease-in-out infinite;
-  }
-}
-
-@keyframes career-now {
-  0%,
-  100% {
-    opacity: 0.6;
-    transform: scale(0.9);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

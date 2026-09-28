@@ -125,14 +125,6 @@ export default function CommandPalette() {
         hint: `#${s.id}`,
         run: go(`/#${s.id}`),
       })),
-      ...palette.pages.map((p) => ({
-        id: `page-${p.href}`,
-        group: "Pages",
-        label: p.label,
-        hint: p.href,
-        keywords: p.keywords,
-        run: go(p.href),
-      })),
       {
         id: "copy-email",
         group: "Contact",
@@ -185,6 +177,14 @@ export default function CommandPalette() {
         feedback: paused ? "Animation resumed" : "Animation paused",
         run: () => setGalaxyPaused(!paused),
       },
+      ...palette.pages.map((p) => ({
+        id: `page-${p.href}`,
+        group: "Secret pages",
+        label: p.label,
+        hint: p.href,
+        keywords: p.keywords,
+        run: go(p.href),
+      })),
     ];
   }, [router, paused]);
 

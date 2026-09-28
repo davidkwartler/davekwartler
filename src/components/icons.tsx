@@ -162,3 +162,14 @@ export function StarMark({ className }: { className?: string }) {
     </svg>
   );
 }
+
+// The same star as a flat glyph: no glow, takes the text color.
+export function StarGlyph({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" aria-hidden className={className} fill="currentColor">
+      <path d="M32 9 L37.7 32 L32 55 L26.3 32 Z" />
+      <path d="M3 32 L32 27.1 L61 32 L32 36.9 Z" />
+      <circle cx="32" cy="32" r="6" />
+    </svg>
+  );
+}

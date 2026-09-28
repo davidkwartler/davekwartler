@@ -1,7 +1,7 @@
-// Every show since 2024, from David's concert tracker spreadsheet.
-// Past shows only: upcoming dates are left out on purpose, since they'd say
-// where he'll be on a given night. Regenerate from a fresh export and keep
-// the cutoff at the export date.
+// Every show since 2024 from David's concert tracker export, including
+// ones still ahead (tickets he already has). The page only shows a show
+// once its date has passed in Austin time (see lib/shows.ts), so the rest
+// of the year fills in on its own. Regenerate from a fresh export.
 
 export type Show = {
   date: string; // YYYY-MM-DD
@@ -9,8 +9,6 @@ export type Show = {
   venue: string;
   festival?: string;
 };
-
-export const showsExportedOn = "2026-09-28";
 
 export const shows: Show[] = [
   { date: "2024-01-06", artist: "Bright Light Social Hour", venue: "Empire" },
@@ -225,4 +223,27 @@ export const shows: Show[] = [
   { date: "2026-09-19", artist: "John Summit", venue: "Randall's Island", festival: "Experts Only" },
   { date: "2026-09-20", artist: "John Summit", venue: "Randall's Island", festival: "Experts Only" },
   { date: "2026-09-20", artist: "John Summit", venue: "Pacha New York", festival: "Experts Only" },
+  { date: "2026-09-30", artist: "Tinlicker", venue: "Emo's" },
+  { date: "2026-10-02", artist: "Skrillex", venue: "Zilker Park", festival: "ACL Music Festival" },
+  { date: "2026-10-04", artist: "The XX", venue: "Zilker Park", festival: "ACL Music Festival" },
+  { date: "2026-10-10", artist: "Calvin Harris", venue: "Empire Polo Club", festival: "Head Trip" },
+  { date: "2026-10-11", artist: "Swedish House Mafia & Skrillex", venue: "Empire Polo Club", festival: "Head Trip" },
+  { date: "2026-10-17", artist: "MGMT", venue: "The Concourse Project" },
+  { date: "2026-10-20", artist: "Dev Lemons", venue: "29th Street Ballroom" },
+  { date: "2026-10-22", artist: "Ben Bohmer", venue: "The Concourse Project" },
+  { date: "2026-10-23", artist: "Zhu", venue: "The Concourse Project", festival: "F1" },
+  { date: "2026-10-25", artist: "Alesso", venue: "Germania Insurance Amphitheater", festival: "F1" },
+  { date: "2026-10-29", artist: "Chris Stassy", venue: "The Concourse Project" },
+  { date: "2026-10-30", artist: "Dombresky", venue: "The Concourse Project" },
+  { date: "2026-10-31", artist: "Madeon", venue: "ACL Live" },
+  { date: "2026-10-31", artist: "Four Tet", venue: "The Concourse Project" },
+  { date: "2026-11-05", artist: "Bonobo", venue: "Emo's" },
+  { date: "2026-11-06", artist: "John Summit", venue: "Moody Center" },
+  { date: "2026-11-13", artist: "Porter Robinson", venue: "The Concourse Project", festival: "Seismic Dance Event" },
+  { date: "2026-11-14", artist: "Above & Beyond", venue: "The Concourse Project", festival: "Seismic Dance Event" },
+  { date: "2026-11-15", artist: "Sara Landry", venue: "The Concourse Project", festival: "Seismic Dance Event" },
+  { date: "2026-12-11", artist: "Magdalena Bay", venue: "Radio East" },
+  { date: "2026-12-12", artist: "Frost Children", venue: "Radio East" },
+  { date: "2026-12-30", artist: "Chris Lake", venue: "Fair Park", festival: "Lights All Night" },
+  { date: "2026-12-31", artist: "Subtronics", venue: "Fair Park", festival: "Lights All Night" },
 ];

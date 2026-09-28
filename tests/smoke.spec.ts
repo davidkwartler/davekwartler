@@ -21,7 +21,7 @@ function trackErrors(page: Page) {
 const routes = [
   { path: "/", heading: "David Kwartler" },
   { path: "/travel", heading: null },
-  { path: "/shows", heading: "The live music receipts." },
+  { path: "/shows", heading: "My live music habit." },
   { path: "/does-not-exist", heading: "401" },
 ];
 
@@ -93,7 +93,7 @@ test("command menu opens with the shortcut and navigates", async ({ page, isMobi
   await input.fill("shows");
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/shows$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The live music receipts.");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("My live music habit.");
 });
 
 test("career rows expand in place", async ({ page }) => {
@@ -103,4 +103,23 @@ test("career rows expand in place", async ({ page }) => {
   await expect(rows.first()).toHaveAttribute("open", "");
   await rows.nth(1).locator("summary").click();
   await expect(rows.nth(1)).toHaveAttribute("open", "");
+});
+
+test("upcoming shows appear once their date has passed", async ({ page }) => {
+  const lastShow = page.getByText("Last show").locator("..");
+  // The day of a show: it hasn't passed yet in Austin
+  await page.clock.setFixedTime(new Date("2026-10-04T20:00:00-05:00"));
+  await page.goto("/shows");
+  await expect(lastShow).toContainText("Skrillex");
+  await expect(page.getByText("The XX")).toHaveCount(0);
+
+  // The morning after, it's there
+  await page.clock.setFixedTime(new Date("2026-10-05T08:00:00-05:00"));
+  await page.reload();
+  await expect(lastShow).toContainText("The XX");
+
+  // After New Year's Eve, the whole year is in
+  await page.clock.setFixedTime(new Date("2027-01-01T12:00:00-06:00"));
+  await page.reload();
+  await expect(lastShow).toContainText("Subtronics");
 });
