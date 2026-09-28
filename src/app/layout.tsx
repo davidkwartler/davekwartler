@@ -5,11 +5,15 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { links } from "@/data/content";
 import "./globals.css";
 
+// Playfair only ever sets headings in bold: one static weight is lighter
+// than the full variable axis.
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  weight: "700",
 });
 
 const schibstedGrotesk = Schibsted_Grotesk({
@@ -17,9 +21,12 @@ const schibstedGrotesk = Schibsted_Grotesk({
   subsets: ["latin"],
 });
 
+// Mono only sets small below-the-fold labels, so don't let it compete with
+// the hero for bandwidth at first paint.
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
+  preload: false,
 });
 
 const siteDescription =
@@ -27,7 +34,8 @@ const siteDescription =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.davidkwartler.com"),
-  title: "David Kwartler",
+  // Home gets the descriptive title; other pages set their own full title.
+  title: "David Kwartler: Product Manager for Identity and AI Agent Authorization",
   description: siteDescription,
   icons: {
     icon: [
@@ -83,10 +91,7 @@ const personJsonLd = {
   },
   url: "https://www.davidkwartler.com",
   image: "https://www.davidkwartler.com/dk-headshot.jpg",
-  sameAs: [
-    "https://www.linkedin.com/in/dkwartler/",
-    "https://github.com/davidkwartler",
-  ],
+  sameAs: [links.linkedin, links.github],
   knowsAbout: [
     "Identity and Access Management",
     "AI Agent Authorization",

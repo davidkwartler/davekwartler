@@ -1,5 +1,10 @@
 // All rendered site copy lives here. Career history lives in resume.ts.
 
+export const links = {
+  linkedin: "https://www.linkedin.com/in/dkwartler/",
+  github: "https://github.com/davidkwartler",
+};
+
 export const nav = {
   name: "David Kwartler",
   sections: [
@@ -16,6 +21,8 @@ export const hero = {
   tagline: "Identity nerd, travel-tech PM, occasional race car driver",
   intro: "I build identity and authorization products for AI agents with OAuth.",
   also: "Also: Porsche, vinyl, and a cat named Rey.",
+  contactCta: "Get in touch",
+  linkedinCta: "LinkedIn",
 };
 
 export type WhatIDoCard = {
@@ -25,6 +32,8 @@ export type WhatIDoCard = {
   /** Optional side-project link, rendered as a pill in the card's bottom corner */
   project?: {
     name: string;
+    /** One line on what the project does, shown above its links */
+    blurb: string;
     demo: string;
     repo: string;
   };
@@ -47,6 +56,8 @@ const whatIDoCards: WhatIDoCard[] = [
     body: "I prototype with AI and ship production changes myself, from UI design to API and OIDC changes. It's the fastest way to test an idea.",
     project: {
       name: "Sentinel",
+      blurb:
+        "Side project: Sentinel catches hijacked sessions by spotting device-fingerprint mismatches, with Claude scoring each one.",
       demo: "https://sentinel.davidkwartler.com",
       repo: "https://github.com/davidkwartler/sentinel",
     },
@@ -114,5 +125,8 @@ export const contact = {
   heading: "Get in touch.",
   subline: "Identity, authorization, AI agents, or anything tech. All fair game.",
   cta: "Email me",
+  copyCta: "Copy email",
+  copiedCta: "Copied",
+  linkedinCta: "LinkedIn",
   email: "david@davidkwartler.com",
 };

@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Reveal } from "@/components/Reveal";
-import { contact } from "@/data/content";
+import { CheckIcon, CopyIcon, LinkedInIcon } from "@/components/icons";
+import { contact, links } from "@/data/content";
 import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
 
 // Subtle cool hints for the contact galaxy: blue and green
@@ -11,6 +13,29 @@ const CONTACT_ACCENTS: [RGB, RGB] = [
 ];
 
 export default function Contact() {
+  // mailto does nothing for visitors without a desktop mail client, so the
+  // address is also one click from the clipboard.
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (!copied) return;
+    const t = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(t);
+  }, [copied]);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(contact.email);
+      setCopied(true);
+    } catch {
+      // Clipboard blocked (insecure context, denied permission): fall back
+      // to the mail client.
+      window.location.href = `mailto:${contact.email}`;
+    }
+  };
+
+  const secondaryPill =
+    "inline-flex items-center gap-2 rounded-full border border-white/15 bg-neutral-950/40 px-5 py-3 text-sm font-medium text-gray-200 backdrop-blur-sm transition-all duration-300 hover:border-white/35 hover:text-white active:scale-[0.98]";
+
   return (
     <section
       id="contact"
@@ -42,13 +67,37 @@ export default function Contact() {
           </p>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="mt-10">
+          <div className="mt-10 flex flex-col items-center gap-4">
             <a
               href={`mailto:${contact.email}`}
               className="inline-block rounded-full bg-white/90 px-8 py-4 text-lg font-medium text-neutral-900 transition-all duration-300 hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] active:scale-[0.98]"
             >
               {contact.cta}
             </a>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button type="button" onClick={copyEmail} className={secondaryPill}>
+                {copied ? (
+                  <CheckIcon className="h-4 w-4 text-emerald-400" />
+                ) : (
+                  <CopyIcon className="h-4 w-4" />
+                )}
+                {copied ? contact.copiedCta : contact.copyCta}
+              </button>
+              <a
+                href={links.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={secondaryPill}
+              >
+                <LinkedInIcon className="h-4 w-4" />
+                {contact.linkedinCta}
+              </a>
+            </div>
+            {/* Announces the copy for screen readers; the button label
+                changing alone isn't reliably read out */}
+            <p className="sr-only" aria-live="polite">
+              {copied ? `${contact.email} copied to clipboard` : ""}
+            </p>
           </div>
           <a
             href="#home"

@@ -35,7 +35,7 @@ export default function NotFound() {
         >
           Request a valid scope
         </Link>
-        <p className="mt-3 text-sm text-gray-600">(take me home)</p>
+        <p className="mt-3 text-sm text-gray-500">(take me home)</p>
       </main>
       <Footer />
     </>

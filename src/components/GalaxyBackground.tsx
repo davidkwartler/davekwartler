@@ -177,8 +177,8 @@ function randomMeteor(now: number): Meteor {
 }
 
 /**
- * Rejection-samples a meteor until its whole streak — head, flight path and
- * trailing tail — clears the no-fly zone. Meteors stay random on every load;
+ * Rejection-samples a meteor until its whole streak (head, flight path and
+ * trailing tail) clears the no-fly zone. Meteors stay random on every load;
  * only the star layout is seeded.
  */
 function spawnMeteor(

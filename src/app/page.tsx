@@ -18,9 +18,10 @@ export default function Home() {
         <Career />
         <Human />
         <Contact />
+        {/* Fixed to the viewport, but lives in main so it sits in a landmark */}
+        <SkipArrow />
       </main>
       <Footer />
-      <SkipArrow />
       <PauseMotionButton />
     </>
   );

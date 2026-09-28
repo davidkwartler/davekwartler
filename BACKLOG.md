@@ -26,6 +26,26 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-09-28 — Site audit: deps, a11y, perf, CI, hero and contact actions (branch claude/personal-site-dev-u407ar)
+
+- Hero gets Get in touch and LinkedIn buttons; Contact adds Copy email
+  (falls back to mailto) and LinkedIn; the Sentinel card gets a one-line
+  description; the home title now says what David does
+- Next 16.3.6 / React 19.3 / Motion 12.43; npm audit clean. The upgrade also
+  stopped Turbopack shipping Motion twice on the home page. Home JS 841KB to
+  653KB raw, /travel 1,051KB to 719KB
+- Images pre-sized by `scripts/gen-images.mjs` (the static export has no
+  optimizer): headshot, nav avatar and logos ~128KB to ~12KB
+- WCAG AA contrast: gray-500 retuned to #767e8c site-wide. Mobile menu gets
+  aria-expanded, Escape and tap-outside dismissal
+- Travel globe glyphs were never in JetBrains Mono: canvas can't resolve
+  `var(--font-jetbrains)`, rejected the whole font string and fell back to
+  10px sans-serif. Now resolved from the computed style
+- Tried LazyMotion (sync and async features): no saving, since useScroll and
+  friends pull in most of motion-dom anyway. Reverted
+- Playwright smoke tests (render, console, axe, key actions) and a GitHub
+  Actions workflow: lint, typecheck, build, tests. HSTS header added
+
 ### 2026-07-27 — Favicon star: richer violet, second glow, more detail (branch galaxy-star-tune)
 
 - Asymmetry retuned. Verticals 19 to 23, horizontals held at 29. The waist,

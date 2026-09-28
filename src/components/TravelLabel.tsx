@@ -1,7 +1,7 @@
 "use client";
 
 // Easter egg: clicking the eyebrow pulls up a random city card. Styled and
-// cursored like plain text on purpose — it shouldn't read as a link.
+// cursored like plain text on purpose: it shouldn't read as a link.
 export default function TravelLabel({ children }: { children: React.ReactNode }) {
   return (
     <h1
