@@ -11,10 +11,10 @@ component's worth), L (multi-file or iteration-heavy), XL (its own project).
 ## Ruled out (privacy boundary, 2026-07-01)
 
 Personal-data dumps stay off the professional site. Kept here in case David
-changes his mind (the travel map survived as a hidden noindex page):
+changes his mind (the travel map and, since 2026-09-28, the concert log
+survived as noindex pages):
 
 - Vinyl collection page (Discogs grid)
-- Concert log (~80 shows/year timeline or map)
 - Track day telemetry (HP Tuners lap/dyno visualizations)
 
 Cut in the 2026-07-12 grooming (David's call, restore if wanted): resume PDF
@@ -25,6 +25,31 @@ widget, Writing section (MDX), further hero animation experiments.
 ---
 
 ## Changelog
+
+### 2026-09-28 — Redesign: changelog career, status hero, contact sheet, command menu, /shows (branch claude/personal-site-dev-u407ar)
+
+The pre-redesign site is kept on the `v1-legacy` branch (a tag push was
+refused by the session's git proxy).
+
+- Copy reframed around account linking for Expedia's loyalty and AI
+  partners: four cards (growing membership, member benefits, AI
+  permissions, PM who builds), new Expedia entry. Partners named by
+  company, nothing from internal plans
+- Hero: left-aligned and bottom-weighted, the big centered headshot
+  replaced by a status pill with a live Austin clock and a time-of-day
+  mood. The star is the name's full stop (`StarMark`, the favicon
+  geometry without its backdrop; the SVG file has a dark ground)
+- Career: the tab grid, binary progress stream and 7-bullet card become
+  four changelog rows on native `<details>`; zero client JS
+- Who I am: film contact sheet with real EXIF. The served WebPs are
+  stripped, so values came from the camera originals in git history
+  (commit e033a86); the Porsche frame is ISO 12800
+- Command menu (Cmd/Ctrl+K): sections, pages, contact actions, pause
+  animation. No hidden easter eggs, by request
+- /shows from the concert tracker (212 shows, 2024 to Sep 2026); the 23
+  upcoming rows in the export are deliberately left out
+- /travel is no longer buried: linked from Who I am and the menu
+- Nav no longer highlights Home on pages without home sections
 
 ### 2026-09-28 — Site audit: deps, a11y, perf, CI, hero and contact actions (branch claude/personal-site-dev-u407ar)
 

@@ -83,3 +83,24 @@ test("mobile menu is labelled and closes on Escape", async ({ page, isMobile }) 
   await expect(page.locator("#mobile-menu")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
 });
+
+test("command menu opens with the shortcut and navigates", async ({ page, isMobile }) => {
+  test.skip(isMobile, "keyboard shortcut is desktop-only; mobile uses the nav button");
+  await page.goto("/");
+  await page.keyboard.press("Control+k");
+  const input = page.getByRole("combobox", { name: "Search commands" });
+  await expect(input).toBeFocused();
+  await input.fill("shows");
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/shows$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The live music receipts.");
+});
+
+test("career rows expand in place", async ({ page }) => {
+  await page.goto("/#career");
+  const rows = page.locator("#career details");
+  await expect(rows).toHaveCount(4);
+  await expect(rows.first()).toHaveAttribute("open", "");
+  await rows.nth(1).locator("summary").click();
+  await expect(rows.nth(1)).toHaveAttribute("open", "");
+});

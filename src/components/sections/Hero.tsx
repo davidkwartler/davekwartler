@@ -13,6 +13,9 @@ const HERO_ACCENTS: [RGB, RGB] = [
   [244, 114, 182],
 ];
 
+const firstNames = hero.name.split(" ").slice(0, -1).join(" ");
+const lastName = hero.name.split(" ").slice(-1)[0];
+
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
 
@@ -52,9 +55,12 @@ export default function Hero() {
           style={{ animationDelay: "0.05s" }}
           className="hero-rise mt-6 text-5xl font-bold leading-none tracking-wide text-white sm:text-7xl font-[family-name:var(--font-playfair)]"
         >
-          {hero.name}
-          {/* the galaxy's star as the full stop */}
-          <StarMark className="ml-0.5 inline-block h-[0.42em] w-[0.42em] align-baseline" />
+          {firstNames}{" "}
+          {/* the galaxy's star as the full stop, never wrapped onto its own line */}
+          <span className="whitespace-nowrap">
+            {lastName}
+            <StarMark className="ml-0.5 inline-block h-[0.42em] w-[0.42em] align-baseline" />
+          </span>
         </h1>
         <p
           style={{ animationDelay: "0.15s" }}

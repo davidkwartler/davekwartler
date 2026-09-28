@@ -29,7 +29,7 @@ export const hero = {
   name: "David Kwartler",
   tagline: "Identity nerd, travel-tech PM, occasional race car driver",
   intro:
-    "I grow Expedia's membership inside AI assistants and partner apps, and I ship a lot of the code myself.",
+    "I build account linking for Expedia's loyalty and AI partners, so travelers' member benefits follow them into cutting-edge agentic AI experiences.",
   also: "Also: Porsche, vinyl, and a cat named Rey.",
   contactCta: "Get in touch",
   linkedinCta: "LinkedIn",
@@ -43,7 +43,7 @@ export const status = {
   moods: [
     { until: 7, text: "asleep, probably" },
     { until: 12, weekend: true, text: "on the gravel bike" },
-    { until: 18, weekend: false, text: "shipping to prod" },
+    { until: 18, weekend: false, text: "building something" },
     { until: 18, weekend: true, text: "at the track, maybe" },
     { until: 20, text: "feeding Rey" },
     { until: 24, text: "at a show" },
@@ -67,23 +67,23 @@ export type WhatIDoCard = {
 const whatIDoCards: WhatIDoCard[] = [
   {
     index: "01",
-    title: "Member growth",
-    body: "Travel planning is moving into AI assistants, and I make sure Expedia is there. Travelers link their Expedia accounts in ChatGPT and Claude today, with Alexa, Google AI Mode, and Meta announced. Every linked account is a member we don't have to buy back through ads.",
+    title: "Growing membership",
+    body: "Account linking in partners like ChatGPT and Claude lets travelers connect their Expedia account, or join our rewards program, right where they already are.",
   },
   {
     index: "02",
     title: "Member benefits, everywhere",
-    body: "Membership is worth more when it works in more places. I bring member prices into partner and AI experiences, design the moments that make a traveler want to sign in, and build with loyalty partners so members earn rewards with brands they already use.",
+    body: "Earn perks with loyalty partners, and see member prices inside AI assistants. Expedia membership should pay off wherever travelers are.",
   },
   {
     index: "03",
-    title: "AI agent authorization",
-    body: "I design how AI agents get permission to act for you: the consent and access models behind Expedia's MCP-based Gen AI integrations.",
+    title: "AI permissions",
+    body: "When an AI assistant acts for a traveler, consent should be clear: scoped permissions, and access they can revoke anytime.",
   },
   {
     index: "04",
     title: "PM who builds",
-    body: "I don't stop at prototypes. I use Claude Code and Codex to ship customer-facing features to production for millions of travelers, from the UI down to APIs and OIDC.",
+    body: "I use AI tools to ship new features and experiments to production myself, across UI and APIs. It's the fastest way to test an idea, and it keeps our engineers focused on the big bets.",
     project: {
       name: "Sentinel",
       blurb:
@@ -96,7 +96,7 @@ const whatIDoCards: WhatIDoCard[] = [
 
 export const whatIDo = {
   label: "What I do",
-  heading: "Members, partners, and production code.",
+  heading: "Membership, partners, and permissions.",
   cards: whatIDoCards,
 };
 
@@ -172,7 +172,7 @@ export const contact = {
   label: "Contact",
   heading: "Get in touch.",
   subline:
-    "Member growth, AI partnerships, shipping with AI, or anything tech. All fair game.",
+    "Account linking, AI permissions, loyalty partnerships, or anything tech. All fair game.",
   cta: "Email me",
   copyCta: "Copy email",
   copiedCta: "Copied",
