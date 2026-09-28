@@ -6,7 +6,7 @@ export const links = {
   sentinel: "https://sentinel.davidkwartler.com",
 };
 
-// Standalone pages the ⌘K menu lists (in plain sight, not hidden)
+// Standalone pages the ⌘K menu lists last, under "Secret pages"
 export const palette = {
   pages: [
     { href: "/travel", label: "Where I've been", keywords: "travel globe map cities" },

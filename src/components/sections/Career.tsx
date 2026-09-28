@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { careerEntries } from "@/data/resume";
 import { careerSection } from "@/data/content";
-import { StarMark } from "@/components/icons";
+import { StarGlyph } from "@/components/icons";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -24,16 +24,16 @@ export default function Career() {
 
         <Reveal delay={0.07}>
           <div className="relative mt-12">
-          {/* the rail: runs through the logo centers, brightest at "now" */}
+          {/* the rail: runs through the logo centers, fading toward the past */}
           <span
             aria-hidden
-            className="pointer-events-none absolute bottom-8 left-[31px] top-8 hidden w-px sm:block bg-gradient-to-b from-violet-300/50 via-white/[0.08] to-white/[0.04]"
+            className="pointer-events-none absolute bottom-8 left-[31px] top-8 hidden w-px sm:block bg-gradient-to-b from-white/20 via-white/[0.08] to-white/[0.04]"
           />
           <ol className="relative space-y-1">
             {entries.map((entry, i) => {
               const current = i === 0;
               return (
-                <li key={entry.id}>
+                <li key={entry.id} className="relative">
                   <details open={current} className="group">
                     <summary className="flex cursor-pointer list-none items-start gap-4 rounded-xl px-3 py-3 transition-colors hover:bg-white/[0.025] group-open:bg-white/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40 [&::-webkit-details-marker]:hidden">
                       <span className="relative mt-0.5 shrink-0">
@@ -44,14 +44,10 @@ export default function Career() {
                           height={40}
                           className={`rounded-full bg-neutral-950 ring-1 transition duration-300 ${
                             current
-                              ? "ring-violet-300/40 shadow-[0_0_20px_rgba(167,139,250,0.3)]"
+                              ? "ring-white/25"
                               : "opacity-70 ring-white/10 group-hover:opacity-100 group-open:opacity-100"
                           }`}
                         />
-                        {current && (
-                          // The galaxy's own star marks "now"
-                          <StarMark className="career-now absolute -right-2.5 -top-2.5 h-6 w-6" />
-                        )}
                       </span>
 
                       <span className="min-w-0 flex-1">
@@ -135,6 +131,10 @@ export default function Career() {
                       </p>
                     </div>
                   </details>
+                  {current && (
+                    // A still star on the rail where GM hands off to Expedia
+                    <StarGlyph className="pointer-events-none absolute -bottom-[9px] left-[25px] hidden h-[13px] w-[13px] text-gray-400 sm:block" />
+                  )}
                 </li>
               );
             })}
