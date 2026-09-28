@@ -21,7 +21,7 @@ function trackErrors(page: Page) {
 const routes = [
   { path: "/", heading: "David Kwartler" },
   { path: "/travel", heading: null },
-  { path: "/shows", heading: "The live music receipts." },
+  { path: "/shows", heading: "My live music habit." },
   { path: "/does-not-exist", heading: "401" },
 ];
 
@@ -93,7 +93,7 @@ test("command menu opens with the shortcut and navigates", async ({ page, isMobi
   await input.fill("shows");
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/shows$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The live music receipts.");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("My live music habit.");
 });
 
 test("career rows expand in place", async ({ page }) => {

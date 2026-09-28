@@ -42,7 +42,12 @@ const lastDate = new Date(`${last.date}T00:00:00Z`).toLocaleDateString("en-US", 
 });
 const latestYear = last.date.slice(0, 4);
 const thisYear = shows.filter((s) => s.date.startsWith(latestYear)).length;
-const artists = new Set(shows.map((s) => s.artist)).size;
+// Nights out, not shows: a festival day with two sets is one night
+const nights = [...new Set(shows.map((s) => s.date))];
+const weekendNights = nights.filter((d) => {
+  const day = new Date(`${d}T00:00:00Z`).getUTCDay();
+  return day === 5 || day === 6;
+}).length;
 const venues = new Set(shows.map((s) => s.venue)).size;
 // A festival counts once per year it was attended (ACL 2024 and ACL 2025
 // are two), however many sets were logged there
@@ -53,7 +58,7 @@ const [topVenue, topVenueCount] = mostCommon(shows.map((s) => s.venue));
 
 const stats = [
   { label: "Shows since 2024", value: String(shows.length), note: `${thisYear} this year` },
-  { label: "Artists", value: String(artists), note: "all different" },
+  { label: "Nights out", value: String(nights.length), note: `${weekendNights} on a Friday or Saturday` },
   { label: "Festivals", value: String(festivals), note: plural(shows.filter((s) => s.festival).length, "set") },
   { label: "Venues", value: String(venues), note: `${topVenueCount} nights at ${topVenue}` },
 ];
