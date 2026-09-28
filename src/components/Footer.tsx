@@ -11,7 +11,7 @@ export default function Footer() {
             href={links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
+            className="flex min-h-6 items-center gap-2 py-1 text-sm text-gray-400 transition-colors hover:text-white"
           >
             <LinkedInIcon className="h-5 w-5" />
             LinkedIn
@@ -20,7 +20,7 @@ export default function Footer() {
             href={links.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
+            className="flex min-h-6 items-center gap-2 py-1 text-sm text-gray-400 transition-colors hover:text-white"
           >
             <GitHubIcon className="h-5 w-5" />
             GitHub

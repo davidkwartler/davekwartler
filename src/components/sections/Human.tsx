@@ -84,7 +84,7 @@ export default function Human() {
                 <li key={page.href}>
                   <Link
                     href={page.href}
-                    className="group inline-flex items-center gap-1.5 text-sm text-gray-300 transition-colors hover:text-white"
+                    className="group inline-flex min-h-6 items-center gap-1.5 py-1 text-sm text-gray-300 transition-colors hover:text-white"
                   >
                     <span>
                       {page.label}

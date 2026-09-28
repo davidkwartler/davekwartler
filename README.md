@@ -45,23 +45,30 @@ An orthographic globe rendered on canvas (`TravelMap.tsx`): continents drawn as 
 
 ```
 src/
-  app/            Routes: layout, home page, /travel, 404, robots, sitemap
-  components/     Shared components (nav, footer, canvases, cards)
+  app/            Routes: layout, home page, /shows, /travel, 404, robots,
+                  sitemap
+  components/     Shared components: nav, footer, command menu
+                  (CommandPalette), status pill, shows browser and summary,
+                  vinyl, canvases (galaxy, star field, globe), cards
     sections/     The five home-page sections in scroll order
   data/           All site content lives here, separated from presentation:
-                  content.ts (copy), resume.ts (career), travel.ts (cities),
-                  land-mask.ts (generated continent bitmap)
-  lib/            Hooks and shared config: use-canvas-loop.ts (rAF loop with
+                  content.ts (copy), resume.ts (career), shows.ts (concert
+                  export), travel.ts (cities), land-mask.ts (generated
+                  continent bitmap)
+  lib/            Hooks and helpers: use-canvas-loop.ts (rAF loop with
                   IntersectionObserver + reduced-motion + pause handling),
-                  galaxy-pause.ts (global motion pause store), globe-config.ts,
-                  motion.ts (shared easing), use-active-section.ts
+                  galaxy-pause.ts (global motion pause store), shows.ts
+                  (date-filtered shows and stats), austin-date.ts,
+                  section-link.ts, use-active-section.ts, globe-config.ts,
+                  star-seed.ts
 public/           Images, favicons, OG image
 assets/           Full-size image sources (not served); see gen-images.mjs
 scripts/          gen-landmask.mjs regenerates src/data/land-mask.ts;
-                  gen-images.mjs derives the pre-sized headshot and logo
-                  webps in public/; gen-favicon.mjs redraws every favicon
+                  gen-images.mjs derives the pre-sized avatar and logo
+                  webps in public/; gen-favicon.mjs redraws every favicon;
                   gen-og.mjs renders the link-preview card public/og.jpg
-                  (run after a build; it borrows the built fonts)
+                  (run after a build; it borrows the built fonts and uses
+                  CHROMIUM_PATH like the tests)
 tests/            Playwright smoke tests (render, console, axe, key actions)
 ```
 
@@ -71,7 +78,7 @@ tests/            Playwright smoke tests (render, console, axe, key actions)
 - **Motion respect:** every canvas animation runs through `use-canvas-loop.ts`, which pauses offscreen, honors `prefers-reduced-motion`, and obeys the site-wide pause button (`PauseMotionButton.tsx`).
 - **Accessibility:** decorative canvases are aria-hidden with `sr-only` equivalents (the travel globe's city list, for example); interactive elements are keyboard-reachable with visible focus rings.
 - **Style:** colons instead of em dashes, everywhere (copy and code comments).
-- **Security headers** (CSP and friends) and legacy-URL redirects are configured in `vercel.json`.
+- **Security headers** (CSP and friends) and legacy-URL redirects are configured in `vercel.json`. The CSP's `script-src 'unsafe-inline'` is required, not an oversight: a static export inlines Next's page payload and the JSON-LD as `<script>` tags, and nonces need a server. No user input reaches the DOM, so leave it rather than "tightening" it and breaking hydration.
 
 ## Development
 

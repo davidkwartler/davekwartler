@@ -35,10 +35,10 @@ for (const { path, heading } of routes) {
     const { violations } = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "best-practice"])
       .analyze();
-    const serious = violations.filter(
-      (v) => v.impact === "serious" || v.impact === "critical" || v.id === "region",
+    const blocking = violations.filter(
+      (v) => v.impact !== "minor",
     );
-    expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`)).toEqual([]);
+    expect(blocking.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`)).toEqual([]);
 
     // The 404 route answers with a 404 status by design
     const unexpected = errors.filter(
@@ -90,7 +90,7 @@ test("command menu opens with the shortcut and navigates", async ({ page, isMobi
   await page.keyboard.press("Control+k");
   const input = page.getByRole("combobox", { name: "Search commands" });
   await expect(input).toBeFocused();
-  await input.fill("shows");
+  await input.fill("live music");
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/shows$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("My live music habit.");
@@ -122,4 +122,58 @@ test("upcoming shows appear once their date has passed", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2027-01-01T12:00:00-06:00"));
   await page.reload();
   await expect(lastShow).toContainText("Subtronics");
+});
+
+test("command menu keeps Escape working after a click on its chrome", async ({ page, isMobile }) => {
+  test.skip(isMobile, "desktop keyboard flow");
+  await page.goto("/");
+  const trigger = page.getByRole("button", { name: "Open command menu" }).first();
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Command menu" });
+  await expect(dialog).toBeVisible();
+  // A click on non-interactive chrome must not drop focus out of the menu
+  await dialog.getByText("move", { exact: false }).click();
+  await expect(page.getByRole("combobox", { name: "Search commands" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
+test("shows year tabs move with the arrow keys", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-09-28T12:00:00-05:00"));
+  await page.goto("/shows");
+  const tab2026 = page.getByRole("tab", { name: "2026" });
+  await expect(tab2026).toHaveAttribute("aria-selected", "true");
+  await tab2026.focus();
+  await page.keyboard.press("ArrowRight");
+  const tab2025 = page.getByRole("tab", { name: "2025" });
+  await expect(tab2025).toHaveAttribute("aria-selected", "true");
+  await expect(tab2025).toBeFocused();
+  await expect(page.getByText("80 shows in 2025", { exact: false })).toBeVisible();
+});
+
+test("status pill tells Austin time and a mood", async ({ page }) => {
+  // A Wednesday morning in Austin
+  await page.clock.setFixedTime(new Date("2026-09-30T10:05:00-05:00"));
+  await page.goto("/");
+  const pill = page.locator("#hero-copy p").first();
+  await expect(pill).toContainText("10:05 AM");
+  await expect(pill).toContainText("building something");
+  // A Saturday morning
+  await page.clock.setFixedTime(new Date("2026-10-03T09:00:00-05:00"));
+  await page.reload();
+  await expect(pill).toContainText("on the gravel bike");
+});
+
+test.describe("with reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("pause button is hidden and the skip arrow is usable", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: /background animation/ })).toBeHidden();
+    const arrow = page.getByRole("link", { name: "Skip to next section" });
+    await expect(arrow).toHaveCSS("opacity", "1");
+    await arrow.click();
+    await expect(page).toHaveURL(/#work$/);
+  });
 });

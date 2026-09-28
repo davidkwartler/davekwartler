@@ -160,12 +160,12 @@ export default function ShowsBrowser({ buildDate }: { buildDate: string }) {
             .reverse()
             .map(({ list, m }) => (
               <section key={m} id={`m-${year}-${m}`} className="scroll-mt-24">
-                <h3 className="flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h2 className="flex items-baseline justify-between border-b border-white/10 pb-2">
                   <span className="font-semibold text-white">{MONTHS_LONG[m]}</span>
                   <span className="text-xs tabular-nums text-gray-500 font-[family-name:var(--font-jetbrains)]">
                     {list.length}
                   </span>
-                </h3>
+                </h2>
                 <ul className="divide-y divide-white/[0.05]">
                   {[...list].reverse().map((s, i) => {
                     const p = parts(s.date);

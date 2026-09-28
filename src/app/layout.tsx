@@ -41,6 +41,7 @@ const previewDescription =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.davidkwartler.com"),
+  alternates: { canonical: "/" },
   // Home gets the descriptive title; other pages set their own full title.
   title: "David Kwartler: Product Manager for Membership and AI Partnerships",
   description: siteDescription,

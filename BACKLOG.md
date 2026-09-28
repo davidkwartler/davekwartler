@@ -26,6 +26,41 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-09-28 — Review fixes: 27 findings from a full-site review (branch claude/personal-site-dev-u407ar)
+
+A separate review pass (security, correctness, performance, accessibility,
+SEO) found 0 critical/high, 5 medium, 14 low, 8 nits. Fixed or settled:
+
+- Reduced motion: the pause button hides via CSS instead of a render
+  branch (the hook is null at prerender, so the old branch left a dead,
+  un-hydrated button); the skip arrow's entrance and bounce move to CSS
+  so no inline opacity:0 is ever serialized
+- Command menu: Escape and the Tab trap work wherever focus is, chrome
+  clicks keep focus in the search box, the page doesn't scroll behind it,
+  results are grouped with role="group", feedback timer is cleared.
+  Re-picking the section you're on scrolls (menu and nav links)
+- /travel: the globe ignores keys typed in fields or the open menu; CLS
+  0.50 to 0.0002 (globe box sized in CSS until measured; nav avatar and
+  name animate with transforms, not width)
+- Scrollspy starts with nothing active, so static HTML of /shows, /travel
+  and 404 no longer marks Home
+- /shows month headings are h2; 24px tap targets on footer, Who I am and
+  back links; /shows gets its own Twitter card; canonical URLs; titles use
+  colons ("David Kwartler: Shows"); duplicate 404 noindex removed
+- CI: read-only token, actions pinned to commit SHAs. CSP: dropped the
+  unused Speed Insights host, added upgrade-insecure-requests; README says
+  why script-src keeps 'unsafe-inline'
+- Removed the unused 352px headshot and lib/motion.ts; WhatIDo is a
+  server component; stale comments and README layout updated
+- Tests: axe now fails on moderate too; new tests for reduced motion,
+  menu focus, shows tabs and the status pill mood
+- Not changed, on purpose: HSTS stays without includeSubDomains/preload
+  (other subdomains' HTTPS isn't guaranteed and preload is hard to undo);
+  Chrome's font-preload warning looks like its known same-origin false
+  positive (fonts load once) and Playfair is the hero's LCP text, so it
+  keeps its preload; shows data ships to the browser by design now that
+  the list filters by date there
+
 ### 2026-09-28 — Shows page, round 2 (branch claude/personal-site-dev-u407ar)
 
 - "My live music habit." Stats: shows (and this year), artists, festivals

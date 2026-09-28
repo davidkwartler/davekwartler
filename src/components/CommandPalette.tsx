@@ -12,6 +12,7 @@ import {
 } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { contact, links, nav, palette } from "@/data/content";
+import { scrollIfSameSection } from "@/lib/section-link";
 import {
   isGalaxyPaused,
   setGalaxyPaused,
@@ -75,6 +76,7 @@ export default function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
+  const feedbackTimer = useRef<number | undefined>(undefined);
   const paused = useSyncExternalStore(
     subscribeGalaxyPause,
     isGalaxyPaused,
@@ -82,6 +84,7 @@ export default function CommandPalette() {
   );
 
   const show = useCallback(() => {
+    clearTimeout(feedbackTimer.current);
     returnFocus.current = document.activeElement as HTMLElement | null;
     setQuery("");
     setActive(0);
@@ -90,6 +93,7 @@ export default function CommandPalette() {
   }, []);
 
   const close = useCallback(() => {
+    clearTimeout(feedbackTimer.current);
     setOpen(false);
     // Hand focus back to whatever opened the palette
     requestAnimationFrame(() => returnFocus.current?.focus?.());
@@ -112,8 +116,37 @@ export default function CommandPalette() {
     };
   }, [open, show, close]);
 
+  // While open: Escape closes and Tab stays put, wherever focus is (a click
+  // on the dialog's chrome must not let keys fall through to the page), and
+  // the page behind doesn't scroll
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      } else if (e.key === "Tab") {
+        // The input is the only stop inside the dialog
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    const root = document.documentElement;
+    const overflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    document.addEventListener("keydown", onKey);
+    return () => {
+      root.style.overflow = overflow;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open, close]);
+
+  useEffect(() => () => clearTimeout(feedbackTimer.current), []);
+
   const commands = useMemo<Command[]>(() => {
-    const go = (href: string) => () => router.push(href);
+    const go = (href: string) => () => {
+      if (!scrollIfSameSection(href)) router.push(href);
+    };
     const external = (href: string) => () => {
       window.open(href, "_blank", "noopener,noreferrer");
     };
@@ -217,7 +250,7 @@ export default function CommandPalette() {
     }
     if (cmd.feedback) {
       setNote(cmd.feedback);
-      setTimeout(close, 900);
+      feedbackTimer.current = window.setTimeout(close, 900);
     } else {
       close();
     }
@@ -241,16 +274,17 @@ export default function CommandPalette() {
     } else if (e.key === "Enter") {
       e.preventDefault();
       run(results[activeIndex]);
-    } else if (e.key === "Escape") {
-      e.preventDefault();
-      close();
-    } else if (e.key === "Tab") {
-      // The input is the only stop inside the dialog: keep focus here
-      e.preventDefault();
     }
   };
 
-  let lastGroup = "";
+  // Results in their groups, keeping each command's flat index for the
+  // keyboard highlight
+  const groups: { name: string; items: { cmd: Command; index: number }[] }[] = [];
+  results.forEach((cmd, index) => {
+    const last = groups[groups.length - 1];
+    if (last?.name === cmd.group) last.items.push({ cmd, index });
+    else groups.push({ name: cmd.group, items: [{ cmd, index }] });
+  });
 
   return (
     <AnimatePresence>
@@ -275,6 +309,10 @@ export default function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 420, damping: 32 }}
+            // Clicks on the chrome keep focus in the search box
+            onMouseDown={(e) => {
+              if (e.target !== inputRef.current) e.preventDefault();
+            }}
           >
             <div className="flex items-center gap-3 border-b border-white/10 px-4">
               <svg
@@ -315,48 +353,50 @@ export default function CommandPalette() {
               </kbd>
             </div>
 
+            {results.length === 0 && (
+              <p className="px-5 py-8 text-center text-sm text-gray-500">
+                Nothing matches. Try &ldquo;career&rdquo; or &ldquo;email&rdquo;.
+              </p>
+            )}
             <div
               ref={listRef}
               id={listId}
               role="listbox"
               aria-label="Commands"
-              className="max-h-[min(22rem,55vh)] overflow-y-auto p-2"
+              className={`max-h-[min(22rem,55vh)] overflow-y-auto p-2 ${results.length ? "" : "hidden"}`}
             >
-              {results.length === 0 && (
-                <p className="px-3 py-6 text-center text-sm text-gray-500">
-                  Nothing matches. Try &ldquo;career&rdquo; or &ldquo;email&rdquo;.
-                </p>
-              )}
-              {results.map((cmd, i) => {
-                const header = cmd.group !== lastGroup ? cmd.group : null;
-                lastGroup = cmd.group;
-                const isActive = i === activeIndex;
+              {groups.map((group) => {
+                const headingId = `${listId}-group-${group.name.replace(/\s+/g, "-")}`;
                 return (
-                  <div key={cmd.id}>
-                    {header && (
-                      <p
-                        role="presentation"
-                        className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]"
-                      >
-                        {header}
-                      </p>
-                    )}
-                    <div
-                      id={`${listId}-${cmd.id}`}
-                      role="option"
-                      aria-selected={isActive}
-                      data-index={i}
-                      onMouseMove={() => setActive(i)}
-                      onClick={() => run(cmd)}
-                      className={`flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
-                        isActive ? "bg-white/[0.07] text-white" : "text-gray-300"
-                      }`}
+                  <div key={group.name} role="group" aria-labelledby={headingId}>
+                    <p
+                      id={headingId}
+                      className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-widest text-gray-500 font-[family-name:var(--font-jetbrains)]"
                     >
-                      <span className="min-w-0 flex-1 truncate">{cmd.label}</span>
-                      <span className="shrink-0 truncate text-xs text-gray-500 font-[family-name:var(--font-jetbrains)]">
-                        {cmd.hint}
-                      </span>
-                    </div>
+                      {group.name}
+                    </p>
+                    {group.items.map(({ cmd, index }) => {
+                      const isActive = index === activeIndex;
+                      return (
+                        <div
+                          key={cmd.id}
+                          id={`${listId}-${cmd.id}`}
+                          role="option"
+                          aria-selected={isActive}
+                          data-index={index}
+                          onMouseMove={() => setActive(index)}
+                          onClick={() => run(cmd)}
+                          className={`flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                            isActive ? "bg-white/[0.07] text-white" : "text-gray-300"
+                          }`}
+                        >
+                          <span className="min-w-0 flex-1 truncate">{cmd.label}</span>
+                          <span className="shrink-0 truncate text-xs text-gray-500 font-[family-name:var(--font-jetbrains)]">
+                            {cmd.hint}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })}

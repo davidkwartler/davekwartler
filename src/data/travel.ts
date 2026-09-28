@@ -1,4 +1,4 @@
-// Travel map easter egg: destinations and field notes.
+// Travel map (/travel): destinations and field notes.
 // `featured` cities glow brightest and get a bigger pin; the rest are
 // smaller pins, some still awaiting David's notes.
 

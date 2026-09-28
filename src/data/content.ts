@@ -10,7 +10,7 @@ export const links = {
 export const palette = {
   pages: [
     { href: "/travel", label: "Where I've been", keywords: "travel globe map cities" },
-    { href: "/shows", label: "Shows", keywords: "concerts music live festivals" },
+    { href: "/shows", label: "My live music habit", keywords: "shows concerts music live festivals" },
   ],
 };
 
