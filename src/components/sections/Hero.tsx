@@ -1,14 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
-import { LinkedInIcon } from "@/components/icons";
+import { LinkedInIcon, StarMark } from "@/components/icons";
+import { PaletteHint } from "@/components/CommandPalette";
+import StatusPill from "@/components/StatusPill";
 import { hero, links } from "@/data/content";
 
 // Subtle warm hints for the hero galaxy: orange and pink
@@ -32,7 +28,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+      className="relative isolate flex min-h-svh flex-col justify-end overflow-hidden px-4 pb-24 pt-28 sm:px-6 sm:pb-32 lg:px-8"
     >
       <motion.div
         className="absolute inset-0 -z-10"
@@ -42,72 +38,39 @@ export default function Hero() {
           accents={HERO_ACCENTS}
           shootingStars
           easterEggs
-          avoidSelector="#hero-headshot-img"
+          avoidSelector="#hero-copy"
         />
       </motion.div>
 
-      <div className="text-center">
-        <div className="relative mx-auto mb-8 h-44 w-44">
-          {/* Soft breathing halo behind the headshot */}
-          {!prefersReducedMotion && (
-            <motion.div
-              aria-hidden
-              className="absolute left-1/2 top-1/2 -z-10 h-[340px] w-[340px] rounded-full"
-              style={{
-                x: "-50%",
-                y: "-50%",
-                background:
-                  "radial-gradient(circle, rgba(196,181,253,0.14), transparent 65%)",
-              }}
-              animate={{ scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            />
-          )}
-          {/* Thin static ring, brighter at the top like overhead light */}
-          <div
-            aria-hidden
-            className="absolute -inset-1.5 rounded-full"
-            style={{
-              background:
-                "conic-gradient(from 0deg, rgba(255,255,255,0.55), rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.55))",
-              WebkitMask:
-                "radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px))",
-              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px))",
-            }}
-          />
-          <Image
-            id="hero-headshot-img"
-            src="/dk-headshot-352.webp"
-            alt="David Kwartler"
-            width={176}
-            height={176}
-            className="rounded-full"
-            priority
-          />
+      {/* Left-aligned and bottom-weighted: the sky gets the top of the
+          screen, the words sit on the horizon */}
+      <div id="hero-copy" className="mx-auto w-full max-w-5xl">
+        <div style={{ animationDelay: "0s" }} className="hero-rise">
+          <StatusPill />
         </div>
         <h1
           style={{ animationDelay: "0.05s" }}
-          className="hero-rise text-5xl font-bold text-white sm:text-6xl font-[family-name:var(--font-playfair)] tracking-wide"
+          className="hero-rise mt-6 text-5xl font-bold leading-none tracking-wide text-white sm:text-7xl font-[family-name:var(--font-playfair)]"
         >
           {hero.name}
+          {/* the galaxy's star as the full stop */}
+          <StarMark className="ml-0.5 inline-block h-[0.42em] w-[0.42em] align-baseline" />
         </h1>
         <p
           style={{ animationDelay: "0.15s" }}
-          className="hero-rise mt-4 text-lg text-balance text-gray-300 sm:text-xl"
+          className="hero-rise mt-5 max-w-xl text-lg text-balance text-gray-300 sm:text-xl"
         >
           {hero.tagline}
         </p>
         <p
           style={{ animationDelay: "0.25s" }}
-          className="hero-rise mt-3 max-w-xl mx-auto text-base text-pretty text-gray-400 sm:text-lg"
+          className="hero-rise mt-3 max-w-xl text-base text-pretty text-gray-400 sm:text-lg"
         >
-          {hero.intro}
-          <br />
-          {hero.also}
+          {hero.intro} {hero.also}
         </p>
         <div
           style={{ animationDelay: "0.35s" }}
-          className="hero-rise mt-8 flex flex-wrap items-center justify-center gap-3"
+          className="hero-rise mt-8 flex flex-wrap items-center gap-3"
         >
           <a
             href="#contact"
@@ -124,9 +87,9 @@ export default function Hero() {
             <LinkedInIcon className="h-4 w-4" />
             {hero.linkedinCta}
           </a>
+          <PaletteHint />
         </div>
       </div>
-
     </section>
   );
 }

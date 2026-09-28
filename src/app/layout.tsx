@@ -5,6 +5,7 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import CommandPalette from "@/components/CommandPalette";
 import { links } from "@/data/content";
 import "./globals.css";
 
@@ -116,6 +117,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         {children}
+        <CommandPalette />
         <Analytics />
       </body>
     </html>

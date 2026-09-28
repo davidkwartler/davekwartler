@@ -81,19 +81,51 @@ html {
   }
 }
 
-/* Career timeline: 0/1 stream flowing left→right along the progress fill */
-@keyframes career-binary-flow {
-  from {
-    transform: translateX(-50%);
-  }
-  to {
-    transform: translateX(0);
+/* Who I am contact sheet: sprocket holes punched along both film edges */
+.film-strip {
+  background-image:
+    radial-gradient(circle, #050505 2.6px, transparent 3px),
+    radial-gradient(circle, #050505 2.6px, transparent 3px);
+  background-size: 16px 12px;
+  background-position:
+    0 6px,
+    0 calc(100% - 6px);
+  background-repeat: repeat-x;
+}
+
+/* Exposure readout: shown on hover or keyboard focus, always on touch */
+.exif {
+  opacity: 0;
+  transform: translateY(4px);
+}
+.group:hover .exif,
+.group:focus-within .exif {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .exif {
+    opacity: 1;
+    transform: none;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .career-binary-stream {
-    animation: none !important;
+/* Career changelog: the star on the current role breathes, slowly */
+@media (prefers-reduced-motion: no-preference) {
+  .career-now {
+    animation: career-now 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes career-now {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
   }
 }
 

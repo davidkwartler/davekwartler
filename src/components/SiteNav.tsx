@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { openPalette, useModKey } from "@/components/CommandPalette";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { links, nav } from "@/data/content";
 import { useActiveSection } from "@/lib/use-active-section";
@@ -14,6 +15,7 @@ const sectionIds = sections.map((s) => s.id);
 export function SiteNav() {
   const prefersReducedMotion = useReducedMotion();
   const active = useActiveSection(sectionIds);
+  const modKey = useModKey();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -125,6 +127,14 @@ export function SiteNav() {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            <button
+              type="button"
+              onClick={openPalette}
+              aria-label="Open command menu"
+              className="rounded-md border border-white/15 px-1.5 py-0.5 text-xs text-gray-400 transition-colors hover:border-white/30 hover:text-white font-[family-name:var(--font-jetbrains)]"
+            >
+              {modKey}K
+            </button>
             <a
               href={links.linkedin}
               target="_blank"
@@ -145,11 +155,23 @@ export function SiteNav() {
             </a>
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile: command menu + hamburger */}
+          <div className="flex items-center md:hidden">
+          <button
+            type="button"
+            onClick={openPalette}
+            aria-label="Open command menu"
+            className="p-2 text-gray-300 hover:text-white"
+          >
+            <svg className="h-5 w-5" aria-hidden fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7" />
+              <path strokeLinecap="round" d="m20 20-3.5-3.5" />
+            </svg>
+          </button>
           <button
             ref={menuButtonRef}
             type="button"
-            className="md:hidden p-2 text-gray-300 hover:text-white"
+            className="p-2 text-gray-300 hover:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
@@ -165,6 +187,7 @@ export function SiteNav() {
               </svg>
             )}
           </button>
+          </div>
         </nav>
 
         {/* Mobile menu */}
