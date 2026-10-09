@@ -1,0 +1,17 @@
+/* Site overrides on top of Arc's foundation.css (kept verbatim so it can be
+   re-pulled from the registry). The site is dark-only: <html> sets
+   data-theme="dark" data-accent="neutral", and these pull Arc's dark theme
+   down to the site's own near-black monochrome and fonts. */
+:root[data-theme="dark"] {
+  --background: #0a0a0a;
+  --surface: oklch(16% 0 0);
+  --surface-raised: oklch(19% 0 0);
+  --surface-muted: oklch(22% 0 0);
+  --foreground: #ededed;
+  --border: oklch(100% 0 0 / 0.15);
+  --border-strong: oklch(100% 0 0 / 0.35);
+  --font-display: var(--font-playfair), serif;
+  --font-body: var(--font-schibsted), sans-serif;
+  /* Pill CTAs, like the rest of the site's chips and nav */
+  --radius-control: 9999px;
+}

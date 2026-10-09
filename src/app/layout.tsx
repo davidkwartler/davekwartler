@@ -8,6 +8,8 @@ import { Analytics } from "@vercel/analytics/next";
 import CommandPalette from "@/components/CommandPalette";
 import { links } from "@/data/content";
 import "./globals.css";
+import "@/components/arc/foundation.css";
+import "@/components/arc/theme.css";
 
 // Playfair only ever sets headings in bold: one static weight is lighter
 // than the full variable axis.
@@ -113,7 +115,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark" data-accent="neutral">
       <body
         className={`${playfair.variable} ${schibstedGrotesk.variable} ${jetbrainsMono.variable} antialiased`}
       >
