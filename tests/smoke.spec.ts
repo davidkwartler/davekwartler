@@ -98,11 +98,11 @@ test("command menu opens with the shortcut and navigates", async ({ page, isMobi
 
 test("career rows expand in place", async ({ page }) => {
   await page.goto("/#career");
-  const rows = page.locator("#career details");
+  const rows = page.locator("#career h3 > button");
   await expect(rows).toHaveCount(4);
-  await expect(rows.first()).toHaveAttribute("open", "");
-  await rows.nth(1).locator("summary").click();
-  await expect(rows.nth(1)).toHaveAttribute("open", "");
+  await expect(rows.first()).toHaveAttribute("aria-expanded", "true");
+  await rows.nth(1).click();
+  await expect(rows.nth(1)).toHaveAttribute("aria-expanded", "true");
 });
 
 test("upcoming shows appear once their date has passed", async ({ page }) => {

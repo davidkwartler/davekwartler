@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/Reveal";
-import { GlowCard } from "@/components/GlowCard";
+import { Card } from "@/components/arc/card/card";
 import { SectionHeading } from "@/components/SectionHeading";
 import {
   ArrowUpRightIcon,
@@ -20,22 +20,21 @@ export default function WhatIDo() {
         <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
           {cards.map((card, i) => (
             <Reveal key={card.index} delay={i * 0.07} className="h-full">
-              <GlowCard className="h-full">
-                <p className="text-sm text-gray-500 font-[family-name:var(--font-jetbrains)]">
-                  {card.index}
-                </p>
-                <h3 className="mt-4 text-lg font-semibold text-white">
-                  {card.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                  {card.body}
-                </p>
-                {card.project && (
-                  <div className="mt-auto pt-6">
-                    <p className="border-t border-white/[0.07] pt-4 text-xs leading-relaxed text-gray-500">
-                      {card.project.blurb}
-                    </p>
-                    <div className="mt-4 flex items-center justify-end gap-3">
+              <Card
+                className="h-full"
+                title={card.title}
+                description={card.body}
+                meta={
+                  <span className="font-normal text-gray-500 font-[family-name:var(--font-jetbrains)]">
+                    {card.index}
+                  </span>
+                }
+                // The side project gets Arc's quick look: the card grows
+                // into a panel with the blurb.
+                details={card.project && <p>{card.project.blurb}</p>}
+                action={
+                  card.project && (
+                    <>
                       <a
                         href={card.project.demo}
                         target="_blank"
@@ -60,10 +59,10 @@ export default function WhatIDo() {
                       >
                         <GitHubIcon className="h-4 w-4" />
                       </a>
-                    </div>
-                  </div>
-                )}
-              </GlowCard>
+                    </>
+                  )
+                }
+              />
             </Reveal>
           ))}
         </div>

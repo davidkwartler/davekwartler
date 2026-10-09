@@ -5,6 +5,7 @@ import GalaxyBackground, { type RGB } from "@/components/GalaxyBackground";
 import { LinkedInIcon, StarMark } from "@/components/icons";
 import { PaletteHint } from "@/components/CommandPalette";
 import StatusPill from "@/components/StatusPill";
+import { ButtonLink } from "@/components/arc/button/button-link";
 import { hero, links } from "@/data/content";
 
 // Subtle warm hints for the hero galaxy: orange and pink
@@ -78,21 +79,19 @@ export default function Hero() {
           style={{ animationDelay: "0.35s" }}
           className="hero-rise mt-8 flex flex-wrap items-center gap-3"
         >
-          <a
-            href="#contact"
-            className="rounded-full bg-white/90 px-6 py-2.5 text-sm font-medium text-neutral-900 transition-all duration-300 hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_32px_rgba(255,255,255,0.22)] active:scale-[0.98]"
-          >
+          <ButtonLink href="#contact" size="lg">
             {hero.contactCta}
-          </a>
-          <a
+          </ButtonLink>
+          <ButtonLink
             href={links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-neutral-950/40 px-6 py-2.5 text-sm font-medium text-gray-200 backdrop-blur-sm transition-all duration-300 hover:border-white/35 hover:text-white active:scale-[0.98]"
+            variant="secondary"
+            size="lg"
           >
             <LinkedInIcon className="h-4 w-4" />
             {hero.linkedinCta}
-          </a>
+          </ButtonLink>
           <PaletteHint />
         </div>
       </div>
