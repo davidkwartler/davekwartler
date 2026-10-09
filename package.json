@@ -13,7 +13,10 @@
     "gen:og": "node scripts/gen-og.mjs"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.21",
+    "@radix-ui/react-dialog": "^1.2.0",
     "@vercel/analytics": "^2.0.1",
+    "lucide-react": "^1.54.0",
     "motion": "^12.43.0",
     "next": "16.3",
     "react": "^19.3.0",
