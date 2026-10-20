@@ -26,6 +26,20 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-10-20 — CI and security pipeline (branch claude/ci-spike)
+
+- CI split into parallel jobs (lint, types and `npm audit` on production
+  deps; build and Playwright) plus a Lighthouse job on the built site with
+  budgets in `lighthouserc.json`; superseded PR runs cancel
+- New workflows: CodeQL (TypeScript and the workflows), dependency review
+  on PRs, zizmor for workflow security, OpenSSF Scorecard with a README
+  badge. Dependabot for npm and actions, grouped weekly, 7-day cooldown
+- Every action pinned to a commit SHA, read-only tokens by default,
+  checkout without persisted credentials; actionlint and zizmor clean
+- `SECURITY.md` points at the same contact as security.txt
+- Lighthouse's first catch: the command-menu buttons' accessible names now
+  include their visible "Ctrl K" (WCAG 2.5.3, label in name)
+
 ### 2026-10-20 — Ask me: a chat popup easter egg (branch claude/ask-me)
 
 - Spike of the "chat with David" idea with no model behind it: a chat

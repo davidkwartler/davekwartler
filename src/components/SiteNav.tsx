@@ -142,7 +142,9 @@ export function SiteNav() {
             <button
               type="button"
               onClick={openPalette}
-              aria-label="Open command menu"
+              // Starts with the visible keys so voice control ("click Ctrl K")
+              // finds it (WCAG 2.5.3, label in name)
+              aria-label={`${modKey}K: open command menu`}
               className="rounded-md border border-white/15 px-1.5 py-0.5 text-xs text-gray-400 transition-colors hover:border-white/30 hover:text-white font-[family-name:var(--font-jetbrains)]"
             >
               {modKey}K
