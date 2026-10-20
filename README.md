@@ -78,7 +78,7 @@ tests/            Playwright smoke tests (render, console, axe, key actions)
 - **Motion respect:** every canvas animation runs through `use-canvas-loop.ts`, which pauses offscreen, honors `prefers-reduced-motion`, and obeys the site-wide pause button (`PauseMotionButton.tsx`).
 - **Accessibility:** decorative canvases are aria-hidden with `sr-only` equivalents (the travel globe's city list, for example); interactive elements are keyboard-reachable with visible focus rings.
 - **Style:** colons instead of em dashes, everywhere (copy and code comments).
-- **Security headers** (CSP and friends) and legacy-URL redirects are configured in `vercel.json`. The CSP's `script-src 'unsafe-inline'` is required, not an oversight: a static export inlines Next's page payload and the JSON-LD as `<script>` tags, and nonces need a server. No user input reaches the DOM, so leave it rather than "tightening" it and breaking hydration.
+- **Security headers** (CSP and friends) and legacy-URL redirects are configured in `vercel.json`. The header's `script-src 'unsafe-inline'` stays because one static header covers every page, while Next's inline bootstrap and page-payload scripts change per page and per build (and nonces need a server). Instead, `scripts/csp-hashes.mjs` runs after `next build` and gives each HTML file in `out/` a `<meta http-equiv="Content-Security-Policy">` with the sha256 of exactly its inline scripts. Browsers enforce both policies and ignore `'unsafe-inline'` once hashes are present, so only Next's own inline scripts run. Run builds through `npm run build`, not bare `next build`, or pages ship without the meta tag (the header still applies). `/.well-known/security.txt` is generated at build with a fresh `Expires`.
 
 ## Development
 
