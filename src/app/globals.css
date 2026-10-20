@@ -104,6 +104,25 @@ html {
   }
 }
 
+/* Ask me: the three "typing" dots pulse in turn (delays set inline) */
+@media (prefers-reduced-motion: no-preference) {
+  .typing-dot {
+    animation: typing-dot 1s ease-in-out infinite;
+  }
+}
+@keyframes typing-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
 /* Who I am contact sheet: sprocket holes punched along both film edges */
 .film-strip {
   background-image:

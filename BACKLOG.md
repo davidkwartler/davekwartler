@@ -26,6 +26,32 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-10-20 — Ask me: a chat-shaped FAQ (branch claude/ask-me)
+
+- Spike of the "chat with David" idea with no model behind it: 16
+  pre-written questions (data in `content.ts` as `askMe`), answered from
+  facts already on the site. Tap a chip or type a question; typed text
+  matches by keyword, ties go to the closest wording, and anything else
+  gets the fallback with every chip shown
+- Answers type out after a short dots beat; reduced motion lands them at
+  once. A new question finishes the current answer instead of waiting.
+  Screen readers hear each answer once, when it lands
+- Live numbers: the shows answer counts past shows and the top venue, the
+  travel answer counts globe cities, both at the moment they're asked
+- New "Ask" nav section between About and Contact; smoke test covers a
+  chip, a typed match and the fallback
+
+### 2026-10-20 — UX polish: brighter text, spring press, smooth career rows (branch claude/ux-polish)
+
+- The ideas worth keeping from the Arc UI spike, without the library:
+  section headings a size up, brighter card and career copy, a CSS
+  `linear()` spring on pills and buttons, a small card lift on hover,
+  career rows that slide via `::details-content` (still native
+  `<details>`), and one zero-specificity focus ring
+- Welcome meteor fixed: its no-fly zone was a circle as wide as the hero
+  copy, which covered the sky on laptops and pushed every streak behind
+  the nav. It's now the copy's box, with streaks kept below the nav
+
 ### 2026-10-20 — Hardening: hashed inline scripts, CORP, security.txt, deps (branch claude/site-hardening)
 
 - Each exported page carries a meta CSP with the sha256 of its own inline

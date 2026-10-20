@@ -206,3 +206,22 @@ test.describe("with reduced motion", () => {
     await expect(page).toHaveURL(/#work$/);
   });
 });
+
+test("ask me answers chips and typed questions", async ({ page }) => {
+  await page.goto("/#ask");
+  const log = page.getByRole("log", { name: "Conversation" });
+  await page.getByRole("button", { name: "What do you do at Expedia?" }).click();
+  await expect(log).toContainText("I'm a Senior PM at Expedia Group");
+  // The asked chip leaves the suggestions
+  await expect(page.getByRole("button", { name: "What do you do at Expedia?" })).toHaveCount(0);
+
+  const input = page.getByRole("textbox", { name: "Ask a question" });
+  await input.fill("how many concerts do you go to");
+  await input.press("Enter");
+  await expect(log).toContainText(/I've logged \d+ shows since 2024/);
+  await expect(log.getByRole("link", { name: "Every show since 2024" })).toBeVisible();
+
+  await input.fill("what's your favorite pizza");
+  await input.press("Enter");
+  await expect(log).toContainText("I don't have a good answer for that one here.");
+});
