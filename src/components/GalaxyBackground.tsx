@@ -102,6 +102,7 @@ const TAU = Math.PI * 2;
 const GRID = 28; // px between binary glyphs
 const METEOR_TAIL = 120; // px of streak behind the head
 const METEOR_CLEARANCE = 26; // px of daylight left around the no-fly zone
+const METEOR_TOP = 80; // px: keep the streak below the 64px fixed nav
 const VIOLET: RGB = [196, 181, 253];
 const WHITE: RGB = [255, 255, 255];
 const EGG_WORDS = ["DK", "MCP", "OIDC"];
@@ -123,10 +124,11 @@ function makeStars(count: number, rand: () => number): Star[] {
   });
 }
 
-// A region the meteor must not fly through, in canvas pixels. The hero's
-// canvas sits behind the headshot, so a streak crossing it doesn't overlap,
-// it disappears mid-flight.
-type NoFlyZone = { x: number; y: number; r: number };
+// A region the meteor must not fly through, in canvas pixels: the avoided
+// element's box. A box, not a circle around it: the hero copy is a wide,
+// short block, and a circle that wide used to cover the whole sky, so every
+// meteor fell back to the top edge, hidden behind the nav.
+type NoFlyZone = { left: number; top: number; right: number; bottom: number };
 
 function noFlyZone(
   canvas: HTMLCanvasElement,
@@ -140,27 +142,37 @@ function noFlyZone(
   if (!a.width || !c.width) return null;
   // Both rects are viewport-relative, so the difference holds at any scroll
   return {
-    x: a.left - c.left + a.width / 2,
-    y: a.top - c.top + a.height / 2,
-    r: Math.max(a.width, a.height) / 2,
+    left: a.left - c.left,
+    top: a.top - c.top,
+    right: a.right - c.left,
+    bottom: a.bottom - c.top,
   };
 }
 
-function distanceToSegment(
-  px: number,
-  py: number,
+// Whether the streak from (x1, y1) to (x2, y2) stays clear of the zone (grown
+// by the clearance) and below the fixed nav. Sampled along the path: a
+// streak is a few hundred px, so 32 steps can't skip past a 26px margin.
+function streakClears(
   x1: number,
   y1: number,
   x2: number,
-  y2: number
+  y2: number,
+  zone: NoFlyZone
 ) {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const len2 = dx * dx + dy * dy;
-  const t = len2
-    ? Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / len2))
-    : 0;
-  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+  for (let i = 0; i <= 32; i++) {
+    const x = x1 + ((x2 - x1) * i) / 32;
+    const y = y1 + ((y2 - y1) * i) / 32;
+    if (y < METEOR_TOP) return false;
+    if (
+      x > zone.left - METEOR_CLEARANCE &&
+      x < zone.right + METEOR_CLEARANCE &&
+      y > zone.top - METEOR_CLEARANCE &&
+      y < zone.bottom + METEOR_CLEARANCE
+    ) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function randomMeteor(now: number): Meteor {
@@ -178,8 +190,8 @@ function randomMeteor(now: number): Meteor {
 
 /**
  * Rejection-samples a meteor until its whole streak (head, flight path and
- * trailing tail) clears the no-fly zone. Meteors stay random on every load;
- * only the star layout is seeded.
+ * trailing tail) clears the no-fly zone and the nav. Meteors stay random on
+ * every load; only the star layout is seeded.
  */
 function spawnMeteor(
   now: number,
@@ -190,7 +202,7 @@ function spawnMeteor(
   let candidate = randomMeteor(now);
   if (!zone || !w || !h) return candidate;
 
-  for (let attempt = 0; attempt < 24; attempt++) {
+  for (let attempt = 0; attempt < 48; attempt++) {
     const hx = candidate.x0 * w;
     const hy = candidate.y0 * h;
     const ex = (candidate.x0 + candidate.dx) * w;
@@ -200,22 +212,18 @@ function spawnMeteor(
     const tx = hx - Math.cos(ang) * METEOR_TAIL;
     const ty = hy - Math.sin(ang) * METEOR_TAIL;
 
-    if (
-      distanceToSegment(zone.x, zone.y, tx, ty, ex, ey) >
-      zone.r + METEOR_CLEARANCE
-    ) {
-      return candidate;
-    }
+    if (streakClears(tx, ty, ex, ey, zone)) return candidate;
     candidate = randomMeteor(now);
   }
 
-  // Nothing cleared it (short viewport, photo near the middle): tuck the
-  // flight into the band above the zone rather than give up and cross it.
-  const ceiling = (zone.y - zone.r - METEOR_CLEARANCE) / h;
+  // Nothing cleared it (short viewport): fly a shallow line through the
+  // band between the nav and the zone, so it's still seen.
+  const band = Math.max(0, zone.top - METEOR_CLEARANCE - METEOR_TOP);
+  const tailRise = METEOR_TAIL * 0.1; // the tail sits a little higher
   return {
     ...candidate,
-    y0: Math.max(0.03, ceiling * 0.45),
-    dy: Math.max(0.02, Math.min(0.06, ceiling * 0.25)),
+    y0: (METEOR_TOP + tailRise + band * 0.25) / h,
+    dy: Math.min(0.06, (band * 0.5) / h),
   };
 }
 
