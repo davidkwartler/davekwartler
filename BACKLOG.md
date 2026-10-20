@@ -1,26 +1,12 @@
 # Site Backlog
 
-Groomed 2026-07-12. Active work up top, then a release-note changelog of
+Groomed 2026-10-20. Active work up top, then a release-note changelog of
 everything shipped. Effort ≈ Claude tokens: S (a few edits), M (a
 component's worth), L (multi-file or iteration-heavy), XL (its own project).
 
 ## Active
 
-- **(XL) David Kwartler AI ("chat with David")** — full spec below
-
-## Ruled out (privacy boundary, 2026-07-01)
-
-Personal-data dumps stay off the professional site. Kept here in case David
-changes his mind (the travel map and, since 2026-09-28, the concert log
-survived as noindex pages):
-
-- Vinyl collection page (Discogs grid)
-- Track day telemetry (HP Tuners lap/dyno visualizations)
-
-Cut in the 2026-07-12 grooming (David's call, restore if wanted): resume PDF
-download link, live-music photo for Who I am, Rey konami-code easter egg,
-OAuth consent-screen easter egg, /now page, Spotify now-playing footer
-widget, Writing section (MDX), further hero animation experiments.
+Nothing right now.
 
 ---
 
@@ -40,9 +26,9 @@ widget, Writing section (MDX), further hero animation experiments.
 - Lighthouse's first catch: the command-menu buttons' accessible names now
   include their visible "Ctrl K" (WCAG 2.5.3, label in name)
 
-### 2026-10-20 — Ask me: a chat popup easter egg (branch claude/ask-me)
+### 2026-10-20 — Chat with David MVP: the Ask me popup (branch claude/ask-me)
 
-- Spike of the "chat with David" idea with no model behind it: a chat
+- The "chat with David" idea shipped as an MVP with no model behind it: a chat
   bubble in the bottom-right corner opens a small popup of pre-written
   questions (data in `content.ts` as `askMe`). The pause-animation
   button moved to the bottom-left corner to give it room
@@ -454,26 +440,3 @@ refused by the session's git proxy).
 
 - Full rework to a single-page scroll: galaxy hero, horizontal career
   timeline, 3-photo Human section, contact galaxy. Merged to main and live
-
----
-
-## Spec: David Kwartler AI ("chat with David")
-
-A chatbot on the site that lets visitors chat with an AI David — Claude API
-with a basic system prompt plus context about him (resume, about, site
-voice). Heavy rate limits.
-
-- Architecture: the site is a static export, so the API key can't live in
-  the frontend. Needs a small serverless function (Vercel Edge Function
-  alongside the static site, or a separate tiny worker) that holds the key,
-  injects the system prompt, and enforces limits.
-- Rate limiting: aggressive — per-IP token bucket + small daily global cap
-  so a viral moment can't run up the bill. Hard cap on response length and
-  turns per session.
-- System prompt: persona from site content only; deflect anything private,
-  no partner namedrops (same content rules as the site), redirect serious
-  inquiries to email/LinkedIn.
-- Prompt-injection hygiene: treat all user input as untrusted; no tools, no
-  browsing, nothing to exfiltrate. It only talks.
-- On-brand touch: the chat could open with a consent-screen joke ("David AI
-  requests access to: this conversation").
