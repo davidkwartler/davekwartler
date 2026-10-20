@@ -26,6 +26,20 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-10-20 — Hardening: hashed inline scripts, CORP, security.txt, deps (branch claude/site-hardening)
+
+- Each exported page carries a meta CSP with the sha256 of its own inline
+  scripts (`scripts/csp-hashes.mjs`, part of `npm run build`), so injected
+  inline script is refused even though the shared header keeps
+  'unsafe-inline'. Tested: hydration, client navigation, and an injection
+  attempt that's blocked
+- Cross-Origin-Resource-Policy: same-origin header
+- `/.well-known/security.txt` (RFC 9116), Expires regenerated each build
+- Next 16.3.8 and source-map-js 1.2.2 (npm audit); `compression` pinned to
+  1.8.2 for the local `serve` test server. `braces` (via eslint-config-next,
+  dev only) has no patched release yet
+- Still not changed, on purpose: HSTS stays without includeSubDomains/preload
+
 ### 2026-09-28 — Review fixes: 27 findings from a full-site review (branch claude/personal-site-dev-u407ar)
 
 A separate review pass (security, correctness, performance, accessibility,

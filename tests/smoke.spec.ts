@@ -49,6 +49,35 @@ for (const { path, heading } of routes) {
   });
 }
 
+test("CSP pins inline scripts by hash", async ({ page }) => {
+  const violations: string[] = [];
+  page.on("console", (m) => {
+    if (m.text().includes("Content Security Policy")) violations.push(m.text());
+  });
+  await page.goto("/", { waitUntil: "networkidle" });
+  // Next's own inline scripts ran and the page hydrated
+  await expect(page.getByRole("button", { name: "Open command menu" }).first()).toBeEnabled();
+  expect(violations).toEqual([]);
+
+  // An injected inline script is refused
+  const ran = await page.evaluate(() => {
+    const s = document.createElement("script");
+    s.textContent = "window.__injected = true";
+    document.body.append(s);
+    return "__injected" in window;
+  });
+  expect(ran).toBe(false);
+});
+
+test("security.txt names a contact and hasn't expired", async ({ request }) => {
+  const res = await request.get("/.well-known/security.txt");
+  expect(res.ok()).toBe(true);
+  const body = await res.text();
+  expect(body).toContain("Contact: mailto:david@davidkwartler.com");
+  const expires = Date.parse(body.match(/^Expires: (.+)$/m)?.[1] ?? "");
+  expect(expires).toBeGreaterThan(Date.now());
+});
+
 test("hero actions link to contact and LinkedIn", async ({ page }) => {
   await page.goto("/");
   const hero = page.locator("#home");
