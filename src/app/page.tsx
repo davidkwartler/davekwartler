@@ -1,4 +1,5 @@
 import Footer from "@/components/Footer";
+import AskMeChat from "@/components/AskMeChat";
 import PauseMotionButton from "@/components/PauseMotionButton";
 import SkipArrow from "@/components/SkipArrow";
 import { SiteNav } from "@/components/SiteNav";
@@ -23,6 +24,7 @@ export default function Home() {
       </main>
       <Footer />
       <PauseMotionButton />
+      <AskMeChat />
     </>
   );
 }

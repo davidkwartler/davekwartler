@@ -104,6 +104,39 @@ html {
   }
 }
 
+/* Ask me: the three "typing" dots pulse in turn (delays set inline) */
+@media (prefers-reduced-motion: no-preference) {
+  .typing-dot {
+    animation: typing-dot 1s ease-in-out infinite;
+  }
+}
+@keyframes typing-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+/* Ask me popup: grows out of the launcher in the corner */
+@media (prefers-reduced-motion: no-preference) {
+  .ask-pop {
+    transform-origin: bottom right;
+    transition:
+      opacity 0.2s ease,
+      transform 0.35s var(--ease-spring);
+    @starting-style {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+  }
+}
+
 /* Who I am contact sheet: sprocket holes punched along both film edges */
 .film-strip {
   background-image:

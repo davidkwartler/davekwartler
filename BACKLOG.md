@@ -26,6 +26,35 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-10-20 — Ask me: a chat popup easter egg (branch claude/ask-me)
+
+- Spike of the "chat with David" idea with no model behind it: a chat
+  bubble in the bottom-right corner opens a small popup of pre-written
+  questions (data in `content.ts` as `askMe`). The pause-animation
+  button moved to the bottom-left corner to give it room
+- Five openers drawn at random from a "top" pool each conversation; the
+  rest sit in a "More questions" dropdown. No free typing
+- Answers type out after a short dots beat; reduced motion lands them at
+  once; a new question finishes the current answer. Screen readers hear
+  each answer once. Escape or the close button hands focus back to the
+  bubble
+- "Last show" is computed from past shows only: upcoming shows stay
+  private, same as the /shows page
+- Ten questions David picked: six in the opener pool (now, shipped,
+  proudest, agent authorization, last show, trip), four in the dropdown
+  (AI tool, Sentinel, Austin, contact)
+
+### 2026-10-20 — UX polish: brighter text, spring press, smooth career rows (branch claude/ux-polish)
+
+- The ideas worth keeping from the Arc UI spike, without the library:
+  section headings a size up, brighter card and career copy, a CSS
+  `linear()` spring on pills and buttons, a small card lift on hover,
+  career rows that slide via `::details-content` (still native
+  `<details>`), and one zero-specificity focus ring
+- Welcome meteor fixed: its no-fly zone was a circle as wide as the hero
+  copy, which covered the sky on laptops and pushed every streak behind
+  the nav. It's now the copy's box, with streaks kept below the nav
+
 ### 2026-10-20 — Hardening: hashed inline scripts, CORP, security.txt, deps (branch claude/site-hardening)
 
 - Each exported page carries a meta CSP with the sha256 of its own inline

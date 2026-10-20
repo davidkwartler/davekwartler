@@ -179,3 +179,94 @@ export const contact = {
   linkedinCta: "LinkedIn",
   email: "david@davidkwartler.com",
 };
+
+export type AskQuestion = {
+  id: string;
+  /** The chip label, phrased the way a visitor would ask it */
+  q: string;
+  /**
+   * The answer, 1-3 sentences. Tokens in braces are filled in when it's
+   * asked: {lastShow} is the most recent past show ("Artist at Venue").
+   */
+  a: string;
+  /** In the pool the popup draws its five opening questions from */
+  top?: boolean;
+  links?: { label: string; href: string }[];
+};
+
+// Ask me: the chat popup in the corner. Pre-written answers only; nothing
+// is generated and nothing is sent anywhere.
+export const askMe = {
+  launcherLabel: "Ask me something",
+  title: "Ask David",
+  greeting: "Hey, I'm David. Pick a question.",
+  more: "More questions",
+  questions: [
+    {
+      id: "now",
+      q: "What are you working on right now?",
+      a: "Bringing Expedia membership into AI assistants. Account linking lets travelers carry their member prices, rewards, and saved trips into ChatGPT, Claude, and our other AI partners.",
+      top: true,
+    },
+    {
+      id: "shipped",
+      q: "What's the last thing you shipped yourself?",
+      a: "This chat window, and a fix that finally lets the shooting star on my homepage show up. At work it's a steady stream of UI, API, and OIDC changes, built with Claude Code.",
+      top: true,
+    },
+    {
+      id: "proudest",
+      q: "What's your proudest build?",
+      a: "Building Expedia's account linking platform from scratch.",
+      top: true,
+    },
+    {
+      id: "headed",
+      q: "Where is AI agent authorization headed?",
+      a: "Toward the permissions we expect from apps, only tighter: narrow scopes, consent people actually understand, and access they can revoke anytime. The protocols exist; the hard part is making consent clear enough to trust.",
+      top: true,
+    },
+    {
+      id: "tool",
+      q: "Favorite AI tool right now?",
+      a: "I use a lot of AI tools, but Claude Code is my go-to. Most of what I ship, this site included, starts there.",
+    },
+    {
+      id: "sentinel",
+      q: "What's Sentinel, and why build it?",
+      a: "A side project that catches hijacked sessions by spotting device-fingerprint mismatches, with AI scoring each one. I built it to get hands-on with the session security I think about at work.",
+      links: [
+        { label: "Try Sentinel", href: links.sentinel },
+        { label: "Source on GitHub", href: "https://github.com/davidkwartler/sentinel" },
+      ],
+    },
+    {
+      id: "show",
+      q: "What was your last show?",
+      a: "{lastShow}. I make it to about eighty shows a year.",
+      top: true,
+      links: [{ label: "Every show since 2024", href: "/shows" }],
+    },
+    {
+      id: "trip",
+      q: "Favorite trip this year?",
+      a: "My second Europe trip, earlier this year: London, Paris, and Amsterdam.",
+      top: true,
+      links: [{ label: "See the globe", href: "/travel" }],
+    },
+    {
+      id: "austin",
+      q: "Austin hidden gems?",
+      a: "Nori for vegan sushi, the Blanton for art, and Waterloo Records for vinyl. For a show, The Concourse Project is my happy place.",
+    },
+    {
+      id: "contact",
+      q: "What's the best way to reach you?",
+      a: "Email is best: david@davidkwartler.com. LinkedIn works too.",
+      links: [
+        { label: "Email me", href: "mailto:david@davidkwartler.com" },
+        { label: "LinkedIn", href: links.linkedin },
+      ],
+    },
+  ] satisfies AskQuestion[],
+};

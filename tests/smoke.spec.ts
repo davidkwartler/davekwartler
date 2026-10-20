@@ -206,3 +206,27 @@ test.describe("with reduced motion", () => {
     await expect(page).toHaveURL(/#work$/);
   });
 });
+
+test("ask me popup opens, answers a chip, and closes on Escape", async ({ page }) => {
+  await page.goto("/");
+  const launcher = page.getByRole("button", { name: "Ask me something" });
+  await launcher.click();
+  const dialog = page.getByRole("dialog", { name: "Ask David" });
+  await expect(dialog).toBeVisible();
+  const chips = dialog.getByRole("list", { name: "Suggested questions" }).getByRole("button");
+  await expect(chips).toHaveCount(5);
+  const question = (await chips.first().textContent())!;
+  await chips.first().click();
+  const log = dialog.getByRole("log", { name: "Conversation" });
+  await expect(log).toContainText(question);
+  // The asked chip leaves the suggestions
+  await expect(dialog.getByRole("button", { name: question, exact: true })).toHaveCount(0);
+
+  // The rest sit behind the dropdown
+  await dialog.getByText("More questions").click();
+  await expect(dialog.getByRole("button", { name: "What's the best way to reach you?" })).toBeVisible();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(launcher).toBeFocused();
+});
