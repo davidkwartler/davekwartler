@@ -7,6 +7,8 @@ const executablePath = process.env.CHROMIUM_PATH || undefined;
 
 export default defineConfig({
   testDir: "tests",
+  // Node-run property tests (npm run test:unit)
+  testIgnore: "unit/**",
   forbidOnly: !!process.env.CI,
   retries: 0,
   reporter: process.env.CI ? "github" : "list",

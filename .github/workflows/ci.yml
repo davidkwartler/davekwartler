@@ -30,6 +30,8 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      # fast-check property tests for the pure helpers in src/lib
+      - run: npm run test:unit
       # Production dependencies only: dev tooling (eslint's braces) can carry
       # advisories with no patched release that never reach the site
       - run: npm audit --omit=dev --audit-level=high
