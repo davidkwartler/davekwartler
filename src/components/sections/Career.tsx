@@ -34,7 +34,7 @@ export default function Career() {
               const current = i === 0;
               return (
                 <li key={entry.id} className="relative">
-                  <details open={current} className="group">
+                  <details open={current} className="disclosure group">
                     <summary className="flex cursor-pointer list-none items-start gap-4 rounded-xl px-3 py-3 transition-colors hover:bg-white/[0.025] group-open:bg-white/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40 [&::-webkit-details-marker]:hidden">
                       <span className="relative mt-0.5 shrink-0">
                         <Image
@@ -109,11 +109,11 @@ export default function Career() {
                         {entry.summary}
                       </p>
                       {entry.bullets.length > 0 && (
-                        <ul className="mt-4 space-y-2.5">
+                        <ul className="mt-4 space-y-2.5 text-gray-300">
                           {entry.bullets.map((bullet) => (
                             <li
                               key={bullet}
-                              className="relative pl-4 text-sm leading-relaxed text-gray-400"
+                              className="relative pl-4 text-sm leading-relaxed"
                             >
                               <span
                                 aria-hidden

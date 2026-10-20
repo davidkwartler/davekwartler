@@ -32,7 +32,7 @@ export function GlowCard({
       onMouseMove={onMouseMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`relative rounded-2xl p-px bg-white/[0.08] ${className}`}
+      className={`relative rounded-2xl p-px bg-white/[0.08] transition-transform duration-500 ease-spring motion-safe:hover:-translate-y-1 ${className}`}
     >
       <div
         className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"

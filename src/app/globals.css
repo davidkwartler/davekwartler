@@ -14,6 +14,9 @@
      body-size text. Same hue, nudged up to ~4.8:1 so every quiet label
      passes without brightening the monochrome look. */
   --color-gray-500: #767e8c;
+  /* A small spring for press and hover: one soft overshoot, settled by
+     ~60%. CSS linear() instead of a JS spring, so it costs no bundle. */
+  --ease-spring: linear(0, 0.14 4%, 0.5 11%, 0.84 19%, 1.02 28%, 1.04 34%, 1.02 45%, 1 60%, 1);
 }
 
 html {
@@ -194,6 +197,37 @@ body {
 .skip-link:focus {
   transform: translateY(0);
   outline: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* One focus ring for every interactive element that doesn't style its own.
+   :where() keeps it at zero specificity so component rings still win. */
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 3px;
+}
+
+/* Native <details> that slide open and closed instead of snapping. Still
+   the platform's disclosure (keyboard, screen readers, rows open
+   independently); browsers without ::details-content just snap as before. */
+@supports (interpolate-size: allow-keywords) {
+  @media (prefers-reduced-motion: no-preference) {
+    .disclosure {
+      interpolate-size: allow-keywords;
+    }
+    .disclosure::details-content {
+      block-size: 0;
+      opacity: 0;
+      overflow: clip;
+      transition:
+        block-size 0.4s cubic-bezier(0.21, 0.47, 0.32, 0.98),
+        opacity 0.3s ease,
+        content-visibility 0.4s allow-discrete;
+    }
+    .disclosure[open]::details-content {
+      block-size: auto;
+      opacity: 1;
+    }
+  }
 }
 
 /* The skip link focuses main directly; don't outline the whole page for it. */

@@ -27,12 +27,12 @@ export default function WhatIDo() {
                 <h3 className="mt-4 text-lg font-semibold text-white">
                   {card.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                <p className="mt-3 text-[15px] leading-relaxed text-gray-300">
                   {card.body}
                 </p>
                 {card.project && (
                   <div className="mt-auto pt-6">
-                    <p className="border-t border-white/[0.07] pt-4 text-xs leading-relaxed text-gray-500">
+                    <p className="border-t border-white/[0.07] pt-4 text-sm leading-relaxed text-gray-400">
                       {card.project.blurb}
                     </p>
                     <div className="mt-4 flex items-center justify-end gap-3">
@@ -40,7 +40,7 @@ export default function WhatIDo() {
                         href={card.project.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs text-gray-200 transition-colors hover:border-white/30 hover:text-white"
+                        className="group inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs text-gray-200 transition-[color,border-color,transform] duration-500 ease-spring hover:border-white/30 hover:text-white active:scale-[0.96]"
                       >
                         {/* Inherits the pill's grey at rest so the section stays
                             monochrome, then hover pays out Sentinel's brand

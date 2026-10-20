@@ -80,7 +80,7 @@ export default function Hero() {
         >
           <a
             href="#contact"
-            className="rounded-full bg-white/90 px-6 py-2.5 text-sm font-medium text-neutral-900 transition-all duration-300 hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_32px_rgba(255,255,255,0.22)] active:scale-[0.98]"
+            className="rounded-full bg-white/90 px-6 py-2.5 text-sm font-medium text-neutral-900 transition-all duration-500 ease-spring hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_32px_rgba(255,255,255,0.22)] active:scale-[0.96]"
           >
             {hero.contactCta}
           </a>
@@ -88,7 +88,7 @@ export default function Hero() {
             href={links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-neutral-950/40 px-6 py-2.5 text-sm font-medium text-gray-200 backdrop-blur-sm transition-all duration-300 hover:border-white/35 hover:text-white active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-neutral-950/40 px-6 py-2.5 text-sm font-medium text-gray-200 backdrop-blur-sm transition-all duration-500 ease-spring hover:border-white/35 hover:text-white active:scale-[0.96]"
           >
             <LinkedInIcon className="h-4 w-4" />
             {hero.linkedinCta}

@@ -34,7 +34,7 @@ export default function Contact() {
   };
 
   const secondaryPill =
-    "inline-flex items-center gap-2 rounded-full border border-white/15 bg-neutral-950/40 px-5 py-3 text-sm font-medium text-gray-200 backdrop-blur-sm transition-all duration-300 hover:border-white/35 hover:text-white active:scale-[0.98]";
+    "inline-flex items-center gap-2 rounded-full border border-white/15 bg-neutral-950/40 px-5 py-3 text-sm font-medium text-gray-200 backdrop-blur-sm transition-all duration-500 ease-spring hover:border-white/35 hover:text-white active:scale-[0.96]";
 
   return (
     <section
@@ -70,7 +70,7 @@ export default function Contact() {
           <div className="mt-10 flex flex-col items-center gap-4">
             <a
               href={`mailto:${contact.email}`}
-              className="inline-block rounded-full bg-white/90 px-8 py-4 text-lg font-medium text-neutral-900 transition-all duration-300 hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] active:scale-[0.98]"
+              className="inline-block rounded-full bg-white/90 px-8 py-4 text-lg font-medium text-neutral-900 transition-all duration-500 ease-spring hover:bg-white hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] active:scale-[0.96]"
             >
               {contact.cta}
             </a>
