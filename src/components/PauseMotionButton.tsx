@@ -8,7 +8,8 @@ import {
   subscribeGalaxyPause,
 } from "@/lib/galaxy-pause";
 
-// Small fixed control to stop/resume the galaxy canvases. Hidden under
+// Small fixed control to stop/resume the galaxy canvases, bottom left so
+// the Ask me bubble has the right corner to itself. Hidden under
 // prefers-reduced-motion, where the canvases are already static. That's a
 // CSS media variant, not a render-time branch: the hook reads null during
 // prerender, so branching on it left a dead, un-hydrated button behind.
@@ -34,7 +35,7 @@ export default function PauseMotionButton() {
       aria-label={label}
       aria-pressed={paused}
       title={label}
-      className="fixed bottom-3 right-3 z-40 flex motion-reduce:hidden h-7 w-7 items-center justify-center rounded-full bg-neutral-900/70 text-gray-400 ring-1 ring-white/10 backdrop-blur transition-colors hover:text-white hover:ring-white/25"
+      className="fixed bottom-3 left-3 z-40 flex motion-reduce:hidden h-7 w-7 items-center justify-center rounded-full bg-neutral-900/70 text-gray-400 ring-1 ring-white/10 backdrop-blur transition-colors hover:text-white hover:ring-white/25"
     >
       {paused ? (
         <svg className="h-2.5 w-2.5" viewBox="0 0 12 12" fill="currentColor" aria-hidden>

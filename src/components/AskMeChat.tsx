@@ -158,9 +158,8 @@ export default function AskMeChat() {
           tabIndex={-1}
           // Focus lands here on open and after a chip (which disappears) is
           // pressed from the keyboard; the panel itself needs no ring
-          // Above the launcher, which sits above the pause button; both
-          // drop a step when reduced motion hides the pause button
-          className="ask-pop fixed right-3 bottom-[6.25rem] z-50 flex max-h-[min(34rem,calc(100svh-8rem))] w-[min(22rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/95 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-md focus-visible:outline-none motion-reduce:bottom-16"
+          // Just above the launcher in the bottom-right corner
+          className="ask-pop fixed right-3 bottom-16 z-50 flex max-h-[min(34rem,calc(100svh-8rem))] w-[min(22rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/95 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-md focus-visible:outline-none"
         >
           <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
             <Image
@@ -314,9 +313,8 @@ export default function AskMeChat() {
         aria-label={open ? "Close chat" : askMe.launcherLabel}
         aria-expanded={open}
         title={askMe.launcherLabel}
-        // Centered over the pause button (28px at right-3, so its middle is
-        // 26px in) with an 8px gap; takes its corner when that's hidden
-        className="fixed bottom-12 right-1.5 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900/70 text-gray-300 ring-1 ring-white/10 backdrop-blur transition-[color,box-shadow,transform] duration-500 ease-spring hover:text-white hover:ring-white/25 active:scale-[0.94] motion-reduce:bottom-3 motion-reduce:right-3"
+        // Bottom right; the pause button lives bottom left
+        className="fixed bottom-3 right-3 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900/70 text-gray-300 ring-1 ring-white/10 backdrop-blur transition-[color,box-shadow,transform] duration-500 ease-spring hover:text-white hover:ring-white/25 active:scale-[0.94]"
       >
         {open ? (
           <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.75} aria-hidden>

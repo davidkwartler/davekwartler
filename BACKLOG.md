@@ -29,9 +29,9 @@ widget, Writing section (MDX), further hero animation experiments.
 ### 2026-10-20 — Ask me: a chat popup easter egg (branch claude/ask-me)
 
 - Spike of the "chat with David" idea with no model behind it: a chat
-  bubble in the bottom-right corner (centered over the pause button, in
-  its corner when reduced motion hides it) opens a small popup of
-  pre-written questions (data in `content.ts` as `askMe`)
+  bubble in the bottom-right corner opens a small popup of pre-written
+  questions (data in `content.ts` as `askMe`). The pause-animation
+  button moved to the bottom-left corner to give it room
 - Five openers drawn at random from a "top" pool each conversation; the
   rest sit in a "More questions" dropdown. No free typing
 - Answers type out after a short dots beat; reduced motion lands them at
