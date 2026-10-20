@@ -26,20 +26,21 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
-### 2026-10-20 — Ask me: a chat-shaped FAQ (branch claude/ask-me)
+### 2026-10-20 — Ask me: a chat popup easter egg (branch claude/ask-me)
 
-- Spike of the "chat with David" idea with no model behind it: 16
-  pre-written questions (data in `content.ts` as `askMe`), answered from
-  facts already on the site. Tap a chip or type a question; typed text
-  matches by keyword, ties go to the closest wording, and anything else
-  gets the fallback with every chip shown
+- Spike of the "chat with David" idea with no model behind it: a chat
+  bubble in the bottom-right corner (centered over the pause button, in
+  its corner when reduced motion hides it) opens a small popup of
+  pre-written questions (data in `content.ts` as `askMe`)
+- Five openers drawn at random from a "top" pool each conversation; the
+  rest sit in a "More questions" dropdown. No free typing
 - Answers type out after a short dots beat; reduced motion lands them at
-  once. A new question finishes the current answer instead of waiting.
-  Screen readers hear each answer once, when it lands
-- Live numbers: the shows answer counts past shows and the top venue, the
-  travel answer counts globe cities, both at the moment they're asked
-- New "Ask" nav section between About and Contact; smoke test covers a
-  chip, a typed match and the fallback
+  once; a new question finishes the current answer. Screen readers hear
+  each answer once. Escape or the close button hands focus back to the
+  bubble
+- "Last show" is computed from past shows only: upcoming shows stay
+  private, same as the /shows page
+- Answers are placeholders until David signs off on the question list
 
 ### 2026-10-20 — UX polish: brighter text, spring press, smooth career rows (branch claude/ux-polish)
 

@@ -207,21 +207,26 @@ test.describe("with reduced motion", () => {
   });
 });
 
-test("ask me answers chips and typed questions", async ({ page }) => {
-  await page.goto("/#ask");
-  const log = page.getByRole("log", { name: "Conversation" });
-  await page.getByRole("button", { name: "What do you do at Expedia?" }).click();
-  await expect(log).toContainText("I'm a Senior PM at Expedia Group");
+test("ask me popup opens, answers a chip, and closes on Escape", async ({ page }) => {
+  await page.goto("/");
+  const launcher = page.getByRole("button", { name: "Ask me something" });
+  await launcher.click();
+  const dialog = page.getByRole("dialog", { name: "Ask David" });
+  await expect(dialog).toBeVisible();
+  const chips = dialog.getByRole("list", { name: "Suggested questions" }).getByRole("button");
+  await expect(chips).toHaveCount(5);
+  const question = (await chips.first().textContent())!;
+  await chips.first().click();
+  const log = dialog.getByRole("log", { name: "Conversation" });
+  await expect(log).toContainText(question);
   // The asked chip leaves the suggestions
-  await expect(page.getByRole("button", { name: "What do you do at Expedia?" })).toHaveCount(0);
+  await expect(dialog.getByRole("button", { name: question, exact: true })).toHaveCount(0);
 
-  const input = page.getByRole("textbox", { name: "Ask a question" });
-  await input.fill("how many concerts do you go to");
-  await input.press("Enter");
-  await expect(log).toContainText(/I've logged \d+ shows since 2024/);
-  await expect(log.getByRole("link", { name: "Every show since 2024" })).toBeVisible();
+  // The rest sit behind the dropdown
+  await dialog.getByText("More questions").click();
+  await expect(dialog.getByRole("button", { name: "What's the best way to reach you?" })).toBeVisible();
 
-  await input.fill("what's your favorite pizza");
-  await input.press("Enter");
-  await expect(log).toContainText("I don't have a good answer for that one here.");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(launcher).toBeFocused();
 });

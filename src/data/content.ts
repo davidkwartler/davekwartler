@@ -21,7 +21,6 @@ export const nav = {
     { id: "work", label: "Work" },
     { id: "career", label: "Career" },
     { id: "about", label: "About" },
-    { id: "ask", label: "Ask" },
     { id: "contact", label: "Contact" },
   ],
 };
@@ -186,128 +185,60 @@ export type AskQuestion = {
   /** The chip label, phrased the way a visitor would ask it */
   q: string;
   /**
-   * The answer. Tokens in braces are filled in when the answer is shown:
-   * {shows} past shows logged, {topVenue} the most-visited venue, {cities}
-   * cities on the travel globe.
+   * The answer, 1-3 sentences. Tokens in braces are filled in when it's
+   * asked: {lastShow} is the most recent past show ("Artist at Venue").
    */
   a: string;
-  /** Words a typed question can match on (lowercase, any order) */
-  keywords: string[];
+  /** In the pool the popup draws its five opening questions from */
+  top?: boolean;
   links?: { label: string; href: string }[];
 };
 
-// "Ask me": a chat-style FAQ. Every answer is written ahead of time from
-// facts already on the site; nothing is generated and nothing is sent
-// anywhere.
+// Ask me: the chat popup in the corner. Pre-written answers only; nothing
+// is generated and nothing is sent anywhere.
 export const askMe = {
-  label: "Ask me",
-  heading: "Questions I get a lot.",
-  greeting: "Hey, I'm David. Pick a question, or type your own.",
-  fallback:
-    "I don't have a good answer for that one here. Try one of these, or email me.",
-  placeholder: "Ask a question",
+  launcherLabel: "Ask me something",
+  title: "Ask David",
+  greeting: "Hey, I'm David. Pick a question.",
+  more: "More questions",
   questions: [
-    {
-      id: "expedia",
-      q: "What do you do at Expedia?",
-      a: "I'm a Senior PM at Expedia Group in Austin. I build the account linking that connects Expedia members to our loyalty and AI partners, and the permissions that keep those connections safe.",
-      keywords: ["expedia", "job", "role", "current", "currently", "day"],
-    },
-    {
-      id: "account-linking",
-      q: "What's account linking, in plain English?",
-      a: "It lets travelers connect their Expedia account right where they already are, like inside ChatGPT or Claude. Once it's linked, their member prices, rewards, and saved trips come along, so they can shop and book without starting over.",
-      keywords: ["account", "linking", "link", "oauth", "explain", "plain"],
-    },
-    {
-      id: "partners",
-      q: "Which AI companies do you work with?",
-      a: "I lead account linking with AI partners like OpenAI, Anthropic, Google, Meta, and Amazon. The OAuth 2.0 linking and consent system I architected connects 20+ global AI, loyalty, and social partners.",
-      keywords: ["partners", "partner", "companies", "openai", "anthropic", "google", "meta", "amazon", "chatgpt", "claude", "gemini"],
-    },
-    {
-      id: "permissions",
-      q: "How do you think about AI permissions?",
-      a: "When an AI assistant acts for a traveler, consent should be clear. I design that model for our AI partners: scoped permissions, clear consent, and access travelers can revoke anytime.",
-      keywords: ["permissions", "permission", "consent", "authorization", "agent", "agents", "agentic", "safe", "security", "privacy"],
-    },
-    {
-      id: "gm",
-      q: "What did you do at GM?",
-      a: "From 2021 to 2024 I ran product for GM's customer identity platform: sign-in and account security across the mobile apps, web, and the car, for millions of users. A/B testing the enrollment funnel lifted loyalty enrollments 28%, worth $16M a month in customer lifetime value.",
-      keywords: ["gm", "general", "motors", "identity", "mfa"],
-    },
-    {
-      id: "cvp",
-      q: "What did you do before GM?",
-      a: "Two years at CVP, a tech consulting firm in DC, on 10+ modernization projects. I covered product, business analysis, QA, and agile delivery. Leading the design of a real-time data visualization proof of concept won a $2M contract.",
-      keywords: ["cvp", "consulting", "consultant", "before", "earlier", "previous", "previously"],
-    },
-    {
-      id: "code",
-      q: "Do you actually code?",
-      a: "Yes, with AI doing a lot of the typing. I've shipped 50+ changes to production at Expedia across UI, APIs, and OIDC, built with Claude Code and ChatGPT Codex. It's the fastest way to test an idea, and it keeps our engineers on the big bets. I built this site the same way.",
-      keywords: ["code", "coding", "engineer", "build", "builder", "technical", "ai", "tools", "ship", "program"],
-    },
+    { id: "now", q: "What are you working on right now?", a: "Answer TBD.", top: true },
+    { id: "shipped", q: "What's the last thing you shipped yourself?", a: "Answer TBD.", top: true },
+    { id: "proudest", q: "What's your proudest build?", a: "Answer TBD.", top: true },
+    { id: "headed", q: "Where is AI agent authorization headed?", a: "Answer TBD.", top: true },
+    { id: "never", q: "What should an AI agent never do without asking?", a: "Answer TBD." },
+    { id: "mom", q: "Explain account linking like I'm your mom.", a: "Answer TBD." },
+    { id: "tool", q: "Favorite AI tool right now?", a: "Answer TBD." },
+    { id: "passwords", q: "Passwords: dead yet?", a: "Answer TBD." },
+    { id: "car", q: "What's it like building sign-in for a car?", a: "Answer TBD." },
     {
       id: "sentinel",
-      q: "What's Sentinel?",
-      a: "A side project. Sentinel catches hijacked sessions by spotting device-fingerprint mismatches, with AI scoring each one.",
-      keywords: ["sentinel", "side", "project", "hijack", "session", "fingerprint"],
-      links: [
-        { label: "Try Sentinel", href: links.sentinel },
-        { label: "Source on GitHub", href: "https://github.com/davidkwartler/sentinel" },
-      ],
+      q: "What's Sentinel, and why build it?",
+      a: "Answer TBD.",
+      links: [{ label: "Try Sentinel", href: links.sentinel }],
     },
     {
-      id: "wins",
-      q: "What results are you proudest of?",
-      a: "A few numbers I like: +28% loyalty enrollments at GM ($16M a month in customer lifetime value), a 1% lift in Expedia booking conversion from longer sign-in sessions, and removing an external authentication vendor, which saves millions of dollars a year.",
-      keywords: ["proud", "proudest", "results", "wins", "impact", "numbers", "achievements", "accomplishments"],
-    },
-    {
-      id: "based",
-      q: "Where are you based?",
-      a: "Austin, Texas. I grew up in Boston and studied in DC.",
-      keywords: ["based", "live", "located", "location", "austin", "from", "boston", "hometown"],
-    },
-    {
-      id: "school",
-      q: "Where did you go to school?",
-      a: "George Washington University in DC: a BBA with a finance major and an environmental sustainability minor, class of 2019.",
-      keywords: ["school", "college", "university", "gw", "degree", "study", "studied", "education"],
-    },
-    {
-      id: "car",
-      q: "What do you drive?",
-      a: "A white Porsche 718 Cayman GTS, with a Texas plate that reads DAVID. I'm a big fan of track days, in the Porsche or a Corvette.",
-      keywords: ["drive", "car", "porsche", "cayman", "corvette", "track", "racing", "race"],
-    },
-    {
-      id: "shows",
-      q: "How many shows do you go to?",
-      a: "Around eighty a year. I've logged {shows} shows since 2024, from Austin warehouses to festival fields, and {topVenue} is my most-visited venue. The vinyl collection is the receipt.",
-      keywords: ["shows", "concerts", "concert", "music", "festival", "festivals", "vinyl", "edm", "dj"],
+      id: "show",
+      q: "What was your last show?",
+      a: "{lastShow}. Answer TBD.",
+      top: true,
       links: [{ label: "Every show since 2024", href: "/shows" }],
     },
+    { id: "best-show", q: "Best show this year?", a: "Answer TBD.", top: true },
     {
-      id: "rey",
-      q: "Who's Rey?",
-      a: "My cat, and the one actually in charge at home.",
-      keywords: ["rey", "cat", "pet", "pets"],
-    },
-    {
-      id: "travel",
-      q: "Where do you like to travel?",
-      a: "I travel for vegan food, music festivals, and modern art museums. My travel globe has all {cities} cities I've been to, with notes on the good ones.",
-      keywords: ["travel", "traveled", "traveling", "travels", "trips", "trip", "vacation", "visited", "cities", "city", "countries", "food", "vegan", "museums"],
+      id: "trip",
+      q: "Favorite trip this year?",
+      a: "Answer TBD.",
+      top: true,
       links: [{ label: "See the globe", href: "/travel" }],
     },
+    { id: "vegan", q: "Best vegan meal on the road?", a: "Answer TBD." },
+    { id: "track", q: "Track day or gravel ride?", a: "Answer TBD." },
+    { id: "vinyl", q: "What's on the turntable?", a: "Answer TBD." },
     {
       id: "contact",
       q: "What's the best way to reach you?",
-      a: "Email is best: david@davidkwartler.com. LinkedIn works too. Account linking, AI permissions, loyalty partnerships, or anything tech: all fair game.",
-      keywords: ["reach", "contact", "email", "hire", "hiring", "linkedin", "talk"],
+      a: "Answer TBD.",
       links: [
         { label: "Email me", href: "mailto:david@davidkwartler.com" },
         { label: "LinkedIn", href: links.linkedin },

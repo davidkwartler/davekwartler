@@ -1,4 +1,5 @@
 import Footer from "@/components/Footer";
+import AskMeChat from "@/components/AskMeChat";
 import PauseMotionButton from "@/components/PauseMotionButton";
 import SkipArrow from "@/components/SkipArrow";
 import { SiteNav } from "@/components/SiteNav";
@@ -6,7 +7,6 @@ import Hero from "@/components/sections/Hero";
 import WhatIDo from "@/components/sections/WhatIDo";
 import Career from "@/components/sections/Career";
 import Human from "@/components/sections/Human";
-import AskMe from "@/components/sections/AskMe";
 import Contact from "@/components/sections/Contact";
 
 export default function Home() {
@@ -18,13 +18,13 @@ export default function Home() {
         <WhatIDo />
         <Career />
         <Human />
-        <AskMe />
         <Contact />
         {/* Fixed to the viewport, but lives in main so it sits in a landmark */}
         <SkipArrow />
       </main>
       <Footer />
       <PauseMotionButton />
+      <AskMeChat />
     </>
   );
 }
