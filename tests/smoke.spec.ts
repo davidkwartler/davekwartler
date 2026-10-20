@@ -84,7 +84,7 @@ test("hero actions link to contact and LinkedIn", async ({ page }) => {
   await expect(hero.getByRole("link", { name: "Get in touch" })).toHaveAttribute("href", "#contact");
   await expect(hero.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
     "href",
-    /linkedin\.com\/in\/dkwartler/,
+    "https://www.linkedin.com/in/dkwartler/",
   );
 });
 
