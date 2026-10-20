@@ -73,7 +73,9 @@ scripts/          gen-landmask.mjs regenerates src/data/land-mask.ts;
                   gen-og.mjs renders the link-preview card public/og.jpg
                   (run after a build; it borrows the built fonts and uses
                   CHROMIUM_PATH like the tests)
-tests/            Playwright smoke tests (render, console, axe, key actions)
+tests/            Playwright smoke tests (render, console, axe, key actions);
+                  tests/unit/ holds fast-check property tests for src/lib,
+                  run by Node (npm run test:unit)
 ```
 
 ## Conventions

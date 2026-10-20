@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "playwright test",
+    "test:unit": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'tests/unit/*.test.ts'",
     "gen:images": "node scripts/gen-images.mjs",
     "gen:og": "node scripts/gen-og.mjs"
   },
@@ -28,6 +29,7 @@
     "@types/react-dom": "^19.3.0",
     "eslint": "^9",
     "eslint-config-next": "16.3",
+    "fast-check": "^4.10.2",
     "serve": "^14.2.6",
     "tailwindcss": "^4.3.3",
     "typescript": "^5"

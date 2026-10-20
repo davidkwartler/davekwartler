@@ -12,6 +12,23 @@ Nothing right now.
 
 ## Changelog
 
+### 2026-10-20 — Dependency and security alert cleanup (branch claude/deps-security)
+
+- `npm audit`: production deps still at 0. The only open advisory is dev-only
+  and has no patched release: `braces` via `eslint-config-next`'s
+  `fast-glob` (5 highs, one chain). npm's only "fix" is a downgrade to
+  eslint-config-next 14, so it stays
+- Dependabot security updates now arrive as one grouped PR per ecosystem
+  (`applies-to: security-updates`), next to the weekly version groups
+- `SECURITY.md`: response times (acknowledge within 7 days, fix within 90)
+  and coordinated disclosure, for Scorecard's Security-Policy check
+- First unit tests: fast-check property tests for `mulberry32` and
+  `todayInAustin` (`npm run test:unit`, Node's own runner, in CI's static
+  job), which is also what Scorecard's Fuzzing check looks for
+- Left for David: the GitHub Actions group PR (every bump is a major), the
+  minor/patch npm group (Next 16.4 and Playwright 1.64 cross the pinned
+  minors) and the major npm bumps (motion, TypeScript, @types/node, ESLint)
+
 ### 2026-10-20 — CI and security pipeline (branch claude/ci-spike)
 
 - CI split into parallel jobs (lint, types and `npm audit` on production
