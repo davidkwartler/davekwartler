@@ -1,5 +1,9 @@
 # davidkwartler.com
 
+[![CI](https://github.com/davidkwartler/davekwartler/actions/workflows/ci.yml/badge.svg)](https://github.com/davidkwartler/davekwartler/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/davidkwartler/davekwartler/actions/workflows/codeql.yml/badge.svg)](https://github.com/davidkwartler/davekwartler/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/davidkwartler/davekwartler/badge)](https://scorecard.dev/viewer/?uri=github.com/davidkwartler/davekwartler)
+
 Personal portfolio site for David Kwartler: a single-page scroll narrative built to demonstrate craft. The site itself is the proof of "PM who builds."
 
 **Live:** [www.davidkwartler.com](https://www.davidkwartler.com)
@@ -96,8 +100,31 @@ npm run gen:og     # re-render the link-preview card (build first)
 First-time test setup: `npx playwright install chromium`, or point
 `CHROMIUM_PATH` at an existing Chromium binary.
 
-GitHub Actions (`.github/workflows/ci.yml`) runs lint, typecheck, build, and
-the smoke tests on every pull request and push to main.
+Lighthouse budgets (`lighthouserc.json`) run locally with
+`npx @lhci/cli@0.15.1 autorun` after a build.
+
+## CI and security
+
+Every workflow pins its actions to commit SHAs and starts from a read-only
+token, granting more per job only where it needs it.
+
+- **CI** (`ci.yml`): lint, typecheck and `npm audit` (production
+  dependencies, high and up) in one job; build and the Playwright smoke
+  tests in another; then Lighthouse against the built site. Lighthouse fails
+  on accessibility or best practices under 95/90, and on SEO under 90 for
+  the indexed home page; performance only warns. A new push to a PR cancels
+  its older run.
+- **CodeQL** (`codeql.yml`): code scanning for the TypeScript and for the
+  workflows themselves, on PRs, main and weekly.
+- **Dependency review** (`dependency-review.yml`): fails a PR that adds a
+  dependency with a known high-severity vulnerability.
+- **Workflow security** (`zizmor.yml`): zizmor audits the workflow files
+  when they change.
+- **Scorecard** (`scorecard.yml`): the OpenSSF security-posture score behind
+  the README badge, weekly and on pushes to main.
+- **Dependabot** (`dependabot.yml`): one grouped PR a week each for npm and
+  the pinned actions, after a seven-day cooldown on new releases.
+- **Security policy:** `SECURITY.md`, matching `/.well-known/security.txt`.
 
 ## Workflow
 

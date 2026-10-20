@@ -43,7 +43,8 @@ export function PaletteHint({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={openPalette}
-      aria-label="Open command menu"
+      // Contains the visible "Press ⌘K" so voice control can target it
+      aria-label={`Press ${mod}K to open the command menu`}
       className={`hidden items-center gap-1.5 rounded-full px-3 py-2.5 text-sm text-gray-400 transition-colors hover:text-white sm:inline-flex ${className}`}
     >
       Press
