@@ -40,7 +40,9 @@ widget, Writing section (MDX), further hero animation experiments.
   bubble
 - "Last show" is computed from past shows only: upcoming shows stay
   private, same as the /shows page
-- Answers are placeholders until David signs off on the question list
+- Ten questions David picked: six in the opener pool (now, shipped,
+  proudest, agent authorization, last show, trip), four in the dropdown
+  (AI tool, Sentinel, Austin, contact)
 
 ### 2026-10-20 — UX polish: brighter text, spring press, smooth career rows (branch claude/ux-polish)
 

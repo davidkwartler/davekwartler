@@ -217,7 +217,7 @@ export const askMe = {
     {
       id: "proudest",
       q: "What's your proudest build?",
-      a: "Building Expedia's account linking platform from scratch. It now connects 20+ AI, loyalty, and social partners to Expedia accounts.",
+      a: "Building Expedia's account linking platform from scratch.",
       top: true,
     },
     {
@@ -229,7 +229,7 @@ export const askMe = {
     {
       id: "tool",
       q: "Favorite AI tool right now?",
-      a: "Claude Code. Most of what I ship myself, this site included, starts there.",
+      a: "I use a lot of AI tools, but Claude Code is my go-to. Most of what I ship, this site included, starts there.",
     },
     {
       id: "sentinel",
@@ -250,7 +250,7 @@ export const askMe = {
     {
       id: "trip",
       q: "Favorite trip this year?",
-      a: "Paris this spring: vegan food at Breathe and an afternoon at the Orangerie, which beats the Louvre.",
+      a: "My second Europe trip, earlier this year: London, Paris, and Amsterdam.",
       top: true,
       links: [{ label: "See the globe", href: "/travel" }],
     },
