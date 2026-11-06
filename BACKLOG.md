@@ -12,6 +12,14 @@ Nothing right now.
 
 ## Changelog
 
+### 2026-11-06 — New headshot (branch new-headshot)
+
+- `dk-headshot.jpg` replaced with the retouched November photo (same filename
+  and 512px size, so the JSON-LD picks it up with no code change)
+- Regenerated from it with the repo scripts: `dk-headshot-72.webp` (nav avatar,
+  status pill, Ask me popup) via `gen:images`, and the `og.jpg` link-preview
+  card via `gen:og`
+
 ### 2026-10-20 — Dependency and security alert cleanup (branch claude/deps-security)
 
 - `npm audit`: production deps still at 0. The only open advisory is dev-only
