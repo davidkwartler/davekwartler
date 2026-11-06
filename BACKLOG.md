@@ -12,6 +12,14 @@ Nothing right now.
 
 ## Changelog
 
+### 2026-11-06 — minimatch override (branch claude/minimatch-override)
+
+- Scoped npm override: `@typescript-eslint/typescript-estree` gets `minimatch`
+  ^11.0.1, outside its declared ^10.2.2, for GHSA-g3hv-75wg-m249 (dev-only).
+  `npm audit` is at 0. Drop the override once typescript-estree allows 11
+- Lockfile edited by hand from main's: `npm install` here dropped the optional
+  `@emnapi/*` entries, and `npm ci` then rejected the lockfile
+
 ### 2026-11-06 — Patch Dependabot alerts (branch claude/deps-next-fast-uri)
 
 - `next` and `eslint-config-next` 16.4.0 to 16.4.5, `fast-uri` to 3.1.9
