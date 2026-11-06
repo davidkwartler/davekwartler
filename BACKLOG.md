@@ -12,6 +12,17 @@ Nothing right now.
 
 ## Changelog
 
+### 2026-11-06 — Final retouched headshot (branch claude/new-headshot)
+
+- `dk-headshot.jpg` swapped for the final retouch of the November photo
+  (cleaned-up collar and placket). Same filename and 512px size; now keeps
+  its embedded sRGB profile (the old file had none)
+- `dk-headshot-72.webp` regenerated with `gen:images`
+- `og.jpg`: the new photo composited into the card's photo circle, since
+  `gen:og` needs the built Google fonts, which the build sandbox could not
+  fetch. Rerun `npm run build && npm run gen:og` anywhere with font access
+  to re-render the whole card if wanted
+
 ### 2026-11-06 — minimatch override (branch claude/minimatch-override)
 
 - Scoped npm override: `@typescript-eslint/typescript-estree` gets `minimatch`
