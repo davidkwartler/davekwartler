@@ -26,6 +26,13 @@ widget, Writing section (MDX), further hero animation experiments.
 
 ## Changelog
 
+### 2026-11-06 — New headshot (branch new-headshot)
+
+- `dk-headshot.jpg` replaced with the retouched November photo (same filename
+  and 512px size, so hero, nav avatar and JSON-LD pick it up with no code change)
+- `og.jpg` link-preview card updated too: the new photo is composited into the
+  existing ring, background and text unchanged
+
 ### 2026-07-27 — Favicon star: richer violet, second glow, more detail (branch galaxy-star-tune)
 
 - Asymmetry retuned. Verticals 19 to 23, horizontals held at 29. The waist,
