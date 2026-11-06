@@ -12,6 +12,14 @@ Nothing right now.
 
 ## Changelog
 
+### 2026-11-06 — Patch Dependabot alerts (branch claude/deps-next-fast-uri)
+
+- `next` and `eslint-config-next` 16.4.0 to 16.4.5, `fast-uri` to 3.1.9
+  (lockfile only, both inside existing ranges). Closes all 7 open alerts;
+  `npm audit --omit=dev` is back to 0
+- Still open in `npm audit`: 8 moderate, dev-only, all one `minimatch` advisory
+  through `eslint-config-next`. npm's only fix is a downgrade to 15, so it stays
+
 ### 2026-11-06 — New headshot (branch new-headshot)
 
 - `dk-headshot.jpg` replaced with the retouched November photo (same filename
